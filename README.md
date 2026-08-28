@@ -11,7 +11,7 @@
 > **Architect & Full-Stack Developer**: Gregory Buts  
 > **Platform**: De Verstandhouding – Clinical Appointment & Practice Management System  
 > **Runtime**: .NET 10 LTS (C# 13) met Long-Term Support tot november 2028  
-> **Interactive Showcase**: Open [`[(https://gregorybuts.github.io/de-verstandhouding-showcase/index.html)]`](index.html) in any browser or visit the live deployment.
+> **Interactive Showcase**: Open [`[index.html]`]([index.htm](https://gregorybuts.github.io/de-verstandhouding-showcase/index.html)l) in any browser or visit the live deployment.
 
 ---
 
