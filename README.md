@@ -5,7 +5,7 @@
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-3.4-38B2AC?logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
 [![HL7 FHIR R4](https://img.shields.io/badge/HL7_FHIR-R4-E36209.svg)](https://hl7.org/fhir/R4/)
-[![Coverage](https://img.shields.io/badge/Test_Coverage-90%2B%25-brightgreen.svg)]()
+[![Test Coverage](coverage-badge.svg)](./api.html)
 [![Security](https://img.shields.io/badge/Security-AES--256-emerald.svg)]()
 
 > **Architect & Full-Stack Developer**: Gregory Buts  
