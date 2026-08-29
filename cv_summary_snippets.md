@@ -13,7 +13,7 @@ Gebruik onderstaande kant-en-klare teksten op je **Curriculum Vitae**, **LinkedI
 > * Implementeerde een atomaire beschikbaarheidsengine (`SlotCalculator`) met `System.Threading.Lock` en database-isolatie die *double-bookings* en race-conditions 100% uitsluit.  
 > * Waarborgde medische data-privacy (GDPR) via **AES-256 veld-encryptie** in de database (met unieke IV's en multi-key rotatie) en strikte BOLA/IDOR autorisatie.  
 > * Integreerde realtime 2-weg **Google Calendar API** synchronisatie, automatische Google Meet generatie en asynchrone e-mail herinneringen via **Hangfire**.  
-> * Behaalde **90%+ geautomatiseerde testdekking** (624 xUnit backend tests, 370 Vitest frontend tests — 994 tests totaal) met een complete GitHub Actions CI/CD pipeline.
+> * Behaalde **90%+ geautomatiseerde testdekking** (627 xUnit backend tests, 370 Vitest frontend tests — 997 tests totaal) met een complete GitHub Actions CI/CD pipeline.
 
 ---
 
@@ -30,7 +30,7 @@ Gebruik onderstaande kant-en-klare teksten op je **Curriculum Vitae**, **LinkedI
 > 3. **Privacy & Beveiliging**: Transparante AES-256 veldencryptie op patiëntgegevens via EF Core ValueConverters en mitigatie van OWASP Top 10 kwetsbaarheden.  
 > 4. **Belgische Zorgwetgeving (ELP/RIZIV)**: Geautomatiseerde opvolging van het 8-sessies contingent per cliënt inclusief 1-click facturatie export voor zorgnetwerken.  
 > 5. **Interoperabiliteit**: HL7 FHIR R4 compatibele endpoints voor koppeling met Elektronische Patiënten Dossiers (EPD/EHR).  
-> 6. **Kwaliteitsborging**: 90%+ testdekking (624 backend + 370 frontend tests, 994 tests totaal), EF Core Model Snapshot drift tests, en geautomatiseerde zero-downtime deployment pipelines.
+> 6. **Kwaliteitsborging**: 90%+ testdekking (627 backend + 370 frontend tests, 997 tests totaal), EF Core Model Snapshot drift tests, en geautomatiseerde zero-downtime deployment pipelines.
 
 ---
 
@@ -43,7 +43,7 @@ Gebruik onderstaande kant-en-klare teksten op je **Curriculum Vitae**, **LinkedI
 > * Built a high-performance, concurrency-safe booking engine (`SlotCalculator`) with transaction isolation, preventing 100% of double-bookings.  
 > * Enforced strict GDPR/medical data privacy through **AES-256 field-level database encryption** (with unique IVs and multi-key rotation) and fine-grained IDOR authorization checks.  
 > * Integrated two-way **Google Calendar API** sync with dynamic Google Meet provisioning and asynchronous background job queues via **Hangfire**.  
-> * Established **90%+ automated test coverage** across 624 xUnit tests, multi-threaded concurrency suites, and 370 Vitest tests (994 tests total) within a GitHub Actions CI/CD pipeline.
+> * Established **90%+ automated test coverage** across 627 xUnit tests, multi-threaded concurrency suites, and 370 Vitest tests (997 tests total) within a GitHub Actions CI/CD pipeline.
 
 ---
 
