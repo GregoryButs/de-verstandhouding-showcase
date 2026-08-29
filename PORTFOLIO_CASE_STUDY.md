@@ -75,6 +75,7 @@ graph TD
     *   Ontwikkeling van een atomaire `SlotCalculator` engine die werkt met vaste buffertijden (10–15 minuten rusttijd tussen consultaties) en pauzeblokken.
     *   Implementatie van `System.Threading.Lock` en `HeeftConflict()` validaties in EF Core 10 zodat concurrerende boekingspogingen direct worden afgevangen en atomair falen (`HTTP 409 Conflict`) zonder database-corruptie.
     *   Ondersteund door geautomatiseerde multi-threaded xUnit concurrency stress-tests (`BookingConcurrencyTests.cs`).
+    *   De kern van dit mechanisme is los uitgewerkt in een publieke proof of concept met een generiek domein: [slotallocatie onder gelijktijdigheid](https://github.com/GregoryButs/Slotcalculator-showcase) — vijftig parallelle aanvragen, 1× `201` en 49× `409`, gemeten op HTTP-niveau.
 
 ### 2. Privacy-by-Design & AES-256 Veld-Encryptie (GDPR)
 *   **De Uitdaging**: Medische en persoonsgegevens (PII) mogen niet leesbaar in plaintext in de database staan om datalekken bij database-diefstal uit te sluiten.
