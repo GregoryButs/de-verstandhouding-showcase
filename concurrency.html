@@ -286,8 +286,16 @@
   <h2>Drie lagen, van goedkoop naar hard</h2>
 
   <p>
-    In het echte systeem staat niet één maatregel maar een reeks. Niet uit wantrouwen tegen de
-    vorige, maar omdat ze verschillende dingen vangen tegen verschillende kosten.
+    Niet één maatregel dus, maar een reeks. Niet uit wantrouwen tegen de vorige, maar omdat ze
+    verschillende dingen vangen tegen verschillende kosten.
+  </p>
+
+  <p>
+    Voor de goede orde: dit is de opstelling van de losse proof of concept. Het draaiende platform
+    heeft de eerste twee lagen — de overlapcontrole binnen een transactie die op
+    <code>Serializable</code> staat, wat de SQLite-provider naar een niet-uitgestelde transactie
+    vertaalt. De unieke index op de starttijd zit daar niet; die is in de PoC toegevoegd om te laten
+    zien wat hij wel en niet oplevert.
   </p>
 
   <table>
@@ -364,6 +372,36 @@
     database, niet de juiste oplossing in het algemeen.
   </p>
 
+  <h3>Waarom het dan toch SQLite is</h3>
+
+  <p>
+    Die vraag hoort hier, want als PostgreSQL dit beter oplost, waarom staat het systeem er dan niet
+    op? Het antwoord is dat de database niet gekozen is voor de boekingsengine. Hij is gekozen voor
+    de gegevens die erin staan.
+  </p>
+
+  <p>
+    Een psychologenpraktijk verwerkt gezondheidsgegevens — de zwaarste categorie onder de AVG. De
+    afweging ging over hoe je die het veiligst bewaart voor één praktijk met één behandelaar.
+    PostgreSQL met <code>pgcrypto</code> viel af omdat het externe hosting vereist en daarmee het
+    aanvalsoppervlak vergroot voor een praktijk die geen enkele reden heeft om patiëntdossiers
+    buiten de deur te zetten. SQLCipher viel af omdat het native binaries per platform vraagt, wat
+    migraties en back-upinspectie omslachtig maakt.
+  </p>
+
+  <p>
+    Wat overbleef is SQLite met veldencryptie in pure C#: geen externe afhankelijkheden, draait
+    naast de applicatie op één machine, en het dossier is een bestand dat je kunt back-uppen en
+    verplaatsen. De prijs staat in deze sectie beschreven — geen bereikconstraints, een lock op
+    bestandsniveau — en die prijs is bewust betaald voor een systeem met één agenda.
+  </p>
+
+  <p>
+    Dat maakt het bovenstaande geen spijtbetuiging. Het is een gevolg. Zou het platform ooit meerdere
+    praktijken bedienen, dan verschuift de afweging over hosting, en pas dán komt de
+    <code>EXCLUDE</code>-constraint binnen bereik.
+  </p>
+
   <h3>Drie manieren, drie plekken waar de waarheid ligt</h3>
 
   <table>
@@ -422,6 +460,31 @@
     zwakker naarmate de domeinregel grilliger wordt. Ergens tussen "vijftien minuten" en "het hangt
     ervan af" verschuift het voordeel terug naar de applicatielaag — en het is de moeite waard om te
     weten wáár dat punt ligt voor je een database kiest.
+  </p>
+
+  <h3>Wie kan er eigenlijk een scheve tijd insturen?</h3>
+
+  <p>
+    Nog iets dat het beeld bijstelt. Het boekingsportaal voor patiënten toont geen vrije tijdkiezer
+    maar een lijst met vooraf berekende sloten. Wie via die weg boekt, kán geen 10:15 aanklikken als
+    het rooster op hele en halve uren staat — de scheve tijden uit dit artikel bestaan daar
+    eenvoudigweg niet. Voor dat pad zou een unieke index op de starttijd dus wél het merendeel van
+    de botsingen afvangen, want gelijktijdige aanvragen gaan er per definitie over hetzelfde slot.
+  </p>
+
+  <p>
+    Twee kanttekeningen houden de overlapcontrole toch onmisbaar. De psycholoog plant zelf wél op
+    vrije tijden, want een gesprek loopt uit of een afspraak wordt verzet — daar ontstaan de scheve
+    starttijden alsnog. En belangrijker: <strong>die slotlijst is een keuze van de interface, niet
+    van de server.</strong> Het endpoint neemt het meegestuurde tijdstip aan en rekent de eindtijd
+    uit; het toetst niet of dat tijdstip in de lijst voorkwam. Wie het verzoek zelf samenstelt,
+    stuurt gewoon 10:15.
+  </p>
+
+  <p>
+    Dat is precies waarom de controle in de transactie moet zitten en niet in het scherm. Een
+    interface die alleen geldige keuzes toont, is een dienst aan de gebruiker. Ze is geen garantie,
+    want de server hoort nooit aan te nemen dat de aanvraag van je eigen formulier komt.
   </p>
 
   <h2>Werkt het ook?</h2>
