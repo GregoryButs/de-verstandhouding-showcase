@@ -381,25 +381,31 @@
   </p>
 
   <p>
-    Een psychologenpraktijk verwerkt gezondheidsgegevens — de zwaarste categorie onder de AVG. De
-    afweging ging over hoe je die het veiligst bewaart voor één praktijk met één behandelaar.
-    PostgreSQL met <code>pgcrypto</code> viel af omdat het externe hosting vereist en daarmee het
-    aanvalsoppervlak vergroot voor een praktijk die geen enkele reden heeft om patiëntdossiers
-    buiten de deur te zetten. SQLCipher viel af omdat het native binaries per platform vraagt, wat
-    migraties en back-upinspectie omslachtig maakt.
+    Het platform draait op één VPS: de applicatie achter een reverse proxy, en verder niets. De
+    afweging ging dus niet over waar de gegevens staan — die staan in een datacenter, zoals bij
+    vrijwel elke praktijk — maar over hoeveel bewegende delen je op die ene machine wilt hebben.
   </p>
 
   <p>
-    Wat overbleef is SQLite met veldencryptie in pure C#: geen externe afhankelijkheden, draait
-    naast de applicatie op één machine, en het dossier is een bestand dat je kunt back-uppen en
-    verplaatsen. De prijs staat in deze sectie beschreven — geen bereikconstraints, een lock op
+    PostgreSQL zou daar prima naast kunnen draaien, in een container. Wat het meebrengt is een
+    tweede dienst die je draait, bijwerkt, afstemt en apart back-upt, plus het geheugen dat hij
+    opeist naast de applicatie. Voor één agenda en één behandelaar staat daar weinig tegenover.
+    SQLCipher viel om een andere reden af: dat vraagt native binaries per platform, wat migraties en
+    het inspecteren van een back-up omslachtig maakt.
+  </p>
+
+  <p>
+    Wat overbleef is SQLite met veldencryptie in pure C#: geen tweede proces, geen extra
+    netwerkluisteraar, en het volledige dossier is één bestand dat je kunt kopiëren, terugzetten en
+    controleren. De prijs staat in deze sectie beschreven — geen bereikconstraints, een lock op
     bestandsniveau — en die prijs is bewust betaald voor een systeem met één agenda.
   </p>
 
   <p>
-    Dat maakt het bovenstaande geen spijtbetuiging. Het is een gevolg. Zou het platform ooit meerdere
-    praktijken bedienen, dan verschuift de afweging over hosting, en pas dán komt de
-    <code>EXCLUDE</code>-constraint binnen bereik.
+    Dat maakt het bovenstaande geen spijtbetuiging. Het is een gevolg. Zou het platform meerdere
+    praktijken gaan bedienen, dan verandert de rekensom: een tweede dienst draaien weegt dan wél op
+    tegen wat je ervoor terugkrijgt, en pas dán komt de <code>EXCLUDE</code>-constraint binnen
+    bereik.
   </p>
 
   <h3>Drie manieren, drie plekken waar de waarheid ligt</h3>
