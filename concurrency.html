@@ -283,9 +283,11 @@
 
   <p>
     <strong>De traagste bewerking binnen de transactie bepaalt hoe lang iedereen wacht.</strong>
-    Een externe aanroep daarbinnen — een agenda raadplegen, een betaling controleren — koppelt de
-    beschikbaarheid van je database aan een dienst die je niet in de hand hebt. Haal op wat je nodig
-    hebt, en open de transactie pas daarna.
+    Een externe aanroep daarbinnen — een gedeelde agenda raadplegen, een bevestigingsmail versturen —
+    koppelt de beschikbaarheid van je database aan een dienst die je niet in de hand hebt. De
+    verleiding is reëel: je wil geen mail sturen over een boeking die daarna alsnog terugdraait. Maar
+    het antwoord daarop is een wachtrij ná de commit, niet een langere transactie. Haal op wat je
+    nodig hebt, open de transactie pas daarna, en zet het naspel erbuiten.
   </p>
 
   <p>
