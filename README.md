@@ -1,5 +1,9 @@
 # Clinical Healthcare & EHR Practice Platform – Case Study
 
+### ▶ [Bekijk de live case study](https://gregorybuts.github.io/de-verstandhouding-showcase/)
+
+*Deze repository bevat de bron. De gerenderde pagina staat op de link hierboven.*
+
 [![.NET 10 LTS](https://img.shields.io/badge/ASP.NET%20Core-10.0%20LTS-512BD4?logo=dotnet&logoColor=white)](https://dotnet.microsoft.com/)
 [![React 18/19](https://img.shields.io/badge/React-18%2F19-61DAFB?logo=react&logoColor=black)](https://reactjs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
@@ -11,7 +15,9 @@
 > **Architect & Full-Stack Developer**: Gregory Buts  
 > **Platform**: De Verstandhouding – Clinical Appointment & Practice Management System  
 > **Runtime**: .NET 10 LTS (C# 13) met Long-Term Support tot november 2028  
-> **Interactive Showcase**: Open [`index.html`](index.html) in any browser or visit the live deployment.
+> **Live case study**: **<https://gregorybuts.github.io/de-verstandhouding-showcase/>**
+> **API-contract**: <https://gregorybuts.github.io/de-verstandhouding-showcase/api.html>
+> **Concurrency-PoC**: <https://github.com/GregoryButs/Slotcalculator-showcase>
 
 ---
 
