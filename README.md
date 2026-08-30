@@ -16,6 +16,7 @@
 > **Platform**: De Verstandhouding – Clinical Appointment & Practice Management System  
 > **Runtime**: .NET 10 LTS (C# 13) met Long-Term Support tot november 2028  
 > **Live case study**: **<https://gregorybuts.github.io/de-verstandhouding-showcase/>**
+> **Uitgelicht**: [Waarom een unieke index dit niet kan](https://gregorybuts.github.io/de-verstandhouding-showcase/concurrency.html) — over het afdwingen van een invariant die over de verhouding tussen rijen gaat
 > **API-contract**: <https://gregorybuts.github.io/de-verstandhouding-showcase/api.html>
 > **Concurrency-PoC**: <https://github.com/GregoryButs/Slotcalculator-showcase>
 

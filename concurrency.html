@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Waarom een unieke index dit niet kan — De Verstandhouding</title>
+<meta name="description" content="Over het afdwingen van een invariant die over de verhouding tussen rijen gaat: overlappende tijdsloten met wisseltijd, onder gelijktijdigheid.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap">
+<style>
+  :root {
+    --linnen: #FCFAF7; --blush: #f3e9e7; --rand: #e2cbd2;
+    --roos: #DF8A8B; --lei: #5f80a0; --lei-diep: #4b6c8a; --houtskool: #1d1d1b;
+    --inkt: #1d1d1b; --zacht: #6b6a67; --vlak: #ffffff;
+    --goed: #2f7d63; --goed-vlak: #e6f2ed;
+    --fout: #b4503f; --fout-vlak: #fbeae7;
+    --serif: "Cormorant Garamond", Georgia, serif;
+    --sans: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+    --mono: "JetBrains Mono", ui-monospace, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --linnen: #14150f; --blush: #201d1c; --rand: #33302f;
+      --inkt: #ece9e4; --zacht: #a09c96; --vlak: #1b1a18;
+      --goed: #5fbf9c; --goed-vlak: #13251f;
+      --fout: #e0836d; --fout-vlak: #2a1a15;
+      --lei: #8fa9c4; --lei-diep: #a8bed4;
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--linnen); color: var(--inkt);
+    font-family: var(--sans); font-size: 17px; line-height: 1.72;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 720px; margin: 0 auto; padding: 56px 22px 100px; }
+  .kruimel {
+    font-family: var(--mono); font-size: 12px; letter-spacing: .1em; text-transform: uppercase;
+    color: var(--roos); margin: 0 0 18px;
+  }
+  .kruimel a { color: inherit; }
+  h1 {
+    font-family: var(--serif); font-size: clamp(34px, 6.5vw, 52px); font-weight: 700;
+    line-height: 1.08; letter-spacing: -.01em; margin: 0 0 16px; text-wrap: balance;
+  }
+  .inleiding { font-size: 19.5px; color: var(--zacht); margin: 0 0 10px; }
+  .auteur {
+    font-family: var(--mono); font-size: 12.5px; color: var(--zacht);
+    border-top: 1px solid var(--rand); padding-top: 16px; margin-top: 26px;
+  }
+  h2 {
+    font-family: var(--serif); font-size: 30px; font-weight: 600; line-height: 1.2;
+    margin: 62px 0 14px; text-wrap: balance;
+  }
+  h3 { font-size: 17px; font-weight: 600; margin: 34px 0 8px; }
+  p { margin: 0 0 18px; }
+  a { color: var(--lei-diep); }
+  strong { font-weight: 600; }
+  code {
+    font-family: var(--mono); font-size: .86em; background: var(--blush);
+    border: 1px solid var(--rand); border-radius: 3px; padding: 1px 5px;
+  }
+  blockquote {
+    margin: 24px 0; padding: 4px 0 4px 20px; border-left: 3px solid var(--roos);
+    font-family: var(--serif); font-size: 22px; font-style: italic; color: var(--inkt);
+  }
+  blockquote p { margin: 0; }
+
+  /* ---------- interactief blok ---------- */
+  .doos {
+    background: var(--vlak); border: 1px solid var(--rand); border-radius: 10px;
+    padding: 22px; margin: 32px 0;
+  }
+  .doos-kop {
+    font-family: var(--mono); font-size: 11px; letter-spacing: .12em; text-transform: uppercase;
+    color: var(--zacht); margin-bottom: 16px;
+  }
+
+  /* tijdlijn */
+  .tijdlijn { position: relative; height: 92px; margin: 6px 0 4px; }
+  .spoor {
+    position: absolute; left: 0; right: 0; top: 30px; height: 34px;
+    background: var(--blush); border-radius: 5px;
+  }
+  .blok { position: absolute; top: 30px; height: 34px; border-radius: 5px; }
+  .blok-bestaand { background: var(--lei); }
+  .blok-buffer { background: repeating-linear-gradient(45deg, var(--rand), var(--rand) 4px, transparent 4px, transparent 8px); }
+  .blok-nieuw { top: 30px; border: 2px solid; }
+  .blok-nieuw.ok { background: var(--goed-vlak); border-color: var(--goed); }
+  .blok-nieuw.bots { background: var(--fout-vlak); border-color: var(--fout); }
+  .blok-label {
+    position: absolute; top: 68px; font-family: var(--mono); font-size: 11px; color: var(--zacht);
+    white-space: nowrap;
+  }
+  .uren { position: relative; height: 18px; margin-bottom: 10px; }
+  .uur { position: absolute; font-family: var(--mono); font-size: 10.5px; color: var(--zacht); transform: translateX(-50%); }
+  .tik { position: absolute; top: 24px; width: 1px; height: 6px; background: var(--rand); }
+
+  input[type=range] { width: 100%; accent-color: var(--roos); margin: 14px 0 6px; }
+  .uitspraak {
+    font-family: var(--mono); font-size: 13.5px; padding: 12px 14px; border-radius: 6px;
+    border: 1px solid; margin-top: 12px;
+  }
+  .uitspraak.ok { background: var(--goed-vlak); border-color: var(--goed); color: var(--goed); }
+  .uitspraak.bots { background: var(--fout-vlak); border-color: var(--fout); color: var(--fout); }
+  .uitspraak b { font-weight: 700; }
+
+  /* race */
+  .keuze { display: flex; gap: 8px; margin-bottom: 18px; flex-wrap: wrap; }
+  .keuze button, .stap-knop {
+    font: 500 13.5px/1 var(--mono); padding: 9px 14px; border-radius: 6px; cursor: pointer;
+    border: 1px solid var(--rand); background: var(--vlak); color: var(--inkt);
+  }
+  .keuze button[aria-pressed="true"] { background: var(--houtskool); color: var(--linnen); border-color: var(--houtskool); }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) .keuze button[aria-pressed="true"] { background: var(--roos); color: #14150f; border-color: var(--roos); }
+  }
+  .stap-knop { background: var(--roos); border-color: var(--roos); color: #fff; font-weight: 700; }
+  .stap-knop:disabled { opacity: .45; cursor: default; }
+  button:focus-visible, input:focus-visible { outline: 2px solid var(--lei-diep); outline-offset: 2px; }
+
+  .banen { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
+  .baan { border: 1px solid var(--rand); border-radius: 8px; overflow: hidden; }
+  .baan h4 {
+    margin: 0; padding: 8px 12px; font-family: var(--mono); font-size: 11.5px; letter-spacing: .06em;
+    background: var(--blush); color: var(--zacht); font-weight: 600;
+  }
+  .baan ol { list-style: none; margin: 0; padding: 10px 12px; font-family: var(--mono); font-size: 12.5px; min-height: 132px; }
+  .baan li { padding: 3px 0; color: var(--zacht); opacity: .28; transition: opacity .2s; }
+  .baan li.actief { opacity: 1; color: var(--inkt); font-weight: 500; }
+  .baan li.gedaan { opacity: .72; }
+  .baan li.wacht { color: var(--roos); }
+  .baan li.fout { color: var(--fout); }
+  .baan li.goed { color: var(--goed); }
+
+  table { width: 100%; border-collapse: collapse; font-size: 14.5px; margin: 26px 0; }
+  th {
+    text-align: left; font-family: var(--mono); font-size: 11px; letter-spacing: .1em;
+    text-transform: uppercase; color: var(--zacht); padding: 0 12px 9px 0;
+    border-bottom: 1px solid var(--rand);
+  }
+  td { padding: 10px 12px 10px 0; border-bottom: 1px solid var(--rand); vertical-align: top; }
+
+  .slot {
+    margin-top: 64px; padding: 22px; border: 1px solid var(--rand); border-radius: 10px;
+    background: var(--vlak);
+  }
+  .slot h2 { margin-top: 0; font-size: 24px; }
+  .knoppen { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 16px; }
+  .knoppen a {
+    font: 600 14px/1 var(--sans); text-decoration: none; padding: 12px 16px; border-radius: 7px;
+    border: 1px solid var(--rand); color: var(--inkt); background: var(--linnen);
+  }
+  .knoppen a.primair { background: var(--roos); border-color: var(--roos); color: #fff; }
+
+  @media (max-width: 560px) {
+    .banen { grid-template-columns: 1fr; }
+    body { font-size: 16.5px; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <p class="kruimel"><a href="./index.html">← De Verstandhouding</a> · Engineering</p>
+
+  <h1>Waarom een unieke index dit niet kan</h1>
+
+  <p class="inleiding">
+    Een afsprakensysteem mag nooit twee mensen in hetzelfde tijdslot zetten. Dat klinkt als een
+    regel die je met een unieke index afdwingt. Dat is het niet, en het verschil bepaalt waar de
+    consistentiegrens van je systeem ligt.
+  </p>
+
+  <p class="auteur">
+    Gregory Buts · uit het afsprakenbeheerplatform van praktijk De Verstandhouding
+  </p>
+
+  <h2>De regel is niet wat je denkt</h2>
+
+  <p>
+    Bij een psychologenpraktijk duurt een consultatie vijftig minuten, maar de agenda kan niet
+    aaneengesloten volgeboekt worden. Er moet tijd tussen: de ene cliënt moet weg zijn voor de
+    volgende binnenkomt, en de psycholoog heeft een moment nodig om te noteren. In het systeem heet
+    dat de wisseltijd. Vijftien minuten.
+  </p>
+
+  <p>
+    Daarmee verandert de regel van vorm. Hij gaat niet meer over gelijke starttijden, maar over
+    afstand. Hieronder staat een dag met één bestaande afspraak van 10:00 tot 11:00. Schuif de
+    tweede afspraak eroverheen en kijk wanneer het systeem hem weigert.
+  </p>
+
+  <div class="doos">
+    <div class="doos-kop">Interactief · sleep de nieuwe afspraak</div>
+    <div class="uren" id="uren"></div>
+    <div class="tijdlijn" id="tijdlijn">
+      <div class="spoor"></div>
+      <div class="blok blok-buffer" id="bufferVoor"></div>
+      <div class="blok blok-buffer" id="bufferNa"></div>
+      <div class="blok blok-bestaand" id="bestaand"></div>
+      <div class="blok-label" id="labelBestaand">bestaand 10:00–11:00</div>
+      <div class="blok blok-nieuw" id="nieuw"></div>
+      <div class="blok-label" id="labelNieuw"></div>
+    </div>
+    <input type="range" id="schuif" min="480" max="960" step="5" value="700"
+           aria-label="Starttijd van de nieuwe afspraak">
+    <div class="uitspraak" id="uitspraak"></div>
+  </div>
+
+  <p>
+    Merk op wat er gebeurt rond 11:15. Eén minuut eerder is het een conflict, precies op 11:15 mag
+    het. De grens ligt niet op het einde van de afspraak maar vijftien minuten daarna — en aan de
+    andere kant net zo goed: een afspraak die om 09:00 begint en een uur duurt, botst óók.
+  </p>
+
+  <h2>Waarom een index hier niet bij kan</h2>
+
+  <p>
+    De voor de hand liggende oplossing is een unieke index op <code>(ruimte, starttijd)</code>. Die
+    garandeert dat er nooit twee rijen met dezelfde starttijd bestaan. Onwrikbaar, door de database
+    zelf afgedwongen, en precies één regel in je model.
+  </p>
+
+  <p>
+    Alleen: 11:10 en 10:00 zijn verschillende starttijden. Voor de index zijn het twee volstrekt
+    onschuldige rijen. De index kent maar één vraag — <em>bestaat deze sleutel al?</em> — en onze
+    regel stelt een andere vraag: <em>ligt deze afspraak te dicht bij een andere?</em>
+  </p>
+
+  <blockquote>
+    <p>De invariant gaat niet over een rij. Hij gaat over de verhouding tussen rijen.</p>
+  </blockquote>
+
+  <p>
+    Datzelfde bezwaar treft de nette objectgeoriënteerde oplossing. Je zou de controle in de
+    <code>Afspraak</code> zelf willen leggen — daar hoort domeinlogica immers. Maar een afspraak
+    kent haar buren niet. Ze weet niets van de andere afspraken op die dag, en zonder die kennis kan
+    ze de regel onmogelijk beoordelen. Het natuurlijke aggregaat is niet de afspraak maar
+    <em>de agenda van die dag</em>, en dat is in de praktijk een query plus een transactie.
+  </p>
+
+  <h2>En dan komen er twee tegelijk</h2>
+
+  <p>
+    Eén gebruiker is geen probleem: lees de agenda, controleer de afstand, schrijf weg. Het wordt
+    interessant zodra twee aanvragen elkaar in de rede vallen. De controle en het wegschrijven zijn
+    namelijk twee handelingen, en tussen die twee zit een gaatje.
+  </p>
+
+  <p>
+    Hieronder staan twee transacties die op hetzelfde moment hetzelfde slot willen. Klik door de
+    stappen. Wissel daarna van transactiemodus en doorloop het opnieuw.
+  </p>
+
+  <div class="doos">
+    <div class="doos-kop">Interactief · twee transacties, twee modi</div>
+    <div class="keuze" role="group" aria-label="Transactiemodus">
+      <button id="modeDeferred" aria-pressed="true">BEGIN DEFERRED (standaard)</button>
+      <button id="modeImmediate" aria-pressed="false">BEGIN IMMEDIATE</button>
+    </div>
+    <div class="banen">
+      <div class="baan"><h4>Transactie A</h4><ol id="baanA"></ol></div>
+      <div class="baan"><h4>Transactie B</h4><ol id="baanB"></ol></div>
+    </div>
+    <button class="stap-knop" id="stap">Volgende stap</button>
+    <button class="keuze-knop stap-knop" id="herstart" style="background:transparent;color:var(--inkt);border-color:var(--rand);font-weight:500">Opnieuw</button>
+    <div class="uitspraak" id="raceUitspraak" style="margin-top:14px"></div>
+  </div>
+
+  <p>
+    In de standaardmodus doen beide transacties hun controle op een agenda die nog leeg is. Allebei
+    concluderen ze terecht dat het slot vrij is — op dát moment was het dat ook. Pas bij het
+    wegschrijven blijkt dat er iets veranderd is, en zonder vangnet staan er twee afspraken in
+    hetzelfde uur.
+  </p>
+
+  <p>
+    <code>BEGIN IMMEDIATE</code> verplaatst de schrijflock naar het begin van de transactie in
+    plaats van naar de eerste <code>INSERT</code>. Daardoor kan de tweede transactie niet eens
+    beginnen met lezen zolang de eerste bezig is. Controle en schrijven worden samen ondeelbaar, en
+    het gaatje verdwijnt.
+  </p>
+
+  <h2>Drie lagen, van goedkoop naar hard</h2>
+
+  <p>
+    In het echte systeem staat niet één maatregel maar een reeks. Niet uit wantrouwen tegen de
+    vorige, maar omdat ze verschillende dingen vangen tegen verschillende kosten.
+  </p>
+
+  <table>
+    <thead>
+      <tr><th>Laag</th><th>Vangt</th><th>Kost</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Overlapcontrole in de transactie</td>
+        <td>Overlap inclusief wisseltijd — de eigenlijke domeinregel</td>
+        <td>Eén <code>SELECT</code></td>
+      </tr>
+      <tr>
+        <td><code>BEGIN IMMEDIATE</code></td>
+        <td>De race tussen controle en <code>INSERT</code></td>
+        <td>Schrijvers serialiseren</td>
+      </tr>
+      <tr>
+        <td>Unieke index op <code>(ruimte, starttijd)</code></td>
+        <td>Wat er ondanks het bovenstaande doorheen komt</td>
+        <td>Niets, tot het gebeurt</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p>
+    De index is dus niet afgeschreven — hij is gedegradeerd van hoofdrolspeler tot vangnet. Slaat
+    hij toch aan, dan wordt de databasefout vertaald naar een <code>409 Conflict</code> en niet naar
+    een <code>500</code>. Een bezet tijdslot is een normale uitkomst van een boekingspoging, geen
+    storing.
+  </p>
+
+  <h2>Wat het kost</h2>
+
+  <p>
+    Elke keuze heeft een prijs, en deze ook. <code>BEGIN IMMEDIATE</code> serialiseert álle
+    schrijvers, niet alleen die voor dezelfde ruimte. Bij één praktijk met één agenda is dat
+    onzichtbaar. Bij duizenden ruimtes wordt het een bottleneck, en dan wil je een lock per ruimte
+    in plaats van per database.
+  </p>
+
+  <p>
+    Op PostgreSQL zou ik dit trouwens anders bouwen. Daar bestaat een <code>EXCLUDE</code>-constraint
+    met <code>btree_gist</code>, waarmee je overlap rechtstreeks in het schema uitdrukt — inclusief
+    de buffer, zonder één regel applicatiecode. Dat is strikt beter dan wat hier staat. SQLite kent
+    die mogelijkheid niet, en het systeem draait op SQLite. Dus dit is de juiste oplossing voor deze
+    database, niet de juiste oplossing in het algemeen.
+  </p>
+
+  <h2>Werkt het ook?</h2>
+
+  <p>
+    De twee modellen hierboven zijn illustraties: ze tekenen het mechanisme, ze meten niets. Het
+    echte bewijs staat los, in een uitgesneden versie van deze engine met vergaderruimtes in plaats
+    van consultaties. Daar vuren vijftig gelijktijdige aanvragen op hetzelfde tijdslot, en de
+    uitkomst wordt op HTTP-niveau geteld:
+  </p>
+
+  <div class="doos" style="font-family:var(--mono); font-size:14px; line-height:2">
+    <div><span style="color:var(--goed)">1</span> × 201 Created</div>
+    <div><span style="color:var(--fout)">49</span> × 409 Conflict — met de botsende reservering erbij genoemd</div>
+    <div>0 × 5xx</div>
+  </div>
+
+  <p>
+    Die test draait bij elke wijziging in de pijplijn, vijf keer achter elkaar. Een race die één op
+    de vijf keer misgaat, zou anders groen blijven bij een enkele run.
+  </p>
+
+  <div class="slot">
+    <h2>Zelf draaien</h2>
+    <p style="margin-bottom:0">
+      De proof of concept is een losse repository van zo'n tweehonderd regels, met een demopagina
+      waarop één knop vijftig gelijktijdige boekingen afvuurt. Geen installatie nodig via Codespaces.
+    </p>
+    <div class="knoppen">
+      <a class="primair" href="https://github.com/GregoryButs/Slotcalculator-showcase">Proof of concept →</a>
+      <a href="./index.html">Volledige case study</a>
+      <a href="./api.html">API-contract</a>
+    </div>
+  </div>
+
+</div>
+
+<script>
+(() => {
+  // ---------- 1. Tijdlijn ----------
+  const DAG_START = 480, DAG_EIND = 1080;      // 08:00 – 18:00 in minuten
+  const BESTAAND_START = 600, BESTAAND_EIND = 660;  // 10:00 – 11:00
+  const BUFFER = 15, DUUR = 60;
+
+  const tl = document.getElementById('tijdlijn');
+  const pct = m => ((m - DAG_START) / (DAG_EIND - DAG_START)) * 100;
+  const tijd = m => String(Math.floor(m / 60)).padStart(2, '0') + ':' + String(m % 60).padStart(2, '0');
+
+  // uuraanduidingen
+  const uren = document.getElementById('uren');
+  for (let m = DAG_START; m <= DAG_EIND; m += 60) {
+    const s = document.createElement('span');
+    s.className = 'uur'; s.style.left = pct(m) + '%'; s.textContent = tijd(m);
+    uren.appendChild(s);
+  }
+
+  const zet = (el, van, tot) => {
+    el.style.left = pct(van) + '%';
+    el.style.width = (pct(tot) - pct(van)) + '%';
+  };
+  zet(document.getElementById('bestaand'), BESTAAND_START, BESTAAND_EIND);
+  zet(document.getElementById('bufferVoor'), BESTAAND_START - BUFFER, BESTAAND_START);
+  zet(document.getElementById('bufferNa'), BESTAAND_EIND, BESTAAND_EIND + BUFFER);
+  document.getElementById('labelBestaand').style.left = pct(BESTAAND_START) + '%';
+
+  const schuif = document.getElementById('schuif');
+  const nieuw = document.getElementById('nieuw');
+  const labelNieuw = document.getElementById('labelNieuw');
+  const uitspraak = document.getElementById('uitspraak');
+
+  function teken() {
+    const start = +schuif.value, eind = start + DUUR;
+    zet(nieuw, start, eind);
+    labelNieuw.style.left = pct(start) + '%';
+    labelNieuw.textContent = 'nieuw ' + tijd(start) + '–' + tijd(eind);
+    labelNieuw.style.top = '10px';
+
+    // botst als het bestaande blok eindigt ná de start minus buffer,
+    // én begint vóór het einde plus buffer
+    const botst = BESTAAND_EIND > start - BUFFER && BESTAAND_START < eind + BUFFER;
+
+    nieuw.className = 'blok blok-nieuw ' + (botst ? 'bots' : 'ok');
+    uitspraak.className = 'uitspraak ' + (botst ? 'bots' : 'ok');
+
+    if (!botst) {
+      const gat = start >= BESTAAND_EIND ? start - BESTAAND_EIND : BESTAAND_START - eind;
+      uitspraak.innerHTML = '<b>201 Created</b> — ' + gat + ' minuten speling, en dat is genoeg (' + BUFFER + ' vereist).';
+    } else if (start < BESTAAND_EIND && eind > BESTAAND_START) {
+      uitspraak.innerHTML = '<b>409 Conflict</b> — de blokken overlappen elkaar rechtstreeks.';
+    } else {
+      const gat = start >= BESTAAND_EIND ? start - BESTAAND_EIND : BESTAAND_START - eind;
+      uitspraak.innerHTML = '<b>409 Conflict</b> — maar ' + gat + ' minuten tussenruimte; de wisseltijd vraagt er ' + BUFFER + '.';
+    }
+  }
+  schuif.addEventListener('input', teken);
+  teken();
+
+  // ---------- 2. Race ----------
+  const scenarios = {
+    deferred: {
+      stappen: [
+        { baan: 'A', tekst: 'BEGIN DEFERRED' },
+        { baan: 'B', tekst: 'BEGIN DEFERRED' },
+        { baan: 'A', tekst: 'SELECT … → agenda leeg' },
+        { baan: 'B', tekst: 'SELECT … → agenda leeg', klasse: 'wacht' },
+        { baan: 'A', tekst: 'INSERT + COMMIT', klasse: 'goed' },
+        { baan: 'B', tekst: 'INSERT → index weigert', klasse: 'fout' },
+      ],
+      slot: { klasse: 'bots', tekst: '<b>Het gaatje is zichtbaar.</b> Beide controles zagen een lege agenda, want op dat moment wás hij leeg. Alleen de unieke index voorkomt hier de dubbele boeking — en op een overlappend maar niet identiek slot zou zelfs die niet aanslaan.' }
+    },
+    immediate: {
+      stappen: [
+        { baan: 'A', tekst: 'BEGIN IMMEDIATE → schrijflock' },
+        { baan: 'B', tekst: 'BEGIN IMMEDIATE → wacht', klasse: 'wacht' },
+        { baan: 'A', tekst: 'SELECT … → agenda leeg' },
+        { baan: 'A', tekst: 'INSERT + COMMIT', klasse: 'goed' },
+        { baan: 'B', tekst: 'lock vrij → SELECT … → bezet' },
+        { baan: 'B', tekst: '409 Conflict', klasse: 'fout' },
+      ],
+      slot: { klasse: 'ok', tekst: '<b>Controle en INSERT zijn samen ondeelbaar.</b> B kon niet lezen zolang A bezig was, en ziet dus de werkelijkheid ná A. De weigering komt van de domeinregel, niet van een databasefout.' }
+    }
+  };
+
+  let modus = 'deferred', index = 0;
+  const baanA = document.getElementById('baanA'), baanB = document.getElementById('baanB');
+  const stapKnop = document.getElementById('stap'), herstart = document.getElementById('herstart');
+  const raceUitspraak = document.getElementById('raceUitspraak');
+  const knopD = document.getElementById('modeDeferred'), knopI = document.getElementById('modeImmediate');
+
+  function render() {
+    baanA.innerHTML = ''; baanB.innerHTML = '';
+    const s = scenarios[modus].stappen;
+    s.forEach((stap, i) => {
+      const li = document.createElement('li');
+      li.textContent = stap.tekst;
+      if (i < index) li.className = 'gedaan ' + (stap.klasse || '');
+      else if (i === index - 0 && i === index) li.className = '';
+      if (i === index - 1) li.className = 'actief ' + (stap.klasse || '');
+      (stap.baan === 'A' ? baanA : baanB).appendChild(li);
+    });
+    const klaar = index >= s.length;
+    stapKnop.disabled = klaar;
+    stapKnop.textContent = klaar ? 'Klaar' : 'Volgende stap';
+    if (klaar) {
+      const u = scenarios[modus].slot;
+      raceUitspraak.className = 'uitspraak ' + u.klasse;
+      raceUitspraak.innerHTML = u.tekst;
+      raceUitspraak.style.display = '';
+    } else {
+      raceUitspraak.style.display = 'none';
+    }
+  }
+
+  stapKnop.addEventListener('click', () => { index++; render(); });
+  herstart.addEventListener('click', () => { index = 0; render(); });
+  knopD.addEventListener('click', () => { modus = 'deferred'; index = 0; knopD.setAttribute('aria-pressed', 'true'); knopI.setAttribute('aria-pressed', 'false'); render(); });
+  knopI.addEventListener('click', () => { modus = 'immediate'; index = 0; knopI.setAttribute('aria-pressed', 'true'); knopD.setAttribute('aria-pressed', 'false'); render(); });
+  render();
+})();
+</script>
+</body>
+</html>
