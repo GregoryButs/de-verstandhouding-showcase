@@ -14,7 +14,7 @@ Voor een drukke psychologenpraktijk met conventie- en privéraadplegingen ontwie
 |                                     PORTFOLIO IMPACT                                  |
 +---------------------------------------------------------------------------------------+
 |  • 0% Race Conditions / Double Bookings in 50-thread concurrent stress load tests     |
-|  • 90%+ Geautomatiseerde Code Coverage (627 xUnit, 370 Vitest, 997 Tests Totaal)       |
+|  • 90%+ Geautomatiseerde Code Coverage (695 xUnit, 372 Vitest, 1.067 Tests Totaal)       |
 |  • 100% GDPR & Medische Data-isolatie via transparante AES-256 DB Veldversleuteling   |
 |  • Geautomatiseerde RIZIV 8-sessies contingent tracking en facturatie-export          |
 |  • HL7 FHIR R4 interoperabiliteitslaag voor EPD/EHR communicatie                      |
@@ -104,12 +104,12 @@ Het project is gebouwd volgens een strikte Test-Driven en Behavior-Driven aanpak
 
 | Testcategorie | Framework | Scope | Resultaat |
 | :--- | :--- | :--- | :--- |
-| **Unit & Concurrency Tests** | xUnit / Moq | Domeinlogica, `SlotCalculator`, ELP teller, AES encryptie (60 bestanden) | 100% Pass (627 tests) |
+| **Unit & Concurrency Tests** | xUnit / Moq | Domeinlogica, `SlotCalculator`, ELP teller, AES encryptie (62 bestanden) | 100% Pass (695 tests) |
 | **Concurrency Stress Tests** | xUnit / Multi-threaded | Parallelle reserveringen op hetzelfde tijdslot (50 threads) | 0 Race Conditions (1 toegekend, 49 geweigerd) |
 | **Integratietests** | ASP.NET TestHost | API Endpoints, OAuth2/OIDC Auth flows, IDOR beveiliging | 100% Pass |
 | **Model Snapshot Tests**| EF Core Regression | Detectie van schema-drift en snapshot integriteit | 100% Pass |
-| **Frontend Tests** | Vitest / Testing Library | Booking Wizard stappen, validaties, modals, server-state (47 bestanden) | 100% Pass (370 tests) |
-| **Code Coverage** | Coverlet / ReportGenerator | Backend & Frontend gecombineerd (997 tests) | **> 90% Dekking** |
+| **Frontend Tests** | Vitest / Testing Library | Booking Wizard stappen, validaties, modals, server-state (47 bestanden) | 100% Pass (372 tests) |
+| **Code Coverage** | Coverlet / ReportGenerator | Backend & Frontend gecombineerd (1.067 tests) | **> 90% Dekking** |
 
 ---
 
