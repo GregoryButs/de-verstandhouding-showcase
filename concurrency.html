@@ -168,28 +168,26 @@
   <h1>Waarom een unieke index dit niet kan</h1>
 
   <p class="inleiding">
-    Een afsprakensysteem mag nooit twee mensen in hetzelfde tijdslot zetten. Dat klinkt als een
-    regel die je met een unieke index afdwingt. Dat is het niet, en het verschil bepaalt waar de
-    consistentiegrens van je systeem ligt.
+    Twee mensen mogen nooit in hetzelfde tijdslot terechtkomen. Dat klinkt als een regel die je met
+    een unieke index afdwingt. Dat is het niet — en waar je hem dan wél afdwingt, bepaalt de
+    consistentiegrens van je systeem.
   </p>
 
   <p class="auteur">
     Gregory Buts · uit het afsprakenbeheerplatform van praktijk De Verstandhouding
   </p>
 
-  <h2>De regel is niet wat je denkt</h2>
+  <h2>De regel</h2>
 
   <p>
-    Bij een psychologenpraktijk duurt een consultatie vijftig minuten, maar de agenda kan niet
-    aaneengesloten volgeboekt worden. Er moet tijd tussen: de ene cliënt moet weg zijn voor de
-    volgende binnenkomt, en de psycholoog heeft een moment nodig om te noteren. In het systeem heet
-    dat de wisseltijd. Vijftien minuten.
+    Een consultatie duurt vijftig minuten, maar de agenda kan niet aaneengesloten volgeboekt worden.
+    De ene cliënt moet weg zijn voor de volgende binnenkomt, en de psycholoog heeft tijd nodig om te
+    noteren. Vijftien minuten wisseltijd.
   </p>
 
   <p>
-    Daarmee verandert de regel van vorm. Hij gaat niet meer over gelijke starttijden, maar over
-    afstand. Hieronder staat een dag met één bestaande afspraak van 10:00 tot 11:00. Schuif de
-    tweede afspraak eroverheen en kijk wanneer het systeem hem weigert.
+    Daarmee gaat de regel niet meer over gelijke starttijden maar over afstand. Schuif de tweede
+    afspraak over de bestaande heen en kijk waar de grens ligt.
   </p>
 
   <div class="doos">
@@ -209,24 +207,18 @@
     <div class="uitspraak" id="uitspraak"></div>
   </div>
 
-  <p>
-    Merk op wat er gebeurt rond 11:15. Eén minuut eerder is het een conflict, precies op 11:15 mag
-    het. De grens ligt niet op het einde van de afspraak maar vijftien minuten daarna — en aan de
-    andere kant net zo goed: een afspraak die om 09:00 begint en een uur duurt, botst óók.
-  </p>
-
-  <h2>Waarom een index hier niet bij kan</h2>
+  <h2>Waarom hij nergens past</h2>
 
   <p>
     De voor de hand liggende oplossing is een unieke index op <code>(ruimte, starttijd)</code>. Die
-    garandeert dat er nooit twee rijen met dezelfde starttijd bestaan. Onwrikbaar, door de database
-    zelf afgedwongen, en precies één regel in je model.
+    kent één vraag: <em>bestaat deze sleutel al?</em> Maar 11:10 en 10:00 zijn verschillende
+    starttijden, en toch botsen ze. De index vergelijkt op gelijkheid; onze regel gaat over afstand.
   </p>
 
   <p>
-    Alleen: 11:10 en 10:00 zijn verschillende starttijden. Voor de index zijn het twee volstrekt
-    onschuldige rijen. De index kent maar één vraag — <em>bestaat deze sleutel al?</em> — en onze
-    regel stelt een andere vraag: <em>ligt deze afspraak te dicht bij een andere?</em>
+    Datzelfde bezwaar treft de nette objectgeoriënteerde oplossing. Je zou de controle in de
+    <code>Afspraak</code> zelf willen leggen — daar hoort domeinlogica. Maar een afspraak kent haar
+    buren niet. Zonder kennis van de rest van de dag kan ze de regel niet beoordelen.
   </p>
 
   <blockquote>
@@ -234,24 +226,16 @@
   </blockquote>
 
   <p>
-    Datzelfde bezwaar treft de nette objectgeoriënteerde oplossing. Je zou de controle in de
-    <code>Afspraak</code> zelf willen leggen — daar hoort domeinlogica immers. Maar een afspraak
-    kent haar buren niet. Ze weet niets van de andere afspraken op die dag, en zonder die kennis kan
-    ze de regel onmogelijk beoordelen. Het natuurlijke aggregaat is niet de afspraak maar
-    <em>de agenda van die dag</em>, en dat is in de praktijk een query plus een transactie.
+    Het natuurlijke aggregaat is dus niet de afspraak maar de agenda van die dag. En dat is in de
+    praktijk geen object, maar een query plus een transactie.
   </p>
 
-  <h2>En dan komen er twee tegelijk</h2>
+  <h2>Twee tegelijk</h2>
 
   <p>
     Eén gebruiker is geen probleem: lees de agenda, controleer de afstand, schrijf weg. Het wordt
-    interessant zodra twee aanvragen elkaar in de rede vallen. De controle en het wegschrijven zijn
-    namelijk twee handelingen, en tussen die twee zit een gaatje.
-  </p>
-
-  <p>
-    Hieronder staan twee transacties die op hetzelfde moment hetzelfde slot willen. Klik door de
-    stappen. Wissel daarna van transactiemodus en doorloop het opnieuw.
+    interessant zodra twee aanvragen elkaar in de rede vallen, want controleren en wegschrijven zijn
+    twee handelingen — en daartussen zit een gaatje.
   </p>
 
   <div class="doos">
@@ -265,281 +249,109 @@
       <div class="baan"><h4>Transactie B</h4><ol id="baanB"></ol></div>
     </div>
     <button class="stap-knop" id="stap">Volgende stap</button>
-    <button class="keuze-knop stap-knop" id="herstart" style="background:transparent;color:var(--inkt);border-color:var(--rand);font-weight:500">Opnieuw</button>
+    <button class="stap-knop" id="herstart" style="background:transparent;color:var(--inkt);border-color:var(--rand);font-weight:500">Opnieuw</button>
     <div class="uitspraak" id="raceUitspraak" style="margin-top:14px"></div>
   </div>
 
   <p>
-    In de standaardmodus doen beide transacties hun controle op een agenda die nog leeg is. Allebei
-    concluderen ze terecht dat het slot vrij is — op dát moment was het dat ook. Pas bij het
-    wegschrijven blijkt dat er iets veranderd is, en zonder vangnet staan er twee afspraken in
-    hetzelfde uur.
+    SQLite opent standaard met <code>BEGIN DEFERRED</code>: de schrijflock komt pas bij de eerste
+    <code>INSERT</code>. Beide transacties doen hun controle dus op een agenda die op dat moment
+    werkelijk leeg is, en botsen pas bij het schrijven. <code>BEGIN IMMEDIATE</code> neemt de lock
+    meteen, waardoor controle en <code>INSERT</code> samen ondeelbaar worden.
   </p>
 
   <p>
-    <code>BEGIN IMMEDIATE</code> verplaatst de schrijflock naar het begin van de transactie in
-    plaats van naar de eerste <code>INSERT</code>. Daardoor kan de tweede transactie niet eens
-    beginnen met lezen zolang de eerste bezig is. Controle en schrijven worden samen ondeelbaar, en
-    het gaatje verdwijnt.
+    Daaronder ligt nog een unieke index als vangnet. Belangrijk om precies te zijn over wat die wel
+    en niet doet: hij vangt <strong>alleen identieke starttijden</strong> — een dubbelklik, een
+    herhaalde poging na een time-out. Voor een overlappende maar niet-identieke boeking doet hij
+    niets. Slaat hij aan, dan wordt de databasefout vertaald naar <code>409 Conflict</code> en niet
+    naar <code>500</code>: een bezet tijdslot is een normale uitkomst, geen storing.
   </p>
 
-  <h2>Drie lagen, van goedkoop naar hard</h2>
+  <h2>De prijs</h2>
 
   <p>
-    Niet één maatregel dus, maar een reeks. Niet uit wantrouwen tegen de vorige, maar omdat ze
-    verschillende dingen vangen tegen verschillende kosten.
+    De invariant in een transactie leggen kost drie dingen, en ze zijn alle drie de moeite van het
+    kennen waard.
   </p>
 
   <p>
-    Voor de goede orde: dit is de opstelling van de losse proof of concept. Het draaiende platform
-    heeft de eerste twee lagen — de overlapcontrole binnen een transactie die op
-    <code>Serializable</code> staat, wat de SQLite-provider naar een niet-uitgestelde transactie
-    vertaalt. De unieke index op de starttijd zit daar niet; die is in de PoC toegevoegd om te laten
-    zien wat hij wel en niet oplevert.
+    <strong>De lock geldt voor het hele databasebestand</strong>, niet per agenda. Een boeking houdt
+    dus ook het opslaan van een notitie op. Bij één praktijk merkt niemand dat; bij duizenden
+    agenda's is het een bottleneck.
+  </p>
+
+  <p>
+    <strong>De traagste bewerking binnen de transactie bepaalt hoe lang iedereen wacht.</strong>
+    Een externe aanroep daarbinnen — een agenda raadplegen, een betaling controleren — koppelt de
+    beschikbaarheid van je database aan een dienst die je niet in de hand hebt. Haal op wat je nodig
+    hebt, en open de transactie pas daarna.
+  </p>
+
+  <p>
+    <strong>En het werkt alleen als elk schrijfpad zich eraan houdt.</strong> Wie later een tweede
+    endpoint bouwt met een gewone transactie, zet het gaatje terug; in WAL-modus worden lezers niet
+    geblokkeerd, dus die leest ongehinderd een achterhaalde toestand. De garantie zit in de
+    discipline van de code, niet in het schema. Dat is precies het soort afspraak dat na twee jaar
+    en drie ontwikkelaars sneuvelt.
+  </p>
+
+  <p>
+    Eén stille voorwaarde hoort daarbij. Krijgt een wachtende transactie geen wachttijd toegemeten,
+    dan geeft SQLite meteen <code>SQLITE_BUSY</code> in plaats van netjes in de rij te gaan staan —
+    en dat wordt een <code>500</code>. Het verschil tussen "keurig geserialiseerd" en "de helft
+    crasht" is één instelling in de verbindingstekst.
+  </p>
+
+  <h2>Waarom dan toch SQLite</h2>
+
+  <p>
+    Op PostgreSQL zou ik dit anders bouwen. Daar bestaat een <code>EXCLUDE</code>-constraint met
+    <code>btree_gist</code>: je slaat het al opgerekte bereik op als <code>tstzrange</code> en de
+    regel staat in het schema in plaats van in applicatiecode. Dat dekt meteen de twee verfijningen
+    die het model hierboven niet toont — de wisseltijd verschilt per consultatietype, en
+    geannuleerde afspraken tellen niet mee — met een partiële <code>WHERE</code> erbij.
+  </p>
+
+  <p>
+    Dat is structureel sterker, want de regel valt dan niet meer te omzeilen. De reden om het niet zo
+    te doen is niet technisch maar operationeel: het platform draait op één VPS, en een tweede
+    databasedienst betekent een proces om te draaien, bij te werken en apart te back-uppen. Voor één
+    agenda en één behandelaar staat daar te weinig tegenover.
   </p>
 
   <table>
     <thead>
-      <tr><th>Laag</th><th>Vangt</th><th>Kost</th></tr>
+      <tr><th>Aanpak</th><th>Regel staat in</th><th>Lock</th><th>Zwakke plek</th></tr>
     </thead>
     <tbody>
       <tr>
-        <td>Overlapcontrole in de transactie</td>
-        <td>Overlap inclusief wisseltijd — de eigenlijke domeinregel</td>
-        <td>Eén <code>SELECT</code></td>
+        <td>SQLite, <code>BEGIN IMMEDIATE</code></td>
+        <td>applicatiecode</td>
+        <td>het hele bestand</td>
+        <td>vereist dat élk schrijfpad meedoet</td>
       </tr>
       <tr>
-        <td><code>BEGIN IMMEDIATE</code></td>
-        <td>De race tussen controle en <code>INSERT</code></td>
-        <td>Schrijvers serialiseren</td>
+        <td>PostgreSQL, <code>EXCLUDE</code></td>
+        <td>het schema</td>
+        <td>botsende bereiken</td>
+        <td>databasespecifiek, tweede dienst</td>
       </tr>
       <tr>
-        <td>Unieke index op <code>(ruimte, starttijd)</code></td>
-        <td>Alleen identieke starttijden — dubbel verzenden, een herhaalde poging na een time-out</td>
-        <td>Niets, tot het gebeurt</td>
+        <td>Slot op een agendarij</td>
+        <td>applicatiecode, expliciet doel</td>
+        <td>één dag of agenda</td>
+        <td>vraagt een rij om op te vergrendelen</td>
       </tr>
     </tbody>
   </table>
 
-  <p>
-    Over die derde laag moet ik precies zijn, want het is verleidelijk om hem sterker voor te
-    stellen dan hij is. <strong>De index is geen vangnet voor de domeinregel.</strong> Hij vergelijkt
-    starttijden op gelijkheid, en 10:00 en 10:15 zijn nu eenmaal niet gelijk. Faalt de laag erboven,
-    dan glipt een overlappende maar niet-identieke boeking er gewoon langs.
-  </p>
+  <h2>Het bewijs</h2>
 
   <p>
-    Wat hij wél vangt is één specifiek en veelvoorkomend geval: dezelfde aanvraag die twee keer
-    binnenkomt. Een dubbelklik, een herhaalde poging na een time-out, een client die het opnieuw
-    probeert. Daar is de starttijd wél identiek, en daar is de index de goedkoopste bescherming die
-    er bestaat. Slaat hij aan, dan wordt de databasefout vertaald naar een <code>409 Conflict</code>
-    en niet naar een <code>500</code>: een bezet tijdslot is een normale uitkomst van een
-    boekingspoging, geen storing.
-  </p>
-
-  <h2>Wat het kost</h2>
-
-  <p>
-    Elke keuze heeft een prijs, en deze ook. De lock van <code>BEGIN IMMEDIATE</code> geldt voor het
-    <strong>hele databasebestand</strong>, niet voor een ruimte of een dag. Een boeking in de ene
-    agenda houdt dus niet alleen een boeking in de andere op, maar ook het wijzigen van een
-    e-mailadres of het opslaan van een notitie. Bij één praktijk met één psycholoog merkt niemand
-    dat. Bij duizenden agenda's op één database is het een bottleneck, en dan wil je een lock per
-    agenda in plaats van per bestand.
-  </p>
-
-  <h3>De stille voorwaarde: hoe lang mag een wachter wachten?</h3>
-
-  <p>
-    Er zit een instelling onder deze hele opzet die makkelijk over het hoofd te zien is. Als
-    transactie A de schrijflock heeft, krijgt B geen nette wachtrij van SQLite maar meteen een
-    <code>SQLITE_BUSY</code> — tenzij er een wachttijd is ingesteld. Met zo'n <em>busy timeout</em>
-    probeert de driver het opnieuw tot die tijd verstreken is; zonder valt B er direct uit met een
-    databasefout, en dat wordt een <code>500</code> in plaats van een <code>409</code>.
-  </p>
-
-  <p>
-    Het verschil tussen "netjes geserialiseerd" en "de helft crasht" is dus één regel in de
-    verbindingstekst. Bij transacties van enkele milliseconden is een seconde al ruim voldoende, en
-    valt het niemand op. Het valt pas op zodra een transactie langer duurt — en daarmee komt het
-    volgende punt in beeld.
-  </p>
-
-  <h3>Doe geen netwerkaanroep terwijl je de lock vasthoudt</h3>
-
-  <p>
-    Zolang de lock op het hele bestand geldt, bepaalt de traagste bewerking binnen de transactie
-    hoe lang iedereen wacht. Een externe aanroep daarbinnen — een agenda raadplegen, een betaling
-    controleren — koppelt de beschikbaarheid van je database aan die van een dienst die je niet in
-    de hand hebt. Wordt die traag, dan lopen alle wachters tegen hun busy timeout aan en verandert
-    één traag antwoord in een reeks serverfouten op plekken die niets met boeken te maken hebben.
-  </p>
-
-  <p>
-    De regel die daaruit volgt is simpel: haal alles op wát je nodig hebt, en open de transactie
-    pas daarna. Wat je binnen de lock doet, hoort alleen de database te raken.
-  </p>
-
-  <h3>En het werkt alleen als iedereen zich eraan houdt</h3>
-
-  <p>
-    Dit is de scherpste rand van de oplossing. <code>BEGIN IMMEDIATE</code> beschermt alleen de
-    paden die het gebruiken. Schrijft iemand later een tweede boekingsendpoint dat begint met een
-    gewone transactie — lezen, controleren, schrijven — dan zit het gaatje er weer, en niets in de
-    database houdt dat tegen. In WAL-modus worden lezers namelijk niet geblokkeerd: die tweede
-    transactie leest vrolijk een toestand die al achterhaald is.
-  </p>
-
-  <p>
-    De garantie zit dus niet in het schema maar in de discipline van de code. Dat is precies het
-    soort afspraak dat na twee jaar en drie ontwikkelaars sneuvelt. Het is de belangrijkste reden
-    waarom de oplossing hieronder, die de regel in het schema legt, structureel beter is.
-  </p>
-
-  <p>
-    Op PostgreSQL zou ik dit trouwens anders bouwen. Daar bestaat een <code>EXCLUDE</code>-constraint
-    met <code>btree_gist</code>, waarmee je overlap rechtstreeks in het schema uitdrukt — inclusief
-    de buffer, zonder één regel applicatiecode. Dat is strikt beter dan wat hier staat. SQLite kent
-    die mogelijkheid niet, en het systeem draait op SQLite. Dus dit is de juiste oplossing voor deze
-    database, niet de juiste oplossing in het algemeen.
-  </p>
-
-  <h3>Waarom het dan toch SQLite is</h3>
-
-  <p>
-    Die vraag hoort hier, want als PostgreSQL dit beter oplost, waarom staat het systeem er dan niet
-    op? Het antwoord is dat de database niet gekozen is voor de boekingsengine. Hij is gekozen voor
-    de gegevens die erin staan.
-  </p>
-
-  <p>
-    Het platform draait op één VPS: de applicatie achter een reverse proxy, en verder niets. De
-    afweging ging dus niet over waar de gegevens staan — die staan in een datacenter, zoals bij
-    vrijwel elke praktijk — maar over hoeveel bewegende delen je op die ene machine wilt hebben.
-  </p>
-
-  <p>
-    PostgreSQL zou daar prima naast kunnen draaien, in een container. Wat het meebrengt is een
-    tweede dienst die je draait, bijwerkt, afstemt en apart back-upt, plus het geheugen dat hij
-    opeist naast de applicatie. Voor één agenda en één behandelaar staat daar weinig tegenover.
-    SQLCipher viel om een andere reden af: dat vraagt native binaries per platform, wat migraties en
-    het inspecteren van een back-up omslachtig maakt.
-  </p>
-
-  <p>
-    Wat overbleef is SQLite met veldencryptie in pure C#: geen tweede proces, geen extra
-    netwerkluisteraar, en het volledige dossier is één bestand dat je kunt kopiëren, terugzetten en
-    controleren. De prijs staat in deze sectie beschreven — geen bereikconstraints, een lock op
-    bestandsniveau — en die prijs is bewust betaald voor een systeem met één agenda.
-  </p>
-
-  <p>
-    Dat maakt het bovenstaande geen spijtbetuiging. Het is een gevolg. Zou het platform meerdere
-    praktijken gaan bedienen, dan verandert de rekensom: een tweede dienst draaien weegt dan wél op
-    tegen wat je ervoor terugkrijgt, en pas dán komt de <code>EXCLUDE</code>-constraint binnen
-    bereik.
-  </p>
-
-  <h3>Drie manieren, drie plekken waar de waarheid ligt</h3>
-
-  <table>
-    <thead>
-      <tr><th>Aanpak</th><th>Controle ligt in</th><th>Reikwijdte van de lock</th><th>Zwakke plek</th></tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td>SQLite met <code>BEGIN IMMEDIATE</code></td>
-        <td>Applicatiecode</td>
-        <td>Het hele databasebestand</td>
-        <td>Vereist dat élk schrijfpad zich eraan houdt</td>
-      </tr>
-      <tr>
-        <td>PostgreSQL met <code>EXCLUDE</code> en <code>btree_gist</code></td>
-        <td>Het schema</td>
-        <td>Alleen botsende bereiken</td>
-        <td>Databasespecifiek; buffer moet in de constraint passen</td>
-      </tr>
-      <tr>
-        <td>Pessimistisch slot op een agendarij (<code>SELECT … FOR UPDATE</code>)</td>
-        <td>Applicatiecode, maar op een expliciet doel</td>
-        <td>Één dag of één agenda</td>
-        <td>Vraagt een rij om op te vergrendelen, ook als die verder niets doet</td>
-      </tr>
-    </tbody>
-  </table>
-
-  <p>
-    De middelste is de enige waarbij de regel niet meer omzeild kán worden, omdat hij niet in code
-    staat maar in het schema. De derde is het interessante compromis wanneer je op een database zit
-    zonder bereikconstraints maar de lock wél fijnmaziger wilt: je maakt een rij aan die de dag
-    vertegenwoordigt, en vergrendelt die.
-  </p>
-
-  <h2>Wat de echte agenda er nog bovenop legt</h2>
-
-  <p>
-    Het model in dit artikel gebruikt één vaste wisseltijd van vijftien minuten. In het draaiende
-    systeem is dat niet zo. De buffer hangt af van het <em>type</em> consultatie: een intake vraagt
-    meer nazorgtijd dan een vervolggesprek, dus de wisseltijd staat op het afspraaktype met een
-    praktijkbrede standaardwaarde eronder. De regel is daarmee niet één constante maar een waarde
-    die per rij verschilt. Wel steeds een buffer <em>ná</em> de afspraak: voorbereidingstijd vooraf
-    wordt bewust niet gehanteerd, want die zou de controle aan beide kanten moeten oprekken en het
-    zoekvenster verdubbelen.
-  </p>
-
-  <p>
-    Daar komt bij dat geannuleerde afspraken niet meetellen — die blokkeren niets meer, dus de
-    conflictcontrole sluit ze uit.
-  </p>
-
-  <p>
-    Het zou verleidelijk zijn om te zeggen dat de declaratieve oplossing hierop stukloopt. Dat is
-    niet zo, en het is de moeite waard om precies te zijn. PostgreSQL zet de buffer niet in de
-    constraint maar in het bereik zelf: je slaat een <code>tstzrange</code> op die al is opgerekt
-    met de duur en de wisseltijd van dát afspraaktype, desnoods als berekende kolom. De constraint
-    wordt dan <code>EXCLUDE USING gist (ruimte WITH =, bereik WITH &amp;&amp;) WHERE (status &lt;&gt;
-    'geannuleerd')</code> en dekt allebei de verfijningen in één regel — variabele buffers én
-    annuleringen.
-  </p>
-
-  <p>
-    De reden om het niet zo te doen is dus niet dat het niet kan. Het is dat je er een tweede dienst
-    voor draait, waar de vorige sectie over ging. Dat is een operationeel argument, geen
-    zeggingskrachtargument, en die twee moet je niet door elkaar halen.
-  </p>
-
-  <h3>Wie kan er eigenlijk een scheve tijd insturen?</h3>
-
-  <p>
-    Nog iets dat het beeld bijstelt. Het boekingsportaal voor patiënten toont geen vrije tijdkiezer
-    maar een lijst met vooraf berekende sloten. Wie via die weg boekt, kán geen 10:15 aanklikken als
-    het rooster op hele en halve uren staat — de scheve tijden uit dit artikel bestaan daar
-    eenvoudigweg niet. Voor dat pad zou een unieke index op de starttijd dus wél het merendeel van
-    de botsingen afvangen, want gelijktijdige aanvragen gaan er per definitie over hetzelfde slot.
-  </p>
-
-  <p>
-    Twee kanttekeningen houden de overlapcontrole toch onmisbaar. De psycholoog plant zelf wél op
-    vrije tijden, want een gesprek loopt uit of een afspraak wordt verzet — daar ontstaan de scheve
-    starttijden alsnog. En belangrijker: <strong>die slotlijst is een keuze van de interface, niet
-    van de server.</strong> Het endpoint neemt het meegestuurde tijdstip aan en rekent de eindtijd
-    uit; het toetst niet of dat tijdstip in de lijst voorkwam. Wie het verzoek zelf samenstelt,
-    stuurt gewoon 10:15.
-  </p>
-
-  <p>
-    Dat is precies waarom de controle in de transactie moet zitten en niet in het scherm. Een
-    interface die alleen geldige keuzes toont, is een dienst aan de gebruiker. Ze is geen garantie,
-    want de server hoort nooit aan te nemen dat de aanvraag van je eigen formulier komt.
-  </p>
-
-  <h2>Werkt het ook?</h2>
-
-  <p>
-    De twee modellen hierboven zijn illustraties: ze tekenen het mechanisme, ze meten niets. Het
-    echte bewijs staat los, in een uitgesneden versie van deze engine met vergaderruimtes in plaats
-    van consultaties. Daar vuren vijftig gelijktijdige aanvragen op hetzelfde tijdslot, en de
-    uitkomst wordt op HTTP-niveau geteld:
+    De twee modellen hierboven tekenen het mechanisme; ze meten niets. Het echte bewijs staat los, in
+    een uitgesneden versie van deze engine met vergaderruimtes in plaats van consultaties. Vijftig
+    gelijktijdige aanvragen op hetzelfde tijdslot, geteld op HTTP-niveau:
   </p>
 
   <div class="doos" style="font-family:var(--mono); font-size:14px; line-height:2">
@@ -550,14 +362,22 @@
 
   <p>
     Die test draait bij elke wijziging in de pijplijn, vijf keer achter elkaar. Een race die één op
-    de vijf keer misgaat, zou anders groen blijven bij een enkele run.
+    de vijf keer misgaat, zou anders groen blijven.
+  </p>
+
+  <p>
+    Nog een geruststelling die er geen is: het patiëntenportaal biedt alleen vooraf berekende sloten
+    aan, dus scheve starttijden ontstaan daar niet. Maar dat is een keuze van de interface, niet van
+    de server — het endpoint toetst het meegestuurde tijdstip niet tegen die lijst, en de psycholoog
+    plant sowieso op vrije tijden. Een scherm dat alleen geldige keuzes toont is een dienst aan de
+    gebruiker; de garantie hoort in de transactie.
   </p>
 
   <div class="slot">
     <h2>Zelf draaien</h2>
     <p style="margin-bottom:0">
-      De proof of concept is een losse repository van zo'n tweehonderd regels, met een demopagina
-      waarop één knop vijftig gelijktijdige boekingen afvuurt. Geen installatie nodig via Codespaces.
+      De proof of concept is zo'n tweehonderd regels, met een demopagina waarop één knop vijftig
+      gelijktijdige boekingen afvuurt. Via Codespaces zonder installatie.
     </p>
     <div class="knoppen">
       <a class="primair" href="https://github.com/GregoryButs/Slotcalculator-showcase">Proof of concept →</a>
