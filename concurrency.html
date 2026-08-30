@@ -307,26 +307,53 @@
       </tr>
       <tr>
         <td>Unieke index op <code>(ruimte, starttijd)</code></td>
-        <td>Wat er ondanks het bovenstaande doorheen komt</td>
+        <td>Alleen identieke starttijden — dubbel verzenden, een herhaalde poging na een time-out</td>
         <td>Niets, tot het gebeurt</td>
       </tr>
     </tbody>
   </table>
 
   <p>
-    De index is dus niet afgeschreven — hij is gedegradeerd van hoofdrolspeler tot vangnet. Slaat
-    hij toch aan, dan wordt de databasefout vertaald naar een <code>409 Conflict</code> en niet naar
-    een <code>500</code>. Een bezet tijdslot is een normale uitkomst van een boekingspoging, geen
-    storing.
+    Over die derde laag moet ik precies zijn, want het is verleidelijk om hem sterker voor te
+    stellen dan hij is. <strong>De index is geen vangnet voor de domeinregel.</strong> Hij vergelijkt
+    starttijden op gelijkheid, en 10:00 en 10:15 zijn nu eenmaal niet gelijk. Faalt de laag erboven,
+    dan glipt een overlappende maar niet-identieke boeking er gewoon langs.
+  </p>
+
+  <p>
+    Wat hij wél vangt is één specifiek en veelvoorkomend geval: dezelfde aanvraag die twee keer
+    binnenkomt. Een dubbelklik, een herhaalde poging na een time-out, een client die het opnieuw
+    probeert. Daar is de starttijd wél identiek, en daar is de index de goedkoopste bescherming die
+    er bestaat. Slaat hij aan, dan wordt de databasefout vertaald naar een <code>409 Conflict</code>
+    en niet naar een <code>500</code>: een bezet tijdslot is een normale uitkomst van een
+    boekingspoging, geen storing.
   </p>
 
   <h2>Wat het kost</h2>
 
   <p>
-    Elke keuze heeft een prijs, en deze ook. <code>BEGIN IMMEDIATE</code> serialiseert álle
-    schrijvers, niet alleen die voor dezelfde ruimte. Bij één praktijk met één agenda is dat
-    onzichtbaar. Bij duizenden ruimtes wordt het een bottleneck, en dan wil je een lock per ruimte
-    in plaats van per database.
+    Elke keuze heeft een prijs, en deze ook. De lock van <code>BEGIN IMMEDIATE</code> geldt voor het
+    <strong>hele databasebestand</strong>, niet voor een ruimte of een dag. Een boeking in de ene
+    agenda houdt dus niet alleen een boeking in de andere op, maar ook het wijzigen van een
+    e-mailadres of het opslaan van een notitie. Bij één praktijk met één psycholoog merkt niemand
+    dat. Bij duizenden agenda's op één database is het een bottleneck, en dan wil je een lock per
+    agenda in plaats van per bestand.
+  </p>
+
+  <h3>En het werkt alleen als iedereen zich eraan houdt</h3>
+
+  <p>
+    Dit is de scherpste rand van de oplossing. <code>BEGIN IMMEDIATE</code> beschermt alleen de
+    paden die het gebruiken. Schrijft iemand later een tweede boekingsendpoint dat begint met een
+    gewone transactie — lezen, controleren, schrijven — dan zit het gaatje er weer, en niets in de
+    database houdt dat tegen. In WAL-modus worden lezers namelijk niet geblokkeerd: die tweede
+    transactie leest vrolijk een toestand die al achterhaald is.
+  </p>
+
+  <p>
+    De garantie zit dus niet in het schema maar in de discipline van de code. Dat is precies het
+    soort afspraak dat na twee jaar en drie ontwikkelaars sneuvelt. Het is de belangrijkste reden
+    waarom de oplossing hieronder, die de regel in het schema legt, structureel beter is.
   </p>
 
   <p>
@@ -335,6 +362,66 @@
     de buffer, zonder één regel applicatiecode. Dat is strikt beter dan wat hier staat. SQLite kent
     die mogelijkheid niet, en het systeem draait op SQLite. Dus dit is de juiste oplossing voor deze
     database, niet de juiste oplossing in het algemeen.
+  </p>
+
+  <h3>Drie manieren, drie plekken waar de waarheid ligt</h3>
+
+  <table>
+    <thead>
+      <tr><th>Aanpak</th><th>Controle ligt in</th><th>Reikwijdte van de lock</th><th>Zwakke plek</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>SQLite met <code>BEGIN IMMEDIATE</code></td>
+        <td>Applicatiecode</td>
+        <td>Het hele databasebestand</td>
+        <td>Vereist dat élk schrijfpad zich eraan houdt</td>
+      </tr>
+      <tr>
+        <td>PostgreSQL met <code>EXCLUDE</code> en <code>btree_gist</code></td>
+        <td>Het schema</td>
+        <td>Alleen botsende bereiken</td>
+        <td>Databasespecifiek; buffer moet in de constraint passen</td>
+      </tr>
+      <tr>
+        <td>Pessimistisch slot op een agendarij (<code>SELECT … FOR UPDATE</code>)</td>
+        <td>Applicatiecode, maar op een expliciet doel</td>
+        <td>Één dag of één agenda</td>
+        <td>Vraagt een rij om op te vergrendelen, ook als die verder niets doet</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p>
+    De middelste is de enige waarbij de regel niet meer omzeild kán worden, omdat hij niet in code
+    staat maar in het schema. De derde is het interessante compromis wanneer je op een database zit
+    zonder bereikconstraints maar de lock wél fijnmaziger wilt: je maakt een rij aan die de dag
+    vertegenwoordigt, en vergrendelt die.
+  </p>
+
+  <h2>Wat de echte agenda er nog bovenop legt</h2>
+
+  <p>
+    Het model in dit artikel gebruikt één vaste wisseltijd van vijftien minuten. In het draaiende
+    systeem is dat niet zo. De buffer hangt af van het <em>type</em> consultatie: een intake vraagt
+    meer nazorgtijd dan een vervolggesprek, dus de wisseltijd staat op het afspraaktype met een
+    praktijkbrede standaardwaarde eronder. De regel is daarmee niet één constante maar een waarde
+    die per rij verschilt.
+  </p>
+
+  <p>
+    Daar komt bij dat geannuleerde afspraken niet meetellen — die blokkeren niets meer, dus de
+    conflictcontrole sluit ze uit. Allebei die verfijningen zijn eenvoudig in applicatiecode en
+    lastig in een schemaconstraint: op PostgreSQL heb je er een <em>partial</em>
+    <code>EXCLUDE</code>-constraint voor nodig, en een buffer die per rij verschilt past er sowieso
+    moeizaam in.
+  </p>
+
+  <p>
+    Dat nuanceert de vorige sectie. De declaratieve oplossing is structureel sterker, maar ze wordt
+    zwakker naarmate de domeinregel grilliger wordt. Ergens tussen "vijftien minuten" en "het hangt
+    ervan af" verschuift het voordeel terug naar de applicatielaag — en het is de moeite waard om te
+    weten wáár dat punt ligt voor je een database kiest.
   </p>
 
   <h2>Werkt het ook?</h2>
