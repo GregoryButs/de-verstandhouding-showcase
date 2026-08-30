@@ -348,6 +348,38 @@
     agenda in plaats van per bestand.
   </p>
 
+  <h3>De stille voorwaarde: hoe lang mag een wachter wachten?</h3>
+
+  <p>
+    Er zit een instelling onder deze hele opzet die makkelijk over het hoofd te zien is. Als
+    transactie A de schrijflock heeft, krijgt B geen nette wachtrij van SQLite maar meteen een
+    <code>SQLITE_BUSY</code> — tenzij er een wachttijd is ingesteld. Met zo'n <em>busy timeout</em>
+    probeert de driver het opnieuw tot die tijd verstreken is; zonder valt B er direct uit met een
+    databasefout, en dat wordt een <code>500</code> in plaats van een <code>409</code>.
+  </p>
+
+  <p>
+    Het verschil tussen "netjes geserialiseerd" en "de helft crasht" is dus één regel in de
+    verbindingstekst. Bij transacties van enkele milliseconden is een seconde al ruim voldoende, en
+    valt het niemand op. Het valt pas op zodra een transactie langer duurt — en daarmee komt het
+    volgende punt in beeld.
+  </p>
+
+  <h3>Doe geen netwerkaanroep terwijl je de lock vasthoudt</h3>
+
+  <p>
+    Zolang de lock op het hele bestand geldt, bepaalt de traagste bewerking binnen de transactie
+    hoe lang iedereen wacht. Een externe aanroep daarbinnen — een agenda raadplegen, een betaling
+    controleren — koppelt de beschikbaarheid van je database aan die van een dienst die je niet in
+    de hand hebt. Wordt die traag, dan lopen alle wachters tegen hun busy timeout aan en verandert
+    één traag antwoord in een reeks serverfouten op plekken die niets met boeken te maken hebben.
+  </p>
+
+  <p>
+    De regel die daaruit volgt is simpel: haal alles op wát je nodig hebt, en open de transactie
+    pas daarna. Wat je binnen de lock doet, hoort alleen de database te raken.
+  </p>
+
   <h3>En het werkt alleen als iedereen zich eraan houdt</h3>
 
   <p>
@@ -450,22 +482,30 @@
     systeem is dat niet zo. De buffer hangt af van het <em>type</em> consultatie: een intake vraagt
     meer nazorgtijd dan een vervolggesprek, dus de wisseltijd staat op het afspraaktype met een
     praktijkbrede standaardwaarde eronder. De regel is daarmee niet één constante maar een waarde
-    die per rij verschilt.
+    die per rij verschilt. Wel steeds een buffer <em>ná</em> de afspraak: voorbereidingstijd vooraf
+    wordt bewust niet gehanteerd, want die zou de controle aan beide kanten moeten oprekken en het
+    zoekvenster verdubbelen.
   </p>
 
   <p>
     Daar komt bij dat geannuleerde afspraken niet meetellen — die blokkeren niets meer, dus de
-    conflictcontrole sluit ze uit. Allebei die verfijningen zijn eenvoudig in applicatiecode en
-    lastig in een schemaconstraint: op PostgreSQL heb je er een <em>partial</em>
-    <code>EXCLUDE</code>-constraint voor nodig, en een buffer die per rij verschilt past er sowieso
-    moeizaam in.
+    conflictcontrole sluit ze uit.
   </p>
 
   <p>
-    Dat nuanceert de vorige sectie. De declaratieve oplossing is structureel sterker, maar ze wordt
-    zwakker naarmate de domeinregel grilliger wordt. Ergens tussen "vijftien minuten" en "het hangt
-    ervan af" verschuift het voordeel terug naar de applicatielaag — en het is de moeite waard om te
-    weten wáár dat punt ligt voor je een database kiest.
+    Het zou verleidelijk zijn om te zeggen dat de declaratieve oplossing hierop stukloopt. Dat is
+    niet zo, en het is de moeite waard om precies te zijn. PostgreSQL zet de buffer niet in de
+    constraint maar in het bereik zelf: je slaat een <code>tstzrange</code> op die al is opgerekt
+    met de duur en de wisseltijd van dát afspraaktype, desnoods als berekende kolom. De constraint
+    wordt dan <code>EXCLUDE USING gist (ruimte WITH =, bereik WITH &amp;&amp;) WHERE (status &lt;&gt;
+    'geannuleerd')</code> en dekt allebei de verfijningen in één regel — variabele buffers én
+    annuleringen.
+  </p>
+
+  <p>
+    De reden om het niet zo te doen is dus niet dat het niet kan. Het is dat je er een tweede dienst
+    voor draait, waar de vorige sectie over ging. Dat is een operationeel argument, geen
+    zeggingskrachtargument, en die twee moet je niet door elkaar halen.
   </p>
 
   <h3>Wie kan er eigenlijk een scheve tijd insturen?</h3>
