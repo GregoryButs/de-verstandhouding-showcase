@@ -7,7 +7,7 @@
 
 ## 📌 Executive Summary
 
-Voor een drukke psychologenpraktijk met conventie- en privéraadplegingen ontwierp en realiseerde ik een **state-of-the-art afsprakenbeheer- en patiëntenportaal**. Het systeem vervangt gefragmenteerde papieren en e-mailprocessen door een end-to-end geautomatiseerde workflow met strikte medische privacy (**AES-256 GCM veldencryptie**), 100% gegarandeerde preventie van dubbele boekingen (**C# 13 Lock & concurrency engine**), realtime tweewegs **Google Calendar synchronisatie**, en geautomatiseerde facturatie volgens de officiële **Belgische RIZIV/ELP-conventie**.
+Voor een drukke psychologenpraktijk met conventie- en privéraadplegingen ontwierp en realiseerde ik een **state-of-the-art afsprakenbeheer- en patiëntenportaal**. Het systeem vervangt gefragmenteerde papieren en e-mailprocessen door een end-to-end geautomatiseerde workflow met strikte medische privacy (**AES-256 GCM veldencryptie**), 100% gegarandeerde preventie van dubbele boekingen (**C# 13 Lock & concurrency engine**), realtime tweewegs **Google Calendar synchronisatie**, en geautomatiseerde sessieopvolging volgens de officiële **Belgische RIZIV/ELP-conventie**.
 
 ```
 +---------------------------------------------------------------------------------------+
@@ -16,7 +16,7 @@ Voor een drukke psychologenpraktijk met conventie- en privéraadplegingen ontwie
 |  • 0% Race Conditions / Double Bookings in 50-thread concurrent stress load tests     |
 |  • 90%+ Geautomatiseerde Code Coverage (695 xUnit, 372 Vitest, 1.067 Tests Totaal)       |
 |  • 100% GDPR & Medische Data-isolatie via transparante AES-256 DB Veldversleuteling   |
-|  • Geautomatiseerde RIZIV 8-sessies contingent tracking en facturatie-export          |
+|  • Geautomatiseerde RIZIV 8-sessies contingent tracking en registratie-export         |
 |  • HL7 FHIR R4 interoperabiliteitslaag voor EPD/EHR communicatie                      |
 |  • Long-Term Support (LTS) gegarandeerd op .NET 10 tot november 2028                 |
 +---------------------------------------------------------------------------------------+
@@ -88,7 +88,7 @@ graph TD
 *   **De Uitdaging**: In de Belgische Eerstelijnspsychologische Zorg (ELP) heeft een patiënt recht op maximaal 8 geconventioneerde sessies per kalenderjaar. Het overschrijden van dit contingent resulteert in niet-terugbetaalde zorg.
 *   **De Oplossing**:
     *   Domein-invariants in de `Afspraak` aggregate die real-time het sessiesaldo bijhouden.
-    *   Een gespecialiseerde `ElpMaandafsluiting` module in React met TanStack Table om met één klik maandstaten en RIZIV-facturatieoverzichten te exporteren.
+    *   Een gespecialiseerde `ElpMaandafsluiting` module in React met TanStack Table: ze toont de ELP-sessies van de maand, signaleert een ontbrekend rijksregisternummer, houdt bij wat al is ingegeven en exporteert de lijst als CSV voor registratie in het eHealth/ELP-portaal.
 
 ### 4. Realtime 2-Weg Google Calendar Synchronisatie & Hangfire Workers
 *   **De Uitdaging**: Afspraken die de behandelaar in haar persoonlijke Google Agenda aanpast of toevoegt, moeten realtime gesynchroniseerd worden met het interne platform om blinde vlekken te voorkomen.

@@ -77,7 +77,7 @@ graph TD
 
 ### 3. RIZIV / ELP Conventie Contingent Tracking
 *   Real-time domeinbewaking van het 8-sessies contingent per cliënt volgens de Belgische eerstelijnspsychologische zorgconventie.
-*   1-Click export van maandafsluitingen en RIZIV-facturatielijsten.
+*   CSV-export van de maandafsluiting, klaar voor registratie in het eHealth/ELP-portaal.
 
 ### 4. 2-Weg Realtime Google Calendar Sync & Asynchrone Jobs
 *   Bi-directionele synchronisatie met Google Calendar v3 API en dynamische Google Meet linkaanmaak voor videoconsultaties.

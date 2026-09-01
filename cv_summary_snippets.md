@@ -22,13 +22,13 @@ Gebruik onderstaande kant-en-klare teksten op je **Curriculum Vitae**, **LinkedI
 > *Full-Stack .NET 10 LTS & React Platform voor Psychologenpraktijken*  
 > 
 > **Doel & Impact**:  
-> Ontwerp en realisatie van een end-to-end afspraken- en praktijkbeheersysteem voor de eerstelijnspsychologische zorg, ter vervanging van foutgevoelige handmatige planning en facturatie.
+> Ontwerp en realisatie van een end-to-end afspraken- en praktijkbeheersysteem voor de eerstelijnspsychologische zorg, ter vervanging van foutgevoelige handmatige planning en sessieopvolging.
 > 
 > **Belangrijkste Technische Prestaties**:  
 > 1. **Architectuur & Schaalbaarheid**: CQRS-scheiding tussen lees- en schrijfmodellen, met ontkoppelde C# controllers, application services en repositories onder .NET 10 LTS.  
 > 2. **Concurrency & Thread-Safety**: Zero double-booking garantie via geavanceerde database lock-validaties, buffertijden en 50-thread multi-threaded xUnit stress tests.  
 > 3. **Privacy & Beveiliging**: Transparante AES-256 veldencryptie op patiëntgegevens via EF Core ValueConverters en mitigatie van OWASP Top 10 kwetsbaarheden.  
-> 4. **Belgische Zorgwetgeving (ELP/RIZIV)**: Geautomatiseerde opvolging van het 8-sessies contingent per cliënt inclusief 1-click facturatie export voor zorgnetwerken.  
+> 4. **Belgische Zorgwetgeving (ELP/RIZIV)**: Geautomatiseerde opvolging van het 8-sessiescontingent per cliënt, met een maandafsluiting die de sessies klaarzet voor registratie in het eHealth/ELP-portaal.  
 > 5. **Interoperabiliteit**: HL7 FHIR R4 compatibele endpoints voor koppeling met Elektronische Patiënten Dossiers (EPD/EHR).  
 > 6. **Kwaliteitsborging**: 90%+ testdekking (695 backend + 372 frontend tests, 1.067 tests totaal), EF Core Model Snapshot drift tests, en geautomatiseerde zero-downtime deployment pipelines.
 
