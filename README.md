@@ -26,7 +26,7 @@
 
 ```mermaid
 graph TD
-    subgraph ClientApp ["Client Layer (React 18 + Vite + TypeScript)"]
+    subgraph ClientApp ["Client Layer (React 18/19 + Vite 6 + TypeScript)"]
         LP[Publieke Landingspagina]
         BW[5-Staps Boekingswizard]
         PD[Psycholoog Agenda & Dashboard]
@@ -39,49 +39,58 @@ graph TD
         PC[Patiënten & Portaal Controllers]
         FC[FHIR R4 Interop Controller]
         AuthC[Auth & OAuth2 / OIDC Handler]
+        HC[GoogleCalendarHealthCheck & /health]
     end
 
-    subgraph Domain ["Domein & Services (CQRS-modelscheiding / C# 13)"]
-        SC[SlotCalculator Engine]
+    subgraph Domain ["Domein & Services (CQRS / DDD / C# 13)"]
+        CD[AfspraakConflictDetector Engine]
         PBS[PatientBookingService]
-        GCS[GoogleCalendarService]
-        AES[AesEncryptionService - AES-256]
-        RBG[Hangfire Reminder Worker]
+        AGG[Afspraak Rich Aggregate]
+        NOTIF[AfspraakNotificatieService Facade]
+        GCS[GoogleCalendarSyncOrchestrator]
+        QUEUE[CalendarSyncTaskProcessor - Hangfire]
+        AES[AesEncryptionService - AES-256 GCM]
+        AUDIT[AuditLogService & GdprRetentieService]
     end
 
     subgraph Data ["Data & Storage Layer"]
-        EF[EF Core 10 Repositories]
+        EF[Asynchrone EF Core 10 Repositories]
         DB[(Encrypted SQLite Database / WAL Mode)]
+        TRIG[(Append-Only Triggers op Auditlogboek)]
     end
 
     ClientApp -->|REST API / Axios / SameSite Cookies| API
     API --> Domain
     Domain --> EF
     EF --> DB
-    Domain -->|Google APIs Client| Ext1[Google Calendar & Meet]
-    Domain -->|SMTP / MailKit| Ext2[Transactionele E-mail]
+    DB --> TRIG
+    NOTIF --> QUEUE
+    QUEUE -->|Google APIs Client| Ext1[Google Calendar & Meet]
+    NOTIF -->|SMTP / MailKit| Mail[Transactionele E-mail]
 ```
 
 ---
 
 ## ⚡ Belangrijkste Technische Hoogtepunten
 
-### 1. Concurrency Control & Double-Booking Preventie
-*   Atomaire beschikbaarheidsengine (`SlotCalculator`) met instelbare openingstijden, pauzes en vaste 10–15 minuten buffertijden.
-*   Transactie-isolatie in Entity Framework Core waardoor overlappende boekingen direct worden afgevangen (`HeeftConflict()`).
-*   **Resultaat**: 0% race-conditions en double-bookings in multi-threaded xUnit stress tests.
+### 1. Concurrency Control & Centrale Conflictdetector
+*   Atomaire beschikbaarheidsengine (`SlotCalculator`) en centrale `AfspraakConflictDetector` ([ADR-030](vault/01%20-%20Architecture/ADRs/ADR-030-Een-Conflictdetector-Voor-Beide-Boekingspaden.md)) met instelbare openingstijden, pauzes en vaste 10–15 minuten buffertijden.
+*   Rijke domein-invariants op de `Afspraak` aggregate ([ADR-034](vault/01%20-%20Architecture/ADRs/ADR-034-Domeinregels-Op-De-Afspraak-Aggregate.md)) en asynchrone datatoegang ([ADR-029](vault/01%20-%20Architecture/ADRs/ADR-029-Asynchrone-Repositorylaag.md)).
+*   **Resultaat**: 0% race-conditions en double-bookings in 50-thread multi-threaded xUnit stress tests.
 
-### 2. Privacy-by-Design & AES-256 Encryptie (GDPR)
-*   Gevoelige medische en persoonsgegevens (PII) worden transparant versleuteld met **AES-256** (met unieke IV's en multi-key rotatie) via een custom EF Core `EncryptedStringConverter`.
-*   Data wordt uitsluitend in-memory gedecrypt voor geautoriseerde verzoeken, met strikte mitigatie van BOLA / IDOR.
+### 2. Privacy-by-Design, Onveranderbare Audit Trail & GDPR Compliance
+*   Gevoelige medische en persoonsgegevens (PII) worden transparant versleuteld met **AES-256 GCM** (met unieke IV's en multi-key rotatie) via EF Core `EncryptedStringConverter`, met automatische backfill (`VeldEncryptieBackfiller`).
+*   Onweerlegbare **append-only audit trail** op dossierinzages met SQLite database triggers die `UPDATE` en `DELETE` blokkeren ([ADR-027](vault/01%20-%20Architecture/ADRs/ADR-027-Dossier-Audit-Trail.md)).
+*   Server-side HMAC-SHA256 toestemmingsvalidatie en geautomatiseerde 2-jarige GDPR-retentie via Hangfire ([ADR-028](vault/01%20-%20Architecture/ADRs/ADR-028-Toestemmingsregistratie-en-Retentie.md)).
+*   Gestandaardiseerde JSON machine-leesbare dossierexport (GDPR Art. 15/20) en Wet Patiëntenrechten contactpersonen.
 
 ### 3. RIZIV / ELP Conventie Contingent Tracking
 *   Real-time domeinbewaking van het 8-sessies contingent per cliënt volgens de Belgische eerstelijnspsychologische zorgconventie.
 *   CSV-export van de maandafsluiting, klaar voor registratie in het eHealth/ELP-portaal.
 
-### 4. 2-Weg Realtime Google Calendar Sync & Asynchrone Jobs
-*   Bi-directionele synchronisatie met Google Calendar v3 API en dynamische Google Meet linkaanmaak voor videoconsultaties.
-*   Asynchrone achtergrondworkers via **Hangfire** voor 24u-herinneringsmails met ICS-kalenderbijlagen.
+### 4. Resiliente 2-Weg Google Calendar Sync & Duurzame Hangfire Wachtrij
+*   Koppeling opgesplitst conform SRP ([ADR-031](vault/01%20-%20Architecture/ADRs/ADR-031-Google-Agendakoppeling-Opgesplitst.md)), met duurzame verwerking via Hangfire (`CalendarSyncTaskProcessor`, [ADR-033](vault/01%20-%20Architecture/ADRs/ADR-033-Duurzame-Agendawachtrij.md)).
+*   Ontkoppelde notificatiefacade ([ADR-032](vault/01%20-%20Architecture/ADRs/ADR-032-Neveneffecten-Achter-Een-Notificatie-Facade.md)) en `GoogleCalendarHealthCheck` met graceful `Degraded` status.
 
 ---
 
