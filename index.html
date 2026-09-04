@@ -170,8 +170,8 @@
               <div class="text-xs font-semibold text-slate-600">Double-Bookings</div>
             </div>
             <div class="glass-card rounded-2xl p-4 text-center">
-              <div class="text-2xl sm:text-3xl font-extrabold text-brand-rose mb-1">90%+</div>
-              <div class="text-xs font-semibold text-slate-600">Test Coverage &middot; 1.067 tests</div>
+              <div class="text-2xl sm:text-3xl font-extrabold text-brand-rose mb-1">92.7%</div>
+              <div class="text-xs font-semibold text-slate-600">Test Coverage &middot; 1.218 tests</div>
             </div>
             <div class="glass-card rounded-2xl p-4 text-center">
               <div class="text-2xl sm:text-3xl font-extrabold text-emerald-600 mb-1">AES-256</div>
@@ -430,6 +430,7 @@ graph TD
     subgraph API ["Backend API Gateway (ASP.NET Core 10 LTS)"]
         AC[Afspraak & Slot Controllers]
         PC[Patiënten & Portaal Controllers]
+        AuditC[Audit Log & Toestemming Controllers]
         FC[FHIR R4 Interop Controller]
         AuthC[Auth & OAuth2 / OIDC Handler]
     end
@@ -439,18 +440,21 @@ graph TD
         PBS[PatientBookingService]
         GCS[GoogleCalendarService]
         AES[AesEncryptionService - AES-256 GCM]
+        AUDIT[AuditLogService & GdprRetentieService]
         RBG[Hangfire Reminder Worker]
     end
 
     subgraph Data ["Data & Storage Layer"]
         EF[EF Core 10 Repositories]
         DB[(Encrypted SQLite Database / WAL Mode)]
+        TRIG[(Append-Only Triggers op Auditlogboek)]
     end
 
     ClientApp -->|REST API / Axios / SameSite Cookies| API
     API --> Domain
     Domain --> EF
     EF --> DB
+    DB --> TRIG
     Domain -->|Google APIs Client| Ext1[Google Calendar & Meet]
     Domain -->|SMTP / ICS| Ext2[Transactionele E-mail]
       </div>
@@ -485,15 +489,15 @@ graph TD
             <i data-lucide="shield-check" class="w-5 h-5"></i>
           </div>
           <div>
-            <h3 class="font-bold text-slate-900 text-base">2. Privacy-by-Design & AES-256 Encryptie</h3>
-            <span class="text-xs text-brand-900 font-mono">EF Core EncryptedStringConverter</span>
+            <h3 class="font-bold text-slate-900 text-base">2. Privacy-by-Design & Audit Trail</h3>
+            <span class="text-xs text-brand-900 font-mono">AES-256 GCM & Append-Only DB Triggers</span>
           </div>
         </div>
         <p class="text-sm text-slate-600 leading-relaxed mb-4 font-medium">
-          Gevoelige medische en persoonsgegevens (PII) worden transparant versleuteld met AES-256 GCM bij wegschrijven naar de database en enkel in-memory gedecrypt voor geautoriseerde verzoeken.
+          Gevoelige medische en persoonsgegevens (PII) worden transparant versleuteld met AES-256 GCM. Inzages en dossierwijzigingen worden onweerlegbaar vastgelegd in een append-only audit trail via SQLite database triggers die mutaties fysiek blokkeren (`RAISE(ABORT)`).
         </p>
         <div class="p-3 rounded-xl bg-emerald-50 border border-emerald-200 text-xs font-mono text-emerald-800 font-semibold">
-          ✓ Volledige GDPR & Beroepsgeheim compliance
+          ✓ Volledige GDPR, Beroepsgeheim & AVG Art. 15/20 export
         </div>
       </div>
 

@@ -13,7 +13,7 @@ Gebruik onderstaande kant-en-klare teksten op je **Curriculum Vitae**, **LinkedI
 > * Implementeerde een atomaire beschikbaarheidsengine (`SlotCalculator`) en centrale conflictdetector met `System.Threading.Lock` die *double-bookings* 100% uitsluit.  
 > * Waarborgde medische data-privacy (GDPR) via **AES-256 GCM veld-encryptie**, een onweerlegbare **append-only audit trail met database triggers** en HMAC consent validatie.  
 > * Integreerde realtime 2-weg **Google Calendar API** synchronisatie met duurzame Hangfire achtergrondwachtrij, health checks en automatische Google Meet generatie.  
-> * Behaalde **92.5%+ geautomatiseerde testdekking** (812 xUnit backend tests, 406 Vitest frontend tests — 1.218 tests totaal) met een complete GitHub Actions CI/CD pipeline.
+> * Behaalde **92.7%+ geautomatiseerde testdekking** (812 xUnit backend tests, 406 Vitest frontend tests — 1.218 tests totaal) met een complete GitHub Actions CI/CD pipeline.
 
 ---
 
@@ -30,7 +30,7 @@ Gebruik onderstaande kant-en-klare teksten op je **Curriculum Vitae**, **LinkedI
 > 3. **Privacy & Compliance**: Transparante AES-256 GCM veldencryptie (met startup backfill), SQLite database triggers die mutaties op het auditlogboek fysiek blokkeren, en geautomatiseerde 2-jarige GDPR-retentie.  
 > 4. **Belgische Zorgwetgeving (ELP/RIZIV)**: Geautomatiseerde opvolging van het 8-sessiescontingent per cliënt, met registratie-export voor het eHealth/ELP-portaal, machine-leesbare dossierexport en Wet Patiëntenrechten.  
 > 5. **Interoperabiliteit & Resilientie**: HL7 FHIR R4 compatibele endpoints, duurzame Hangfire kalenderwachtrij en `GoogleCalendarHealthCheck` met graceful degradation.  
-> 6. **Kwaliteitsborging**: 92.5%+ testdekking (812 backend + 406 frontend tests, 1.218 tests totaal), EF Core Model Snapshot drift tests, en geautomatiseerde zero-downtime deployment pipelines.
+> 6. **Kwaliteitsborging**: 92.7%+ testdekking (812 backend + 406 frontend tests, 1.218 tests totaal), EF Core Model Snapshot drift tests, en geautomatiseerde zero-downtime deployment pipelines.
 
 ---
 
@@ -43,12 +43,12 @@ Gebruik onderstaande kant-en-klare teksten op je **Curriculum Vitae**, **LinkedI
 > * Built a high-performance, concurrency-safe booking engine (`SlotCalculator`) with unified conflict detection and transaction isolation, preventing 100% of double-bookings.  
 > * Enforced strict GDPR/medical data privacy through **AES-256 GCM field-level encryption**, tamper-proof **append-only audit trails with database triggers**, and server-side HMAC consent verification.  
 > * Integrated two-way **Google Calendar API** sync with durable Hangfire background queues, resilient health checks, and dynamic Google Meet provisioning.  
-> * Established **92.5%+ automated test coverage** across 812 xUnit tests, multi-threaded concurrency suites, and 406 Vitest tests (1.218 tests total) within a GitHub Actions CI/CD pipeline.
+> * Established **92.7%+ automated test coverage** across 812 xUnit tests, multi-threaded concurrency suites, and 406 Vitest tests (1.218 tests total) within a GitHub Actions CI/CD pipeline.
 
 ---
 
 ## 🔗 3. Hoe link je dit op je CV?
 
 Plaats onder de projecttitel op je CV een klikbare link naar je portfolio-case study of LinkedIn:
-*   `Portfolio: https://gregorybuts.be/projects/de-verstandhouding`
+*   `Portfolio: https://gregorybuts.github.io/de-verstandhouding-showcase/`
 *   `Case Study Document: [Bekijk Technische Architectuur & Metrieken]`

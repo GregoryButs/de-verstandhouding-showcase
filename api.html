@@ -32,7 +32,7 @@
       publieke, statische weergave daarvan.
     </p>
     <p class="cijfers">
-      <b>PADEN</b> 57  &middot;  <b>OPERATIES</b> 69  &middot;  <b>SCHEMA'S</b> 24  &middot;
+      <b>PADEN</b> 62  &middot;  <b>OPERATIES</b> 74  &middot;  <b>SCHEMA'S</b> 30  &middot;
       <a href="./index.html">terug naar de showcase</a>
     </p>
   </div>
@@ -1881,7 +1881,7 @@
         }
       }
     },
-    "/api/settings/restore-dump": {
+    "/api/settings/dataonderhoud": {
       "post": {
         "tags": [
           "ApiSettings"
@@ -2955,6 +2955,224 @@
           }
         }
       }
+    },
+    "/api/audit/patient/{patientId}": {
+      "get": {
+        "tags": [
+          "ApiAudit"
+        ],
+        "summary": "Haal chronologisch auditlogboek op voor een patiëntendossier (behandelaar)",
+        "parameters": [
+          {
+            "name": "patientId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "aantal",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 100
+            }
+          },
+          {
+            "name": "X-Version",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "api-version",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/AuditRegelDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/audit/mijn-inzages": {
+      "get": {
+        "tags": [
+          "ApiAudit"
+        ],
+        "summary": "AVG Art. 15 inzagerecht: overzicht van dossierinzages en acties voor de aangemelde cliënt",
+        "parameters": [
+          {
+            "name": "X-Version",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "api-version",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/AuditRegelDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/toestemming": {
+      "post": {
+        "tags": [
+          "ApiToestemming"
+        ],
+        "summary": "Registreert een server-side toestemmingskeuze (AVG Art. 7) met tekstversie en HMAC-SHA256 IP pseudoniem",
+        "parameters": [
+          {
+            "name": "X-Version",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "api-version",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ToestemmingVerzoekDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ToestemmingDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/toestemming/mijn": {
+      "get": {
+        "tags": [
+          "ApiToestemming"
+        ],
+        "summary": "Overzicht van actuele en historische toestemmingskeuzes van de aangemelde gebruiker",
+        "parameters": [
+          {
+            "name": "X-Version",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "api-version",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ToestemmingDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/patientportaal/mijn-dossier": {
+      "get": {
+        "tags": [
+          "ApiPatientPortaal"
+        ],
+        "summary": "Machineleesbare JSON dossierexport (AVG Art. 15 & 20) met consultaties, contactpersonen en toestemmingen",
+        "parameters": [
+          {
+            "name": "X-Version",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "api-version",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PatientDossierExportDto"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -4017,6 +4235,305 @@
           "Regulier",
           "ELP"
         ]
+      },
+      "AuditRegelDto": {
+        "required": [
+          "tijdstipUtc",
+          "actie",
+          "entiteitType"
+        ],
+        "type": "object",
+        "properties": {
+          "tijdstipUtc": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "gebruiker": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "actie": {
+            "type": "string"
+          },
+          "entiteitType": {
+            "type": "string"
+          },
+          "entiteitId": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "patientId": {
+            "type": [
+              "null",
+              "integer"
+            ],
+            "format": "int32"
+          },
+          "details": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "bron": {
+            "type": [
+              "null",
+              "string"
+            ]
+          }
+        }
+      },
+      "ToestemmingVerzoekDto": {
+        "required": [
+          "onderwerp",
+          "versie",
+          "verleend"
+        ],
+        "type": "object",
+        "properties": {
+          "onderwerp": {
+            "maxLength": 64,
+            "type": "string"
+          },
+          "versie": {
+            "maxLength": 32,
+            "type": "string"
+          },
+          "verleend": {
+            "type": "boolean"
+          },
+          "keuzes": {
+            "maxLength": 512,
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "bron": {
+            "maxLength": 64,
+            "type": [
+              "null",
+              "string"
+            ]
+          }
+        }
+      },
+      "ToestemmingDto": {
+        "required": [
+          "onderwerp",
+          "versie",
+          "verleend",
+          "tijdstipUtc"
+        ],
+        "type": "object",
+        "properties": {
+          "onderwerp": {
+            "type": "string"
+          },
+          "versie": {
+            "type": "string"
+          },
+          "verleend": {
+            "type": "boolean"
+          },
+          "keuzes": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "tijdstipUtc": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "bron": {
+            "type": [
+              "null",
+              "string"
+            ]
+          }
+        }
+      },
+      "DossierAfspraakDto": {
+        "required": [
+          "start",
+          "einde",
+          "status",
+          "locatie",
+          "tarief",
+          "elpStatus"
+        ],
+        "type": "object",
+        "properties": {
+          "start": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "einde": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "type": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "status": {
+            "type": "string"
+          },
+          "locatie": {
+            "type": "string"
+          },
+          "tarief": {
+            "type": "string"
+          },
+          "elpStatus": {
+            "type": "string"
+          },
+          "opmerkingen": {
+            "type": [
+              "null",
+              "string"
+            ]
+          }
+        }
+      },
+      "DossierContactpersoonDto": {
+        "required": [
+          "rol",
+          "naam",
+          "aangewezenOp"
+        ],
+        "type": "object",
+        "properties": {
+          "rol": {
+            "type": "string"
+          },
+          "naam": {
+            "type": "string"
+          },
+          "relatie": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "telefoonnummer": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "email": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "aangewezenOp": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "ingetrokkenOp": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "format": "date-time"
+          }
+        }
+      },
+      "PatientDossierExportDto": {
+        "required": [
+          "gegenereerdOpUtc",
+          "voornaam",
+          "achternaam",
+          "geboortedatum",
+          "email",
+          "aangemaaktOp",
+          "isActief",
+          "afspraken",
+          "contactpersonen",
+          "toestemmingen",
+          "toelichting"
+        ],
+        "type": "object",
+        "properties": {
+          "gegenereerdOpUtc": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "dossiernummer": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "voornaam": {
+            "type": "string"
+          },
+          "achternaam": {
+            "type": "string"
+          },
+          "geboortedatum": {
+            "type": "string",
+            "format": "date"
+          },
+          "email": {
+            "type": "string"
+          },
+          "secundairEmail": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "telefoonnummer": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "rijksregisternummer": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "aangemaaktOp": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "isActief": {
+            "type": "boolean"
+          },
+          "afspraken": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DossierAfspraakDto"
+            }
+          },
+          "contactpersonen": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DossierContactpersoonDto"
+            }
+          },
+          "toestemmingen": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ToestemmingDto"
+            }
+          },
+          "toelichting": {
+            "type": "string"
+          }
+        }
       }
     }
   },
@@ -4056,6 +4573,12 @@
     },
     {
       "name": "GoogleWebhook"
+    },
+    {
+      "name": "ApiAudit"
+    },
+    {
+      "name": "ApiToestemming"
     }
   ]
 }</script>

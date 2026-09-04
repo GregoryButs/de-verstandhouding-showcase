@@ -14,7 +14,7 @@ Voor een drukke psychologenpraktijk met conventie- en privéraadplegingen ontwie
 |                                     PORTFOLIO IMPACT                                  |
 +---------------------------------------------------------------------------------------+
 |  • 0% Race Conditions / Double Bookings in 50-thread concurrent stress load tests     |
-|  • 92.5% Geautomatiseerde Code Coverage (812 xUnit, 406 Vitest — 1.218 Tests Totaal)  |
+|  • 92.7% Geautomatiseerde Code Coverage (812 xUnit, 406 Vitest — 1.218 Tests Totaal)  |
 |  • 100% GDPR & Medische Data-isolatie via transparante AES-256 DB Veldversleuteling   |
 |  • Onweerlegbare Append-Only Audit Trail met SQLite DB Triggers (AVG Art. 5(2))       |
 |  • Geautomatiseerde RIZIV 8-sessies contingent tracking en registratie-export         |
@@ -87,8 +87,8 @@ graph TD
 *   **De Uitdaging**: Medische en persoonsgegevens (PII) mogen niet in klaartekst op schijf staan, en dossierinzages moeten onweerlegbaar en onveranderbaar auditeerbaar zijn conform AVG art. 5(2) en het medisch beroepsgeheim.
 *   **De Oplossing**:
     *   Transparante AES-256 GCM veld-encryptie via EF Core `EncryptedStringConverter` op Rijksregisternummers, telefoonnummers en consultatienotities, inclusief automatische opstart-backfill door `VeldEncryptieBackfiller`.
-    *   **Append-Only Audit Trail**: SQLite database triggers blokkeren fysiek elke `UPDATE` en `DELETE` op `AuditLogboek` (`RAISE(ABORT)`).
-    *   **Server-Side Toestemming**: HMAC-SHA256 validatie over consent-teksten en gepseudonimiseerde IP-adressen.
+    *   **Append-Only Audit Trail**: SQLite database triggers blokkeren fysiek elke `UPDATE` en `DELETE` op `AuditLogboek` (`RAISE(ABORT)`). De therapeut auditeert dossierinzages via `/api/audit/patient/{patientId}`, terwijl cliënten via `/api/audit/mijn-inzages` transparant zien wie hun dossier heeft geraadpleegd (AVG Art. 15).
+    *   **Server-Side Toestemming**: HMAC-SHA256 validatie over consent-teksten en gepseudonimiseerde IP-adressen via `/api/toestemming` en `/api/toestemming/mijn`.
     *   **Geautomatiseerde Retentie**: Maandelijkse Hangfire-taak die verlaten online aanmeldingen na 2 jaar anonimiseert, conform AVG art. 5(1)(e).
     *   **Dataportabiliteit & Rechten**: Machine-leesbare JSON dossierexport (AVG Art. 15 & 20) via `/api/patientportaal/mijn-dossier` en ondersteuning voor vertrouwenspersonen/vertegenwoordigers (Belgische Wet Patiëntenrechten).
 
@@ -119,7 +119,7 @@ Het project is gebouwd volgens een strikte Test-Driven en Behavior-Driven aanpak
 | **Integratie & Health Tests**| ASP.NET TestHost | API Endpoints, OAuth2/OIDC flows, IDOR, `GoogleCalendarHealthCheck` | 100% Pass |
 | **Model Snapshot Tests**      | EF Core Regression | Detectie van schema-drift en snapshot integriteit | 100% Pass |
 | **Frontend Component Tests**  | Vitest / Testing Library | Booking Wizard, drag-selectie, praktijkuren, modals, server-state (50 bestanden) | 100% Pass (**406 tests**) |
-| **Code Coverage**             | Coverlet / ReportGenerator | Backend & Frontend gecombineerd (**1.218 tests totaal**) | **92.5% Dekking** |
+| **Code Coverage**             | Coverlet / ReportGenerator | Backend & Frontend gecombineerd (**1.218 tests totaal**) | **92.7% Dekking** |
 
 ---
 
