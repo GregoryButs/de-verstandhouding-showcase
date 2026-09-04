@@ -123,7 +123,7 @@ Het project is gebouwd volgens een strikte Test-Driven en Behavior-Driven aanpak
 
 ---
 
-## 💡 Wat toont dit project aan potentiële werkgevers?
+## 💡 Wat toont dit project?
 
 1.  **Lead C# / .NET Architectuur**: Ervaring met .NET 10 LTS, C# 13 syntax (`Lock`, collection expressions), EF Core 10 asynchrone repositories, dependency injection, caching, health checks en duurzame Hangfire achtergrondtaken.
 2.  **Architecturaal Inzicht**: Begrip van waarom en hoe je lees/schrijf-scheiding (CQRS), een expliciete domeintaal en Architecture Decision Records toepast — inclusief de evolutie naar een rijke `Afspraak` aggregate root met geharmoniseerde conflictdetectie.
