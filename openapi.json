@@ -687,6 +687,85 @@
         }
       }
     },
+    "/api/audit": {
+      "get": {
+        "tags": [
+          "ApiAudit"
+        ],
+        "parameters": [
+          {
+            "name": "patientId",
+            "in": "query",
+            "schema": {
+              "pattern": "^-?(?:0|[1-9]\\d*)$",
+              "type": [
+                "integer",
+                "string"
+              ],
+              "format": "int32"
+            }
+          },
+          {
+            "name": "aantal",
+            "in": "query",
+            "schema": {
+              "pattern": "^-?(?:0|[1-9]\\d*)$",
+              "type": [
+                "integer",
+                "string"
+              ],
+              "format": "int32",
+              "default": 100
+            }
+          },
+          {
+            "name": "X-Version",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "api-version",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/AuditRegelDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/AuditRegelDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/AuditRegelDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/contact": {
       "post": {
         "tags": [
@@ -1067,6 +1146,47 @@
         }
       }
     },
+    "/api/patient/{id}/dossier-export": {
+      "get": {
+        "tags": [
+          "ApiPatient"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "pattern": "^-?(?:0|[1-9]\\d*)$",
+              "type": [
+                "integer",
+                "string"
+              ],
+              "format": "int32"
+            }
+          },
+          {
+            "name": "X-Version",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "api-version",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/api/patient/{id}/heractiveer": {
       "post": {
         "tags": [
@@ -1402,6 +1522,34 @@
           },
           "required": true
         },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/patientportaal/mijn-dossier": {
+      "get": {
+        "tags": [
+          "ApiPatientPortaal"
+        ],
+        "parameters": [
+          {
+            "name": "X-Version",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "api-version",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "OK"
@@ -1868,6 +2016,125 @@
         }
       }
     },
+    "/api/toestemming": {
+      "post": {
+        "tags": [
+          "ApiToestemming"
+        ],
+        "parameters": [
+          {
+            "name": "X-Version",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "api-version",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ToestemmingVerzoekDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ToestemmingVerzoekDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/ToestemmingVerzoekDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ToestemmingDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ToestemmingDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ToestemmingDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/toestemming/mijn": {
+      "get": {
+        "tags": [
+          "ApiToestemming"
+        ],
+        "parameters": [
+          {
+            "name": "X-Version",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "api-version",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ToestemmingDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ToestemmingDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ToestemmingDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/auth/login": {
       "post": {
         "tags": [
@@ -1904,6 +2171,54 @@
             "application/*+json": {
               "schema": {
                 "$ref": "#/components/schemas/LoginDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/auth/unlock": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "parameters": [
+          {
+            "name": "X-Version",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "api-version",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UnlockDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UnlockDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/UnlockDto"
               }
             }
           },
@@ -2416,6 +2731,752 @@
         }
       }
     },
+    "/api/elp/referentieperiode/{patientId}": {
+      "get": {
+        "tags": [
+          "Elp"
+        ],
+        "parameters": [
+          {
+            "name": "patientId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "pattern": "^-?(?:0|[1-9]\\d*)$",
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "opDatum",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          },
+          {
+            "name": "X-Version",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "api-version",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/elp/netwerken": {
+      "get": {
+        "tags": [
+          "Elp"
+        ],
+        "parameters": [
+          {
+            "name": "X-Version",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "api-version",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/elp/netwerkinclusie": {
+      "post": {
+        "tags": [
+          "Elp"
+        ],
+        "parameters": [
+          {
+            "name": "X-Version",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "api-version",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NetwerkinclusieVerzoek"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NetwerkinclusieVerzoek"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/NetwerkinclusieVerzoek"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/elp/netwerkinclusie/{id}/beeindig": {
+      "post": {
+        "tags": [
+          "Elp"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "pattern": "^-?(?:0|[1-9]\\d*)$",
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "X-Version",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "api-version",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BeeindigInclusieVerzoek"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BeeindigInclusieVerzoek"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/BeeindigInclusieVerzoek"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/elp/netwerkinclusie/{id}/functioneel-bilan": {
+      "post": {
+        "tags": [
+          "Elp"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "pattern": "^-?(?:0|[1-9]\\d*)$",
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "X-Version",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "api-version",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FunctioneelBilanVerzoek"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FunctioneelBilanVerzoek"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/FunctioneelBilanVerzoek"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/elp/administratieve-prestatie": {
+      "post": {
+        "tags": [
+          "Elp"
+        ],
+        "parameters": [
+          {
+            "name": "X-Version",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "api-version",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AdministratievePrestatieVerzoek"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AdministratievePrestatieVerzoek"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/AdministratievePrestatieVerzoek"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/elp/administratieve-prestatie/{id}/toggle-status": {
+      "post": {
+        "tags": [
+          "Elp"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "pattern": "^-?(?:0|[1-9]\\d*)$",
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "X-Version",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "api-version",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/elp/administratieve-prestatie/{id}": {
+      "delete": {
+        "tags": [
+          "Elp"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "pattern": "^-?(?:0|[1-9]\\d*)$",
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "X-Version",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "api-version",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/elp/sessie/{id}/zorgfunctie": {
+      "put": {
+        "tags": [
+          "Elp"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "pattern": "^-?(?:0|[1-9]\\d*)$",
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "X-Version",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "api-version",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ZorgfunctieVerzoek"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ZorgfunctieVerzoek"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/ZorgfunctieVerzoek"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/elp/groepsessie/{id}": {
+      "get": {
+        "tags": [
+          "Elp"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "pattern": "^-?(?:0|[1-9]\\d*)$",
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "X-Version",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "api-version",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/elp/groepsessie/{id}/deelnemer": {
+      "post": {
+        "tags": [
+          "Elp"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "pattern": "^-?(?:0|[1-9]\\d*)$",
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "X-Version",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "api-version",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DeelnemerVerzoek"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DeelnemerVerzoek"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/DeelnemerVerzoek"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/elp/groepsessie/deelnemer/{deelnemerId}": {
+      "delete": {
+        "tags": [
+          "Elp"
+        ],
+        "parameters": [
+          {
+            "name": "deelnemerId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "pattern": "^-?(?:0|[1-9]\\d*)$",
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "X-Version",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "api-version",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/elp/groepsessie/{id}/tweede-verstrekker": {
+      "put": {
+        "tags": [
+          "Elp"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "pattern": "^-?(?:0|[1-9]\\d*)$",
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "X-Version",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "api-version",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TweedeVerstrekkerVerzoek"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TweedeVerstrekkerVerzoek"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/TweedeVerstrekkerVerzoek"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/elp/groepsessie/{id}/mhc-sessie-id": {
+      "put": {
+        "tags": [
+          "Elp"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "pattern": "^-?(?:0|[1-9]\\d*)$",
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "X-Version",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "api-version",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MhcSessieIdVerzoek"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MhcSessieIdVerzoek"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/MhcSessieIdVerzoek"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/elp/groepsessie/{id}/nodig-uit": {
+      "post": {
+        "tags": [
+          "Elp"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "pattern": "^-?(?:0|[1-9]\\d*)$",
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "X-Version",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "api-version",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/elp/sessie/{id}/intrekken": {
+      "post": {
+        "tags": [
+          "Elp"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "pattern": "^-?(?:0|[1-9]\\d*)$",
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "X-Version",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "api-version",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/api/elp/markeer-verwerkt": {
       "post": {
         "tags": [
@@ -2724,8 +3785,8 @@
           "200": {
             "description": "OK",
             "content": {
-              "application/fhir+json": { },
-              "application/json": { }
+              "application/fhir+json": {},
+              "application/json": {}
             }
           }
         }
@@ -2790,8 +3851,8 @@
           "200": {
             "description": "OK",
             "content": {
-              "application/fhir+json": { },
-              "application/json": { }
+              "application/fhir+json": {},
+              "application/json": {}
             }
           }
         }
@@ -2835,8 +3896,8 @@
           "200": {
             "description": "OK",
             "content": {
-              "application/fhir+json": { },
-              "application/json": { }
+              "application/fhir+json": {},
+              "application/json": {}
             }
           }
         }
@@ -2880,8 +3941,8 @@
           "200": {
             "description": "OK",
             "content": {
-              "application/fhir+json": { },
-              "application/json": { }
+              "application/fhir+json": {},
+              "application/json": {}
             }
           }
         }
@@ -2914,233 +3975,47 @@
           }
         }
       }
-    },
-    "/api/audit/patient/{patientId}": {
-      "get": {
-        "tags": [
-          "ApiAudit"
-        ],
-        "summary": "Haal chronologisch auditlogboek op voor een patiëntendossier (behandelaar)",
-        "parameters": [
-          {
-            "name": "patientId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          },
-          {
-            "name": "aantal",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "integer",
-              "format": "int32",
-              "default": 100
-            }
-          },
-          {
-            "name": "X-Version",
-            "in": "header",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "api-version",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/AuditRegelDto"
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/audit/mijn-inzages": {
-      "get": {
-        "tags": [
-          "ApiAudit"
-        ],
-        "summary": "AVG Art. 15 inzagerecht: overzicht van dossierinzages en acties voor de aangemelde cliënt",
-        "parameters": [
-          {
-            "name": "X-Version",
-            "in": "header",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "api-version",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/AuditRegelDto"
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/toestemming": {
-      "post": {
-        "tags": [
-          "ApiToestemming"
-        ],
-        "summary": "Registreert een server-side toestemmingskeuze (AVG Art. 7) met tekstversie en HMAC-SHA256 IP pseudoniem",
-        "parameters": [
-          {
-            "name": "X-Version",
-            "in": "header",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "api-version",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/ToestemmingVerzoekDto"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ToestemmingDto"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/toestemming/mijn": {
-      "get": {
-        "tags": [
-          "ApiToestemming"
-        ],
-        "summary": "Overzicht van actuele en historische toestemmingskeuzes van de aangemelde gebruiker",
-        "parameters": [
-          {
-            "name": "X-Version",
-            "in": "header",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "api-version",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/ToestemmingDto"
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/patientportaal/mijn-dossier": {
-      "get": {
-        "tags": [
-          "ApiPatientPortaal"
-        ],
-        "summary": "Machineleesbare JSON dossierexport (AVG Art. 15 & 20) met consultaties, contactpersonen en toestemmingen",
-        "parameters": [
-          {
-            "name": "X-Version",
-            "in": "header",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "api-version",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/PatientDossierExportDto"
-                }
-              }
-            }
-          }
-        }
-      }
     }
   },
   "components": {
     "schemas": {
+      "AdministratievePrestatieVerzoek": {
+        "required": [
+          "datum",
+          "code"
+        ],
+        "type": "object",
+        "properties": {
+          "datum": {
+            "type": "string",
+            "format": "date"
+          },
+          "code": {
+            "type": "string"
+          },
+          "patientId": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "null",
+              "integer",
+              "string"
+            ],
+            "format": "int32"
+          },
+          "extraRizivNummers": {
+            "type": [
+              "null",
+              "string"
+            ]
+          }
+        }
+      },
       "Afspraak": {
         "required": [
           "starttijd",
           "eindtijd",
-          "status"
+          "status",
+          "soort"
         ],
         "type": "object",
         "properties": {
@@ -3200,16 +4075,8 @@
           "status": {
             "$ref": "#/components/schemas/AfspraakStatus"
           },
-          "sentimentScore": {
-            "maximum": 1,
-            "minimum": -1,
-            "pattern": "^-?(?:0|[1-9]\\d*)(?:\\.\\d+)?(?:[eE][+-]?\\d+)?$",
-            "type": [
-              "null",
-              "number",
-              "string"
-            ],
-            "format": "double"
+          "soort": {
+            "$ref": "#/components/schemas/AfspraakSoort"
           },
           "opmerkingen": {
             "type": [
@@ -3266,6 +4133,86 @@
               }
             ]
           },
+          "elpZorgfunctie": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/ElpZorgfunctie"
+              }
+            ]
+          },
+          "elpDoelgroep": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/ElpDoelgroep"
+              }
+            ]
+          },
+          "prestatiecode": {
+            "maxLength": 10,
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "heeftVerhoogdeTegemoetkomingSnapshot": {
+            "type": "boolean"
+          },
+          "remgeldSnapshot": {
+            "pattern": "^-?(?:0|[1-9]\\d*)(?:\\.\\d+)?$",
+            "type": [
+              "null",
+              "number",
+              "string"
+            ],
+            "format": "double"
+          },
+          "remgeldAangerekend": {
+            "type": "boolean"
+          },
+          "tweedeVerstrekkerNummer": {
+            "maxLength": 20,
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "tweedeVerstrekkerHoedanigheid": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/ElpTweedeVerstrekker"
+              }
+            ]
+          },
+          "deelnemers": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ElpGroepsessieDeelnemer"
+            }
+          },
+          "mhcSessieId": {
+            "maxLength": 50,
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "duurMinuten": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "integer",
+              "string"
+            ],
+            "format": "int32"
+          },
           "locatieType": {
             "$ref": "#/components/schemas/LocatieType"
           },
@@ -3279,13 +4226,15 @@
           }
         }
       },
-      "AfspraakStatus": {
+      "AfspraakSoort": {
         "enum": [
-          "Gepland",
-          "Voltooid",
-          "Geannuleerd",
-          "NoShow"
+          "Consultatie",
+          "PraktijkhuisConsultatie",
+          "Blokkade"
         ]
+      },
+      "AfspraakStatus": {
+        "type": "integer"
       },
       "AfspraakType": {
         "required": [
@@ -3325,6 +4274,56 @@
           "vereistPatient": {
             "type": "boolean"
           },
+          "isZichtbaarVoorPatient": {
+            "type": "boolean"
+          },
+          "standaardTariefType": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/TariefType"
+              }
+            ]
+          },
+          "standaardElpType": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/ELPType"
+              }
+            ]
+          },
+          "standaardElpZorgfunctie": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/ElpZorgfunctie"
+              }
+            ]
+          },
+          "standaardLocatieType": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/LocatieType"
+              }
+            ]
+          },
+          "beschrijving": {
+            "maxLength": 500,
+            "type": [
+              "null",
+              "string"
+            ]
+          },
           "id": {
             "pattern": "^-?(?:0|[1-9]\\d*)$",
             "type": [
@@ -3332,6 +4331,90 @@
               "string"
             ],
             "format": "int32"
+          }
+        }
+      },
+      "AuditRegelDto": {
+        "required": [
+          "tijdstipUtc",
+          "gebruiker",
+          "actie",
+          "entiteitType",
+          "entiteitId",
+          "patientId",
+          "details",
+          "bron"
+        ],
+        "type": "object",
+        "properties": {
+          "tijdstipUtc": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "gebruiker": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "actie": {
+            "type": "string"
+          },
+          "entiteitType": {
+            "type": "string"
+          },
+          "entiteitId": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "patientId": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "null",
+              "integer",
+              "string"
+            ],
+            "format": "int32"
+          },
+          "details": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "bron": {
+            "type": [
+              "null",
+              "string"
+            ]
+          }
+        }
+      },
+      "BeeindigInclusieVerzoek": {
+        "required": [
+          "einddatum",
+          "reden"
+        ],
+        "type": "object",
+        "properties": {
+          "einddatum": {
+            "type": "string",
+            "format": "date"
+          },
+          "reden": {
+            "type": "string"
+          },
+          "trajectAfloop": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/ElpTrajectAfloop"
+              }
+            ]
           }
         }
       },
@@ -3500,16 +4583,27 @@
           "standaardTariefType": {
             "$ref": "#/components/schemas/TariefType"
           },
-          "emotioneleStabiliteit": {
-            "maximum": 10,
-            "minimum": 1,
-            "pattern": "^-?(?:0|[1-9]\\d*)(?:\\.\\d+)?(?:[eE][+-]?\\d+)?$",
+          "heeftVerhoogdeTegemoetkoming": {
+            "type": "boolean"
+          },
+          "bevestigAfwijkendeGeboortedatum": {
+            "type": "boolean"
+          }
+        }
+      },
+      "DeelnemerVerzoek": {
+        "required": [
+          "patientId"
+        ],
+        "type": "object",
+        "properties": {
+          "patientId": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
             "type": [
-              "null",
-              "number",
+              "integer",
               "string"
             ],
-            "format": "double"
+            "format": "int32"
           }
         }
       },
@@ -3656,29 +4750,221 @@
           "standaardTariefType": {
             "$ref": "#/components/schemas/TariefType"
           },
-          "emotioneleStabiliteit": {
-            "maximum": 10,
-            "minimum": 1,
-            "pattern": "^-?(?:0|[1-9]\\d*)(?:\\.\\d+)?(?:[eE][+-]?\\d+)?$",
+          "heeftVerhoogdeTegemoetkoming": {
+            "type": "boolean"
+          },
+          "bevestigAfwijkendeGeboortedatum": {
+            "type": "boolean"
+          }
+        }
+      },
+      "ElpDoelgroep": {
+        "enum": [
+          "AlleenRechthebbende",
+          "MetContext",
+          null
+        ]
+      },
+      "ElpGroepsessieDeelnemer": {
+        "required": [
+          "afspraakId",
+          "patientId"
+        ],
+        "type": "object",
+        "properties": {
+          "afspraakId": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "integer",
+              "string"
+            ],
+            "format": "int32"
+          },
+          "afspraak": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/Afspraak"
+              }
+            ]
+          },
+          "patientId": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "integer",
+              "string"
+            ],
+            "format": "int32"
+          },
+          "patient": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/Patient"
+              }
+            ]
+          },
+          "elpStatus": {
+            "$ref": "#/components/schemas/ELPStatus"
+          },
+          "remgeldSnapshot": {
+            "pattern": "^-?(?:0|[1-9]\\d*)(?:\\.\\d+)?$",
             "type": [
               "null",
               "number",
               "string"
             ],
             "format": "double"
+          },
+          "heeftVerhoogdeTegemoetkomingSnapshot": {
+            "type": "boolean"
+          },
+          "uitgenodigdOp": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "format": "date-time"
+          },
+          "wasAanwezig": {
+            "type": "boolean"
+          },
+          "id": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "integer",
+              "string"
+            ],
+            "format": "int32"
+          }
+        }
+      },
+      "ElpNetwerkInclusie": {
+        "required": [
+          "patientId",
+          "netwerk",
+          "conventie",
+          "begindatum"
+        ],
+        "type": "object",
+        "properties": {
+          "patientId": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "integer",
+              "string"
+            ],
+            "format": "int32"
+          },
+          "patient": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/Patient"
+              }
+            ]
+          },
+          "netwerk": {
+            "maxLength": 200,
+            "type": "string"
+          },
+          "conventie": {
+            "maxLength": 200,
+            "type": "string"
+          },
+          "begindatum": {
+            "type": "string",
+            "format": "date"
+          },
+          "einddatum": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "format": "date"
+          },
+          "eindeReden": {
+            "maxLength": 500,
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "functioneelBilanOp": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "format": "date"
+          },
+          "trajectAfloop": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/ElpTrajectAfloop"
+              }
+            ]
+          },
+          "studieToestemmingDeelname": {
+            "type": "boolean"
+          },
+          "studieToestemmingGegevens": {
+            "type": "boolean"
+          },
+          "id": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "integer",
+              "string"
+            ],
+            "format": "int32"
           }
         }
       },
       "ELPStatus": {
         "enum": [
           "TeVerwerken",
-          "Verwerkt"
+          "Verwerkt",
+          "Ingetrokken"
+        ]
+      },
+      "ElpTrajectAfloop": {
+        "enum": [
+          "ZonderVerwijzing",
+          "VoorVerwijzing",
+          "NaVerwijzing",
+          null
+        ]
+      },
+      "ElpTweedeVerstrekker": {
+        "enum": [
+          "Psycholoog",
+          "Arts",
+          "AndereZorgverlener",
+          "ZonderVergoeding",
+          null
         ]
       },
       "ELPType": {
         "enum": [
           "Individueel",
           "Groep",
+          null
+        ]
+      },
+      "ElpZorgfunctie": {
+        "enum": [
+          "Ondersteuning",
+          "Behandeling",
+          "GemeenschapsgerichteInterventie",
           null
         ]
       },
@@ -3690,6 +4976,18 @@
         "properties": {
           "email": {
             "type": "string"
+          }
+        }
+      },
+      "FunctioneelBilanVerzoek": {
+        "required": [
+          "datum"
+        ],
+        "type": "object",
+        "properties": {
+          "datum": {
+            "type": "string",
+            "format": "date"
           }
         }
       },
@@ -3719,7 +5017,9 @@
         "enum": [
           "Praktijk",
           "GoogleMeet",
-          "Telefoon"
+          "Telefoon",
+          "Vindplaats",
+          "AanHuis"
         ]
       },
       "LoginDto": {
@@ -3804,14 +5104,63 @@
               "string"
             ]
           },
-          "emotioneleStabiliteit": {
-            "pattern": "^-?(?:0|[1-9]\\d*)(?:\\.\\d+)?(?:[eE][+-]?\\d+)?$",
+          "bevestigAfwijkendeGeboortedatum": {
+            "type": "boolean"
+          }
+        }
+      },
+      "MhcSessieIdVerzoek": {
+        "required": [
+          "mhcSessieId"
+        ],
+        "type": "object",
+        "properties": {
+          "mhcSessieId": {
             "type": [
               "null",
-              "number",
+              "string"
+            ]
+          }
+        }
+      },
+      "NetwerkinclusieVerzoek": {
+        "required": [
+          "patientId",
+          "begindatum"
+        ],
+        "type": "object",
+        "properties": {
+          "patientId": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "integer",
               "string"
             ],
-            "format": "double"
+            "format": "int32"
+          },
+          "begindatum": {
+            "type": "string",
+            "format": "date"
+          },
+          "netwerk": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "conventie": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "studieToestemmingDeelname": {
+            "type": "boolean",
+            "default": false
+          },
+          "studieToestemmingGegevens": {
+            "type": "boolean",
+            "default": false
           }
         }
       },
@@ -3864,6 +5213,15 @@
           "standaardTariefType": {
             "$ref": "#/components/schemas/TariefType"
           },
+          "heeftVerhoogdeTegemoetkoming": {
+            "type": "boolean"
+          },
+          "netwerkinclusies": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ElpNetwerkInclusie"
+            }
+          },
           "volledigeNaam": {
             "type": [
               "null",
@@ -3879,16 +5237,9 @@
           "isActief": {
             "type": "boolean"
           },
-          "emotioneleStabiliteit": {
-            "maximum": 10,
-            "minimum": 1,
-            "pattern": "^-?(?:0|[1-9]\\d*)(?:\\.\\d+)?(?:[eE][+-]?\\d+)?$",
-            "type": [
-              "null",
-              "number",
-              "string"
-            ],
-            "format": "double"
+          "aangemaaktOp": {
+            "type": "string",
+            "format": "date-time"
           },
           "verwijderdOp": {
             "type": [
@@ -3947,6 +5298,16 @@
               "string"
             ],
             "format": "int32"
+          },
+          "privacyAkkoord": {
+            "type": "boolean"
+          },
+          "privacyVersie": {
+            "maxLength": 32,
+            "type": [
+              "null",
+              "string"
+            ]
           }
         }
       },
@@ -4107,6 +5468,15 @@
           "locatieTelefoon": {
             "type": "boolean"
           },
+          "elpNetwerk": {
+            "type": "string"
+          },
+          "elpConventie": {
+            "type": "string"
+          },
+          "elpConventies": {
+            "type": "string"
+          },
           "googleMeetUrl": {
             "type": "string"
           },
@@ -4195,48 +5565,35 @@
           "ELP"
         ]
       },
-      "AuditRegelDto": {
+      "ToestemmingDto": {
         "required": [
+          "onderwerp",
+          "versie",
+          "verleend",
+          "keuzes",
           "tijdstipUtc",
-          "actie",
-          "entiteitType"
+          "bron"
         ],
         "type": "object",
         "properties": {
+          "onderwerp": {
+            "type": "string"
+          },
+          "versie": {
+            "type": "string"
+          },
+          "verleend": {
+            "type": "boolean"
+          },
+          "keuzes": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
           "tijdstipUtc": {
             "type": "string",
             "format": "date-time"
-          },
-          "gebruiker": {
-            "type": [
-              "null",
-              "string"
-            ]
-          },
-          "actie": {
-            "type": "string"
-          },
-          "entiteitType": {
-            "type": "string"
-          },
-          "entiteitId": {
-            "type": [
-              "null",
-              "string"
-            ]
-          },
-          "patientId": {
-            "type": [
-              "null",
-              "integer"
-            ],
-            "format": "int32"
-          },
-          "details": {
-            "type": [
-              "null",
-              "string"
-            ]
           },
           "bron": {
             "type": [
@@ -4255,42 +5612,6 @@
         "type": "object",
         "properties": {
           "onderwerp": {
-            "maxLength": 64,
-            "type": "string"
-          },
-          "versie": {
-            "maxLength": 32,
-            "type": "string"
-          },
-          "verleend": {
-            "type": "boolean"
-          },
-          "keuzes": {
-            "maxLength": 512,
-            "type": [
-              "null",
-              "string"
-            ]
-          },
-          "bron": {
-            "maxLength": 64,
-            "type": [
-              "null",
-              "string"
-            ]
-          }
-        }
-      },
-      "ToestemmingDto": {
-        "required": [
-          "onderwerp",
-          "versie",
-          "verleend",
-          "tijdstipUtc"
-        ],
-        "type": "object",
-        "properties": {
-          "onderwerp": {
             "type": "string"
           },
           "versie": {
@@ -4305,10 +5626,6 @@
               "string"
             ]
           },
-          "tijdstipUtc": {
-            "type": "string",
-            "format": "date-time"
-          },
           "bron": {
             "type": [
               "null",
@@ -4317,180 +5634,49 @@
           }
         }
       },
-      "DossierAfspraakDto": {
+      "TweedeVerstrekkerVerzoek": {
         "required": [
-          "start",
-          "einde",
-          "status",
-          "locatie",
-          "tarief",
-          "elpStatus"
+          "nummer",
+          "hoedanigheid"
         ],
         "type": "object",
         "properties": {
-          "start": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "einde": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "type": {
-            "type": [
-              "null",
-              "string"
-            ]
-          },
-          "status": {
+          "nummer": {
             "type": "string"
           },
-          "locatie": {
-            "type": "string"
-          },
-          "tarief": {
-            "type": "string"
-          },
-          "elpStatus": {
-            "type": "string"
-          },
-          "opmerkingen": {
-            "type": [
-              "null",
-              "string"
-            ]
+          "hoedanigheid": {
+            "$ref": "#/components/schemas/ElpTweedeVerstrekker"
           }
         }
       },
-      "DossierContactpersoonDto": {
+      "UnlockDto": {
         "required": [
-          "rol",
-          "naam",
-          "aangewezenOp"
+          "password"
         ],
         "type": "object",
         "properties": {
-          "rol": {
+          "password": {
             "type": "string"
-          },
-          "naam": {
-            "type": "string"
-          },
-          "relatie": {
-            "type": [
-              "null",
-              "string"
-            ]
-          },
-          "telefoonnummer": {
-            "type": [
-              "null",
-              "string"
-            ]
-          },
-          "email": {
-            "type": [
-              "null",
-              "string"
-            ]
-          },
-          "aangewezenOp": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "ingetrokkenOp": {
-            "type": [
-              "null",
-              "string"
-            ],
-            "format": "date-time"
           }
         }
       },
-      "PatientDossierExportDto": {
+      "ZorgfunctieVerzoek": {
         "required": [
-          "gegenereerdOpUtc",
-          "voornaam",
-          "achternaam",
-          "geboortedatum",
-          "email",
-          "aangemaaktOp",
-          "isActief",
-          "afspraken",
-          "contactpersonen",
-          "toestemmingen",
-          "toelichting"
+          "zorgfunctie"
         ],
         "type": "object",
         "properties": {
-          "gegenereerdOpUtc": {
-            "type": "string",
-            "format": "date-time"
+          "zorgfunctie": {
+            "$ref": "#/components/schemas/ElpZorgfunctie"
           },
-          "dossiernummer": {
+          "doelgroep": {
+            "$ref": "#/components/schemas/ElpDoelgroep"
+          },
+          "remgeldAangerekend": {
             "type": [
               "null",
-              "string"
+              "boolean"
             ]
-          },
-          "voornaam": {
-            "type": "string"
-          },
-          "achternaam": {
-            "type": "string"
-          },
-          "geboortedatum": {
-            "type": "string",
-            "format": "date"
-          },
-          "email": {
-            "type": "string"
-          },
-          "secundairEmail": {
-            "type": [
-              "null",
-              "string"
-            ]
-          },
-          "telefoonnummer": {
-            "type": [
-              "null",
-              "string"
-            ]
-          },
-          "rijksregisternummer": {
-            "type": [
-              "null",
-              "string"
-            ]
-          },
-          "aangemaaktOp": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "isActief": {
-            "type": "boolean"
-          },
-          "afspraken": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/DossierAfspraakDto"
-            }
-          },
-          "contactpersonen": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/DossierContactpersoonDto"
-            }
-          },
-          "toestemmingen": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/ToestemmingDto"
-            }
-          },
-          "toelichting": {
-            "type": "string"
           }
         }
       }
@@ -4502,6 +5688,9 @@
     },
     {
       "name": "ApiAfspraakType"
+    },
+    {
+      "name": "ApiAudit"
     },
     {
       "name": "ApiContact"
@@ -4519,6 +5708,9 @@
       "name": "ApiSettings"
     },
     {
+      "name": "ApiToestemming"
+    },
+    {
       "name": "Auth"
     },
     {
@@ -4532,12 +5724,6 @@
     },
     {
       "name": "GoogleWebhook"
-    },
-    {
-      "name": "ApiAudit"
-    },
-    {
-      "name": "ApiToestemming"
     }
   ]
 }
