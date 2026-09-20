@@ -13,7 +13,7 @@ Gebruik onderstaande kant-en-klare teksten op je **Curriculum Vitae**, **LinkedI
 > * Implementeerde een atomaire beschikbaarheidsengine (`SlotCalculator`) en centrale conflictdetector met `System.Threading.Lock` die *double-bookings* 100% uitsluit.  
 > * Waarborgde medische data-privacy (GDPR) via **AES-256 GCM veld-encryptie**, een onweerlegbare **append-only audit trail met database triggers** en HMAC consent validatie.  
 > * Integreerde realtime 2-weg **Google Calendar API** synchronisatie met duurzame Hangfire achtergrondwachtrij, health checks en automatische Google Meet generatie.  
-> * Behaalde **92,1% geautomatiseerde testdekking** (1.064 xUnit backend tests, 524 Vitest frontend tests — 1.588 tests totaal) met een complete GitHub Actions CI/CD pipeline.
+> * Behaalde **94,3% geautomatiseerde testdekking** (1.248 xUnit backend tests, 580 Vitest frontend tests — 1.828 tests totaal) met een complete GitHub Actions CI/CD pipeline.
 
 ---
 
@@ -30,7 +30,7 @@ Gebruik onderstaande kant-en-klare teksten op je **Curriculum Vitae**, **LinkedI
 > 3. **Privacy & Compliance**: Transparante AES-256 GCM veldencryptie (met startup backfill), SQLite database triggers die mutaties op het auditlogboek fysiek blokkeren, en geautomatiseerde 2-jarige GDPR-retentie.  
 > 4. **Belgische Zorgwetgeving (ELP/RIZIV)**: Sessieteller per referentieperiode van twaalf maanden, zorgfunctie en prestatiecode per sessie, inclusie in een Mental Health Care-netwerk, groepssessies met deelnemerregistratie en uitnodigingen, plus registratie-export voor het eHealth/ELP-portaal.  
 > 5. **Interoperabiliteit & Resilientie**: HL7 FHIR R4 compatibele endpoints, duurzame Hangfire kalenderwachtrij en `GoogleCalendarHealthCheck` met graceful degradation.  
-> 6. **Kwaliteitsborging**: 92,1% testdekking (1.064 backend + 524 frontend tests, 1.588 tests totaal), EF Core Model Snapshot drift tests, en geautomatiseerde zero-downtime deployment pipelines.
+> 6. **Kwaliteitsborging**: 94,3% testdekking (1.248 backend + 580 frontend tests, 1.828 tests totaal), EF Core Model Snapshot drift tests, en geautomatiseerde zero-downtime deployment pipelines.
 
 ---
 
@@ -43,7 +43,7 @@ Gebruik onderstaande kant-en-klare teksten op je **Curriculum Vitae**, **LinkedI
 > * Built a high-performance, concurrency-safe booking engine (`SlotCalculator`) with unified conflict detection and transaction isolation, preventing 100% of double-bookings.  
 > * Enforced strict GDPR/medical data privacy through **AES-256 GCM field-level encryption**, tamper-proof **append-only audit trails with database triggers**, and server-side HMAC consent verification.  
 > * Integrated two-way **Google Calendar API** sync with durable Hangfire background queues, resilient health checks, and dynamic Google Meet provisioning.  
-> * Established **92.1% automated test coverage** across 1.064 xUnit tests, multi-threaded concurrency suites, and 524 Vitest tests (1.588 tests total) within a GitHub Actions CI/CD pipeline.
+> * Established **94.3% automated test coverage** across 1,248 xUnit tests, multi-threaded concurrency suites, and 580 Vitest tests (1,828 tests total) within a GitHub Actions CI/CD pipeline.
 
 ---
 
