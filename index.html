@@ -113,9 +113,13 @@
       </div>
 
       <div class="flex items-center space-x-3">
-        <a href="#screenshots" class="inline-flex items-center space-x-2 px-4 py-2 rounded-full text-xs font-bold bg-brand-rose hover:bg-brand-600 text-white transition shadow-sm">
+        <a href="#video" class="inline-flex items-center space-x-2 px-4 py-2 rounded-full text-xs font-bold bg-brand-rose hover:bg-brand-600 text-white transition shadow-sm">
+          <i data-lucide="play-circle" class="w-4 h-4"></i>
+          <span>Bekijk de video (23s)</span>
+        </a>
+        <a href="#screenshots" class="hidden sm:inline-flex items-center space-x-2 px-4 py-2 rounded-full text-xs font-bold border border-brand-300 bg-white hover:bg-brand-50 text-brand-900 transition">
           <i data-lucide="image" class="w-4 h-4"></i>
-          <span>Bekijk Screenshots (8)</span>
+          <span>Screenshots (8)</span>
         </a>
         <a href="#architectuur" class="hidden sm:inline-flex items-center space-x-2 px-4 py-2 rounded-full text-xs font-bold bg-brand-900 hover:bg-brand-800 text-white transition">
           <i data-lucide="layers" class="w-4 h-4"></i>
@@ -222,6 +226,64 @@
           </div>
         </div>
 
+      </div>
+    </div>
+  </section>
+
+  <!-- Launch video. Bron en storyboard staan in brag-video/ in deze repository. -->
+  <section id="video" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 border-t border-brand-200">
+    <div class="mb-8">
+      <div class="flex items-center space-x-2 text-brand-rose text-xs font-bold uppercase tracking-wider mb-2">
+        <i data-lucide="play-circle" class="w-4 h-4"></i>
+        <span>Launch Video</span>
+      </div>
+      <h2 class="text-2xl sm:text-4xl font-extrabold text-slate-900 font-brand-title">Het Platform in 23 Seconden</h2>
+      <p class="text-sm sm:text-base text-slate-700 mt-2 max-w-3xl leading-relaxed">
+        Van de landingspagina naar de boekingswizard, en dan naar wat er op dat ene klikmoment
+        onder de motorkap gebeurt: vijftig gelijktijdige aanvragen op hetzelfde tijdslot, waarvan
+        er precies &eacute;&eacute;n doorkomt.
+      </p>
+    </div>
+
+    <div class="glass-card rounded-3xl p-4 sm:p-6 shadow-xl">
+      <video
+        class="w-full h-auto rounded-2xl border border-brand-200 bg-brand-50"
+        controls
+        preload="metadata"
+        playsinline
+        poster="brag-video/brag.jpg"
+        width="1920"
+        height="1080">
+        <source src="brag-video/brag.mp4" type="video/mp4" />
+        Je browser speelt deze video niet af.
+        <a href="brag-video/brag.mp4" class="underline font-semibold">Download het MP4-bestand</a>.
+      </video>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mt-5 text-xs">
+        <div class="flex items-start gap-2.5 p-3 rounded-xl bg-white border border-brand-200">
+          <i data-lucide="shield-check" class="w-4 h-4 text-emerald-600 shrink-0 mt-0.5"></i>
+          <span class="text-slate-700 leading-relaxed">
+            <strong class="text-slate-900">Geen pati&euml;ntgegevens.</strong> Elke interface is
+            nagebouwd met verzonnen inhoud; het rijksregisternummer staat gemaskeerd en de
+            consultatienotitie toont ciphertext.
+          </span>
+        </div>
+        <div class="flex items-start gap-2.5 p-3 rounded-xl bg-white border border-brand-200">
+          <i data-lucide="check-circle-2" class="w-4 h-4 text-brand-rose shrink-0 mt-0.5"></i>
+          <span class="text-slate-700 leading-relaxed">
+            <strong class="text-slate-900">Elk cijfer getoetst.</strong> De beweringen op scherm
+            zijn tegen de broncode geverifieerd, niet overgenomen uit documentatie.
+          </span>
+        </div>
+        <div class="flex items-start gap-2.5 p-3 rounded-xl bg-white border border-brand-200">
+          <i data-lucide="git-branch" class="w-4 h-4 text-brand-900 shrink-0 mt-0.5"></i>
+          <span class="text-slate-700 leading-relaxed">
+            <strong class="text-slate-900">Bron meegeleverd.</strong> De compositie is HTML met
+            &eacute;&eacute;n GSAP-tijdlijn &mdash;
+            <a href="https://github.com/GregoryButs/de-verstandhouding-showcase/tree/main/brag-video"
+               class="text-brand-900 underline font-semibold hover:text-brand-rose">bekijk brag-video/</a>.
+          </span>
+        </div>
       </div>
     </div>
   </section>
