@@ -1,18 +1,18 @@
 <!DOCTYPE html>
-<html lang="nl" class="scroll-smooth">
+<html lang="nl" class="scroll-smooth bg-[#080B10]">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Case Study: De Verstandhouding &middot; Gregory Buts | Lead Software Architect</title>
-  <meta name="description" content="Portfolio Case Study van De Verstandhouding: een enterprise afsprakenbeheer- en patiëntenportaal gebouwd met ASP.NET Core 10 LTS, C# 13, EF Core 10, React 19, Tailwind v4 en FHIR R4. 94.5% testdekking." />
+  <title>De Verstandhouding &middot; Software Architecture Case Study &middot; Gregory Buts</title>
+  <meta name="description" content="Klinisch afsprakenbeheer en patiëntenportaal. 1.828 tests, 94.3% dekking, 0% double-bookings, C# 13 lock-engine en transparante AES-256 GCM veldversleuteling." />
   
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   
-  <!-- Google Fonts: Cormorant Garamond, Inter, JetBrains Mono, Plus Jakarta Sans -->
+  <!-- Google Fonts: Cormorant Garamond, Plus Jakarta Sans, JetBrains Mono -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600;1,700&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   
   <!-- Lucide Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
@@ -27,124 +27,98 @@
         extend: {
           fontFamily: {
             serif: ['"Cormorant Garamond"', 'Georgia', 'serif'],
-            sans: ['"Plus Jakarta Sans"', '"Inter"', '-apple-system', 'sans-serif'],
+            sans: ['"Plus Jakarta Sans"', '-apple-system', 'sans-serif'],
             mono: ['"JetBrains Mono"', 'monospace'],
           },
           colors: {
-            brand: {
-              50: '#FAF8F5',   // Warm, breathable linen canvas (Cavato & De Verstandhouding)
-              100: '#f5eeec',  // Soft airy blush
-              200: '#eadad6',  // Subtle hairline borders
-              300: '#f0b8b7',
-              400: '#eb9b99',
-              500: '#e38483',
-              600: '#cf7372',
-              rose: '#DF8A8B', // Authentic Terracotta Rose Accent
-              700: '#587796',  // Muted Slate
-              800: '#415e7a',
-              900: '#324a61',  // Deep Slate Blue
-              ink: '#18181b',  // Charcoal Ink
-            }
+            canvas: '#080B10',
+            panel: '#0E131F',
+            panelBorder: '#1E2638',
+            roseAccent: '#DF8A8B',
+            slateAccent: '#587796',
           }
         }
       }
     };
     mermaid.initialize({ 
       startOnLoad: true, 
-      theme: 'neutral',
+      theme: 'dark',
       themeVariables: {
-        primaryColor: '#fbf7f5',
-        primaryTextColor: '#18181b',
+        darkMode: true,
+        background: '#0E131F',
+        primaryColor: '#172033',
+        primaryTextColor: '#F1F5F9',
         primaryBorderColor: '#DF8A8B',
         lineColor: '#587796',
-        secondaryColor: '#ffffff',
-        tertiaryColor: '#FAF8F5'
+        secondaryColor: '#0E131F',
+        tertiaryColor: '#080B10'
       }
     });
   </script>
   
   <style>
     body {
-      background-color: #FAF8F5;
-      color: #18181b;
-      font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
+      background-color: #080B10;
+      color: #E2E8F0;
+      font-family: 'Plus Jakarta Sans', sans-serif;
       -webkit-font-smoothing: antialiased;
     }
     .font-brand-title {
       font-family: 'Cormorant Garamond', Georgia, serif;
     }
-    .editorial-lead {
-      line-height: 1.85;
-      letter-spacing: -0.01em;
-    }
-    .glass-panel {
-      background: rgba(255, 255, 255, 0.88);
-      backdrop-filter: blur(16px);
-      border: 1px solid rgba(223, 138, 139, 0.22);
-      box-shadow: 0 10px 30px -5px rgba(50, 74, 97, 0.04), 0 2px 10px -2px rgba(50, 74, 97, 0.02);
+    .dark-card {
+      background-color: rgba(14, 19, 31, 0.75);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(20px);
       transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
     }
-    .glass-panel:hover {
-      border-color: rgba(223, 138, 139, 0.45);
-      box-shadow: 0 20px 40px -10px rgba(223, 138, 139, 0.12), 0 4px 15px -2px rgba(50, 74, 97, 0.04);
+    .dark-card:hover {
+      border-color: rgba(223, 138, 139, 0.35);
+      box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.5);
     }
-    .tab-pill.active {
-      background-color: #18181b;
-      color: #ffffff;
-      border-color: #18181b;
-      box-shadow: 0 6px 18px -2px rgba(24, 24, 27, 0.25);
+    .slide-tab.active {
+      background-color: #DF8A8B;
+      color: #080B10;
+      border-color: #DF8A8B;
+      font-weight: 700;
     }
   </style>
 </head>
-<body class="min-h-screen selection:bg-brand-rose selection:text-white pb-32">
+<body class="min-h-screen selection:bg-roseAccent selection:text-canvas">
 
   <!-- ========================================================================= -->
-  <!-- 00. REFINED EDITORIAL HEADER & NAVIGATION (Cavato & Castaar Style)        -->
+  <!-- 01. MINIMALISTISCHE & RUSTIGE NAVIGATIEBALK                               -->
   <!-- ========================================================================= -->
-  <header class="sticky top-0 z-50 border-b border-brand-200/70 bg-[#FAF8F5]/90 backdrop-blur-xl transition-all duration-300">
-    <div class="max-w-7xl mx-auto px-6 sm:px-10 lg:px-16 h-24 flex items-center justify-between">
+  <header class="sticky top-0 z-50 border-b border-white/10 bg-[#080B10]/85 backdrop-blur-2xl">
+    <div class="max-w-6xl mx-auto px-6 lg:px-8 h-20 flex items-center justify-between">
       
-      <!-- Brand & Architect Meta -->
-      <a href="./index.html" class="flex items-center space-x-4 group">
-        <img src="assets/logo-kop.png" alt="De Verstandhouding" class="h-11 w-auto object-contain transition-transform duration-300 group-hover:scale-105" />
-        <div class="border-l border-brand-200/90 pl-4 py-0.5">
-          <div class="flex items-center space-x-2.5">
-            <span class="font-extrabold text-brand-ink text-base tracking-tight">Gregory Buts</span>
-            <span class="text-[11px] px-2.5 py-0.5 rounded-full bg-brand-100 text-brand-900 font-mono font-semibold border border-brand-200">Lead Architect</span>
-          </div>
-          <p class="text-xs text-stone-500 font-medium tracking-wide">Case Study &middot; De Verstandhouding</p>
+      <!-- Brand & Architect -->
+      <a href="#top" class="flex items-center space-x-3.5 group">
+        <img src="assets/logo-kop.png" alt="De Verstandhouding" class="h-9 w-auto object-contain brightness-95 group-hover:brightness-110 transition" />
+        <div class="border-l border-white/15 pl-3.5">
+          <span class="text-sm font-bold tracking-tight text-white block">Gregory Buts</span>
+          <span class="text-xs text-slate-400 font-mono block">Lead Software Architect</span>
         </div>
       </a>
 
-      <!-- Spacious Editorial Navigation Links -->
-      <nav class="hidden md:flex items-center space-x-8 text-sm font-medium text-stone-600">
-        <a href="#video" class="hover:text-brand-ink transition-colors py-1 flex items-center gap-1.5 font-semibold text-brand-ink">
-          <i data-lucide="play" class="w-3.5 h-3.5 text-brand-rose fill-brand-rose"></i>
-          <span>Video</span>
-        </a>
-        <a href="#context" class="hover:text-brand-ink transition-colors py-1">Context</a>
-        <a href="#statistieken" class="hover:text-brand-ink transition-colors py-1">Impact</a>
-        <a href="#screenshots" class="hover:text-brand-ink transition-colors py-1">Schermen</a>
-        <a href="#architectuur" class="hover:text-brand-ink transition-colors py-1">Architectuur</a>
-        <a href="./concurrency.html" class="hover:text-brand-rose transition-colors py-1 font-semibold flex items-center gap-1.5">
-          <span>Concurrency-Essay</span>
-          <i data-lucide="arrow-up-right" class="w-3.5 h-3.5 text-brand-rose"></i>
-        </a>
-        <a href="./api.html" class="hover:text-brand-rose transition-colors py-1 font-semibold flex items-center gap-1.5">
-          <span>API-Contract</span>
-          <i data-lucide="arrow-up-right" class="w-3.5 h-3.5 text-brand-rose"></i>
-        </a>
+      <!-- Rustige Navigatie -->
+      <nav class="hidden md:flex items-center space-x-8 text-sm font-medium text-slate-300">
+        <a href="#video" class="hover:text-roseAccent transition">Film (60s)</a>
+        <a href="#concurrency" class="hover:text-roseAccent transition">Concurrency</a>
+        <a href="#schermen" class="hover:text-roseAccent transition">Schermen</a>
+        <a href="#architectuur" class="hover:text-roseAccent transition">Architectuur</a>
+        <a href="#bronnen" class="hover:text-roseAccent transition">Artefacten</a>
       </nav>
 
-      <!-- Primary Action CTA -->
-      <div class="flex items-center space-x-4">
-        <a href="https://github.com/GregoryButs/Slotcalculator-showcase" target="_blank" rel="noopener" class="inline-flex items-center space-x-2 px-5 py-2.5 rounded-full text-xs font-bold border border-stone-300/80 bg-white hover:bg-stone-50 text-brand-ink transition shadow-2xs">
-          <i data-lucide="github" class="w-4 h-4"></i>
-          <span class="hidden sm:inline">PoC Repo</span>
+      <!-- Externe Link naar GitHub -->
+      <div class="flex items-center space-x-3">
+        <a href="./concurrency.html" class="hidden sm:inline-flex items-center space-x-1.5 px-4 py-2 rounded-full text-xs font-semibold border border-white/15 bg-white/5 hover:bg-white/10 text-white transition">
+          <span>Essay</span>
+          <i data-lucide="arrow-up-right" class="w-3.5 h-3.5 text-roseAccent"></i>
         </a>
-        <a href="#screenshots" class="inline-flex items-center space-x-2 px-5 py-2.5 rounded-full text-xs font-bold bg-brand-ink hover:bg-stone-800 text-white transition shadow-sm hover:shadow-md">
-          <span>Bekijk Schermen</span>
-          <i data-lucide="arrow-down" class="w-3.5 h-3.5"></i>
+        <a href="https://github.com/GregoryButs/de-verstandhouding-showcase" target="_blank" rel="noopener" class="inline-flex items-center space-x-2 px-4 py-2 rounded-full text-xs font-bold bg-white text-canvas hover:bg-slate-200 transition">
+          <i data-lucide="github" class="w-3.5 h-3.5"></i>
+          <span>GitHub</span>
         </a>
       </div>
 
@@ -152,132 +126,86 @@
   </header>
 
   <!-- ========================================================================= -->
-  <!-- 01. GRAND EDITORIAL HERO SECTION (Castaar Agency Style)                   -->
+  <!-- 02. HERO: RUST & ARCHITECTURALE ESSENTIE                                    -->
   <!-- ========================================================================= -->
-  <section class="relative pt-20 sm:pt-28 pb-16 sm:pb-24 overflow-hidden">
-    <!-- Ambient Warm Airy Glows -->
-    <div class="absolute -top-32 right-1/4 w-[600px] h-[600px] bg-brand-rose/10 blur-[140px] rounded-full pointer-events-none"></div>
-    <div class="absolute top-1/2 -left-40 w-[500px] h-[500px] bg-brand-700/8 blur-[130px] rounded-full pointer-events-none"></div>
+  <section id="top" class="relative pt-24 sm:pt-36 pb-24 sm:pb-32 overflow-hidden">
+    <!-- Ambient Glows -->
+    <div class="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[400px] bg-roseAccent/10 blur-[150px] rounded-full pointer-events-none"></div>
+    <div class="absolute top-1/3 right-10 w-[500px] h-[300px] bg-slateAccent/15 blur-[160px] rounded-full pointer-events-none"></div>
 
-    <div class="max-w-7xl mx-auto px-6 sm:px-10 lg:px-16 relative">
+    <div class="max-w-6xl mx-auto px-6 lg:px-8 relative">
       
-      <!-- Castaar Case Badge / Breadcrumb -->
-      <div class="flex flex-wrap items-center gap-3 text-xs font-mono tracking-widest uppercase text-stone-500 mb-8">
-        <span class="px-3 py-1 rounded-full bg-brand-rose/15 text-brand-900 font-bold border border-brand-rose/30">Case Study</span>
-        <span>&middot;</span>
-        <span class="text-stone-700 font-semibold">Klinische Gezondheidszorg & EPD</span>
-        <span>&middot;</span>
-        <span class="text-stone-400">2025 &ndash; 2026</span>
+      <!-- Kicker -->
+      <div class="inline-flex items-center space-x-2.5 px-3.5 py-1.5 rounded-full text-xs font-mono font-medium text-slate-300 bg-white/5 border border-white/10 mb-8">
+        <span class="w-2 h-2 rounded-full bg-roseAccent"></span>
+        <span>Case Study &middot; Klinische Psychologie &middot; .NET 10 LTS & React 19</span>
       </div>
 
-      <!-- Headline with Confident Editorial Authority -->
-      <div class="max-w-5xl space-y-6">
-        <h1 class="text-4xl sm:text-6xl lg:text-7xl font-bold font-brand-title text-brand-ink leading-[1.08] tracking-tight">
+      <!-- Title -->
+      <div class="max-w-4xl space-y-6">
+        <h1 class="text-4xl sm:text-6xl lg:text-7xl font-bold font-brand-title text-white tracking-tight leading-[1.08]">
           De Verstandhouding. <br/>
-          <span class="italic font-normal text-stone-500">Afsprakenbeheer & Patiëntenportaal</span>
+          <span class="italic font-normal text-slate-400">Klinisch Afsprakenbeheer & Patiëntenportaal</span>
         </h1>
 
-        <p class="text-lg sm:text-2xl text-stone-600 editorial-lead max-w-3xl font-light pt-2">
-          Een doordacht, enterprise softwareplatform voor psychologenpraktijken met conventie- en privéraadplegingen. Gebouwd met <strong class="font-semibold text-brand-ink">CQRS-scheiding</strong>, een <strong class="font-semibold text-brand-ink">C# 13 concurrency engine</strong> tegen dubbele boekingen, transparante <strong class="font-semibold text-brand-ink">AES-256 GCM veldversleuteling</strong> en geautomatiseerde sessieopvolging volgens de <strong class="font-semibold text-brand-ink">Belgische RIZIV/ELP-conventie</strong>.
+        <p class="text-lg sm:text-2xl text-slate-300 font-light leading-relaxed max-w-3xl pt-2">
+          Hoe bouw je een praktijkplatform dat aan de oppervlakte aanvoelt als een serene wachtkamer, maar onder de motorkap de strengste wiskundige en medische discipline handhaaft?
         </p>
       </div>
 
-      <!-- Castaar Project Meta Grid (Clear, Airy Specifications with Latest Data) -->
-      <div class="mt-16 sm:mt-24 pt-12 border-t border-brand-200/80 grid grid-cols-2 md:grid-cols-4 gap-8 lg:gap-12 text-sm">
+      <!-- De 4 Geverifieerde Pijlers (Herhalend & Rustig) -->
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 mt-16 sm:mt-24 pt-12 border-t border-white/10">
         
-        <!-- Meta 1 -->
-        <div class="space-y-2">
-          <div class="text-xs uppercase tracking-wider text-stone-400 font-mono font-medium">Praktijk / Opdrachtgever</div>
-          <div class="font-semibold text-brand-ink text-base">Praktijk De Verstandhouding</div>
-          <p class="text-xs text-stone-500">Inge Debast &middot; Klinisch Psycholoog & Psychotherapeut</p>
+        <div class="dark-card rounded-2xl p-6">
+          <div class="text-3xl sm:text-4xl font-bold font-brand-title text-white">0%</div>
+          <div class="text-xs font-mono uppercase tracking-wider text-roseAccent mt-1">Double-Bookings</div>
+          <p class="text-xs text-slate-400 mt-2 leading-relaxed">50 threads op exact hetzelfde tijdslot &middot; 49x 409, 1x 201.</p>
         </div>
 
-        <!-- Meta 2 -->
-        <div class="space-y-2">
-          <div class="text-xs uppercase tracking-wider text-stone-400 font-mono font-medium">Rol & Architectuur</div>
-          <div class="font-semibold text-brand-ink text-base">Gregory Buts</div>
-          <p class="text-xs text-stone-500">Lead Full-Stack & System Architect</p>
+        <div class="dark-card rounded-2xl p-6">
+          <div class="text-3xl sm:text-4xl font-bold font-brand-title text-emerald-400">94.3%</div>
+          <div class="text-xs font-mono uppercase tracking-wider text-emerald-400 mt-1">Line Coverage</div>
+          <p class="text-xs text-slate-400 mt-2 leading-relaxed">1.828 geautomatiseerde tests (1.248 xUnit + 580 Vitest).</p>
         </div>
 
-        <!-- Meta 3 -->
-        <div class="space-y-2">
-          <div class="text-xs uppercase tracking-wider text-stone-400 font-mono font-medium">Technologie Stack</div>
-          <div class="font-semibold text-brand-ink text-base">.NET 10 LTS &middot; React 19</div>
-          <p class="text-xs text-stone-500">C# 13, EF Core 10, Tailwind v4, TanStack 9, FHIR R4</p>
+        <div class="dark-card rounded-2xl p-6">
+          <div class="text-3xl sm:text-4xl font-bold font-brand-title text-white">AES-256</div>
+          <div class="text-xs font-mono uppercase tracking-wider text-roseAccent mt-1">GCM Veldencryptie</div>
+          <p class="text-xs text-slate-400 mt-2 leading-relaxed">Geen medische data in klare tekst &middot; Append-only audit triggers.</p>
         </div>
 
-        <!-- Meta 4 -->
-        <div class="space-y-2">
-          <div class="text-xs uppercase tracking-wider text-stone-400 font-mono font-medium">Kwaliteitsborging</div>
-          <div class="font-semibold text-emerald-800 text-base flex items-center gap-1.5">
-            <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-600"></i>
-            <span>94.3% Code Coverage</span>
-          </div>
-          <p class="text-xs text-stone-500 font-mono">1.828 geautomatiseerde tests &middot; 0 double-bookings</p>
+        <div class="dark-card rounded-2xl p-6">
+          <div class="text-3xl sm:text-4xl font-bold font-brand-title text-white">12 mnd</div>
+          <div class="text-xs font-mono uppercase tracking-wider text-slate-400 mt-1">RIZIV / ELP</div>
+          <p class="text-xs text-slate-400 mt-2 leading-relaxed">8 sessies contingentering binnen zwevende referentieperiode.</p>
         </div>
 
-      </div>
-
-      <!-- Grand Elevated Hero Showcase Mockup with High Negative Space -->
-      <div class="mt-16 sm:mt-24">
-        <div class="relative rounded-3xl sm:rounded-4xl p-3 sm:p-5 bg-gradient-to-b from-stone-200/70 to-stone-100/30 border border-brand-200/90 shadow-2xl">
-          
-          <!-- Mockup Window Bar -->
-          <div class="flex items-center justify-between px-4 py-3 bg-white/90 backdrop-blur-md rounded-2xl mb-3 border border-stone-200/60 text-xs text-stone-500">
-            <div class="flex items-center space-x-2">
-              <span class="w-3 h-3 rounded-full bg-rose-400/80 inline-block"></span>
-              <span class="w-3 h-3 rounded-full bg-amber-400/80 inline-block"></span>
-              <span class="w-3 h-3 rounded-full bg-emerald-400/80 inline-block"></span>
-              <span class="text-stone-300 ml-2">|</span>
-              <span class="hidden sm:inline text-stone-600 font-mono font-medium">app.deverstandhouding.be/psycholoog/dashboard</span>
-            </div>
-            <div class="flex items-center space-x-3 text-stone-500 text-[11px] font-mono">
-              <span class="flex items-center gap-1"><i data-lucide="lock" class="w-3.5 h-3.5 text-emerald-600"></i> TLS 1.3</span>
-              <span class="hidden md:inline px-2 py-0.5 rounded bg-emerald-50 text-emerald-700 font-semibold border border-emerald-200">Productie-omgeving</span>
-            </div>
-          </div>
-
-          <!-- Hero Image -->
-          <div class="rounded-2xl overflow-hidden shadow-lg border border-stone-200/60 bg-white">
-            <img src="assets/scherm-dashboard.png" alt="Psycholoog Dashboard & Dagplanning" class="w-full h-auto object-cover" />
-          </div>
-
-        </div>
       </div>
 
     </div>
   </section>
 
   <!-- ========================================================================= -->
-  <!-- 02. CINEMATIC CASE VIDEO (Het Platform in Zestig Seconden)                -->
+  <!-- 03. LAUNCH FILM (60 Seconden met Narratie)                                -->
   <!-- ========================================================================= -->
-  <section id="video" class="py-24 sm:py-36 border-t border-brand-200/80 bg-stone-950 text-white relative overflow-hidden">
-    <!-- Ambient Dark Warm Glow -->
-    <div class="absolute -top-40 right-1/4 w-[650px] h-[650px] bg-brand-rose/15 blur-[170px] rounded-full pointer-events-none"></div>
-    <div class="absolute bottom-0 -left-40 w-[550px] h-[550px] bg-brand-700/20 blur-[160px] rounded-full pointer-events-none"></div>
-
-    <div class="max-w-7xl mx-auto px-6 sm:px-10 lg:px-16 relative">
+  <section id="video" class="py-24 sm:py-32 border-t border-white/10 bg-[#06080D]">
+    <div class="max-w-6xl mx-auto px-6 lg:px-8">
       
-      <!-- Video Header -->
-      <div class="max-w-3xl space-y-4 mb-12 sm:mb-16">
-        <div class="flex items-center space-x-2 text-brand-300 text-xs font-mono font-bold tracking-widest uppercase">
-          <i data-lucide="play-circle" class="w-4 h-4"></i>
-          <span>Launch Video &middot; 60 Seconden</span>
-        </div>
+      <div class="max-w-3xl space-y-3 mb-12">
+        <span class="text-xs font-mono uppercase tracking-widest text-roseAccent">01 &middot; De Film</span>
         <h2 class="text-3xl sm:text-5xl font-bold font-brand-title text-white leading-tight">
-          Het Platform in Zestig Seconden. <br/>
-          <span class="italic font-normal text-brand-300">Rust aan de voorkant. Discipline aan de achterkant.</span>
+          Het Platform in Zestig Seconden.
         </h2>
-        <p class="text-stone-300 editorial-lead text-base sm:text-lg font-light">
-          Drie bedrijven: wat de patiënt ziet, wat de praktijk ziet, en wat niemand ziet. Van de boekingswizard naar de RIZIV-maandafsluiting, en dan naar vijftig gelijktijdige aanvragen op hetzelfde tijdslot &mdash; waarvan er precies één doorkomt. Engelse narratie over de echte, Nederlandse interface.
+        <p class="text-slate-400 text-base sm:text-lg leading-relaxed font-light">
+          Drie bedrijven: wat de patiënt ziet, wat de praktijk ziet, en wat niemand ziet. Van de boekingswizard naar de RIZIV-maandafsluiting, en dan naar vijftig gelijktijdige aanvragen op hetzelfde tijdslot.
         </p>
       </div>
 
-      <!-- Cinematic Video Player Stage -->
-      <div class="relative rounded-3xl sm:rounded-4xl p-3 sm:p-5 bg-white/5 border border-white/10 shadow-2xl backdrop-blur-xl">
-        <div class="relative rounded-2xl overflow-hidden aspect-video bg-black flex items-center justify-center shadow-inner">
+      <!-- Speler Stage -->
+      <div class="dark-card rounded-3xl p-3 sm:p-5 shadow-2xl">
+        <div class="relative rounded-2xl overflow-hidden aspect-video bg-black flex items-center justify-center border border-white/10">
           <video 
-            id="case-video"
+            id="main-video"
             controls 
             playsinline 
             preload="metadata" 
@@ -286,435 +214,106 @@
           >
             <source src="brag-video/brag.mp4" type="video/mp4" />
             <source src="brag-video/brag-short.mp4" type="video/mp4" />
-            Uw browser ondersteunt het HTML5-videoelement niet.
+            Je browser ondersteunt geen HTML5-video.
           </video>
         </div>
 
-        <!-- 3 Informative Cards Below Player -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6 text-xs text-stone-300">
-          <div class="flex items-start gap-3 p-4 rounded-2xl bg-white/5 border border-white/10">
-            <i data-lucide="shield-check" class="w-5 h-5 text-emerald-400 shrink-0 mt-0.5"></i>
-            <span class="leading-relaxed">
-              <strong class="text-white block font-semibold mb-1">Geen patiëntgegevens.</strong> Elke interface is nagebouwd met verzonnen inhoud; het rijksregisternummer staat gemaskeerd en de consultatienotitie toont ciphertext.
-            </span>
+        <!-- 3 Inhoudelijke Kaarten Onder de Speler (Herhalend & Rustig) -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6 text-xs text-slate-300">
+          <div class="p-4 rounded-xl bg-white/5 border border-white/5 space-y-1">
+            <span class="font-bold text-white block">Geen patiëntgegevens</span>
+            <p class="text-slate-400 leading-relaxed">Elke interface is nagebouwd met fictieve data; het rijksregisternummer staat gemaskeerd en notities tonen ciphertext.</p>
           </div>
 
-          <div class="flex items-start gap-3 p-4 rounded-2xl bg-white/5 border border-white/10">
-            <i data-lucide="check-circle" class="w-5 h-5 text-brand-300 shrink-0 mt-0.5"></i>
-            <span class="leading-relaxed">
-              <strong class="text-white block font-semibold mb-1">Elk cijfer getoetst.</strong> De beweringen op scherm zijn tegen de broncode geverifieerd (1.828 tests, 94.3% dekking), niet overgenomen uit aannames.
-            </span>
+          <div class="p-4 rounded-xl bg-white/5 border border-white/5 space-y-1">
+            <span class="font-bold text-white block">Elk cijfer getoetst</span>
+            <p class="text-slate-400 leading-relaxed">De beweringen op scherm zijn tegen de broncode geverifieerd (1.828 tests, 94.3% dekking, 50-thread concurrency test).</p>
           </div>
 
-          <div class="flex items-start gap-3 p-4 rounded-2xl bg-white/5 border border-white/10">
-            <i data-lucide="git-branch" class="w-5 h-5 text-brand-300 shrink-0 mt-0.5"></i>
-            <span class="leading-relaxed">
-              <strong class="text-white block font-semibold mb-1">Bron meegeleverd.</strong> Elf scènes, HTML met één GSAP-tijdlijn, getimed op de gesproken regels &mdash; <a href="https://github.com/GregoryButs/de-verstandhouding-showcase/tree/main/brag-video" target="_blank" rel="noopener" class="text-brand-300 underline font-semibold hover:text-white">bekijk brag-video/</a>.
-            </span>
+          <div class="p-4 rounded-xl bg-white/5 border border-white/5 space-y-1">
+            <span class="font-bold text-white block">Broncode meegeleverd</span>
+            <p class="text-slate-400 leading-relaxed">Elf scènes, HTML met één GSAP-tijdlijn, getimed op de gesproken narratie &mdash; <a href="https://github.com/GregoryButs/de-verstandhouding-showcase/tree/main/brag-video" target="_blank" rel="noopener" class="text-roseAccent hover:underline">bekijk brag-video/</a>.</p>
           </div>
         </div>
-
       </div>
 
     </div>
   </section>
 
   <!-- ========================================================================= -->
-  <!-- 03. CONTEXT & DE UITDAGING (The Brief & Challenge - Editorial Layout)      -->
+  <!-- 04. HET KERNPROBLEEM: CONCURRENCY (Waarom een unieke index faalt)         -->
   <!-- ========================================================================= -->
-  <section id="context" class="py-24 sm:py-36 border-t border-brand-200/80 bg-white/60">
-    <div class="max-w-7xl mx-auto px-6 sm:px-10 lg:px-16">
+  <section id="concurrency" class="py-24 sm:py-36 border-t border-white/10">
+    <div class="max-w-6xl mx-auto px-6 lg:px-8">
       
-      <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20 items-start">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
         
-        <!-- Left: Context Header -->
-        <div class="lg:col-span-5 space-y-6">
-          <div class="flex items-center space-x-2 text-brand-rose text-xs font-mono font-bold tracking-widest uppercase">
-            <span>01 &middot; De Uitdaging & De Context</span>
-          </div>
-          
-          <h2 class="text-3xl sm:text-5xl font-bold font-brand-title text-brand-ink leading-tight">
-            Waarom standaard afsprakentools te kort schieten in de klinische praktijk.
+        <!-- Links: De Uitleg -->
+        <div class="lg:col-span-6 space-y-6">
+          <span class="text-xs font-mono uppercase tracking-widest text-roseAccent">02 &middot; Concurrency & Domein</span>
+          <h2 class="text-3xl sm:text-5xl font-bold font-brand-title text-white leading-tight">
+            Waarom een unieke index dit wiskundig niet kan oplossen.
           </h2>
 
-          <p class="text-stone-600 editorial-lead text-base sm:text-lg font-light">
-            In een eerstelijnspsychologische praktijk volstaat een standaard online kalender zoals Calendly of Doctolib niet. De combinatie van wettelijke geheimhouding, simultane patiëntboekingen en strenge RIZIV-subsidieregels eist een gespecialiseerde architectuur.
-          </p>
-        </div>
-
-        <!-- Right: The 3 Core Tension Points (Airy, Unhurried Cards) -->
-        <div class="lg:col-span-7 space-y-8">
-          
-          <!-- Point 1 -->
-          <div class="glass-panel rounded-3xl p-8 sm:p-10 space-y-3">
-            <div class="flex items-center space-x-3 text-brand-rose">
-              <i data-lucide="split" class="w-5 h-5"></i>
-              <h3 class="font-bold text-brand-ink text-lg sm:text-xl">1. Het gevaar van race conditions bij overlappende tijdsloten</h3>
-            </div>
-            <p class="text-stone-600 editorial-lead text-sm sm:text-base font-light">
-              Wanneer meerdere patiënten tegelijkertijd een consultatie willen vastleggen, kan een traditionele database met enkel een unieke index op datum/uur geen overlappende intervallen met variabele wisseltijden (10 tot 15 minuten buffertijd) beveiligen. Zonder atomaire transacties en locks ontstaan double-bookings en verstoorde consultatieritmes.
+          <div class="space-y-4 text-slate-300 text-sm sm:text-base leading-relaxed font-light">
+            <p>
+              In een relationele database kan een <code class="text-roseAccent font-mono text-xs px-1.5 py-0.5 rounded bg-white/5">UNIQUE INDEX</code> alleen controleren of twee rijen exact dezelfde waarde hebben (bijv. <code class="font-mono text-xs">Datum == '2026-09-25 14:00'</code>).
+            </p>
+            <p>
+              Maar een afspraak is <strong>geen punt in de tijd</strong>; het is een interval $[t_{start}, t_{eind}]$, vermeerderd met <strong>10 tot 15 minuten wisseltijd (buffertijd)</strong>. Een consultatie van 50 minuten om 14:00 blokkeert de agenda tot 15:00. Een nieuwe boeking om 14:30 heeft een andere starttijd, maar intersecteert het interval.
+            </p>
+            <p>
+              Omdat SQL geen standaard index heeft over temporele overlappingen tussen verschillende rijen, moeten race conditions opgelost worden met <strong>C# 13 lock-synchronisatie</strong> en <strong>atomaire database transacties</strong>.
             </p>
           </div>
 
-          <!-- Point 2 -->
-          <div class="glass-panel rounded-3xl p-8 sm:p-10 space-y-3">
-            <div class="flex items-center space-x-3 text-brand-rose">
-              <i data-lucide="shield-alert" class="w-5 h-5"></i>
-              <h3 class="font-bold text-brand-ink text-lg sm:text-xl">2. Medisch beroepsgeheim & GDPR Art. 9 veldencryptie</h3>
+          <div class="pt-2">
+            <a href="./concurrency.html" class="inline-flex items-center space-x-2 text-sm font-semibold text-roseAccent hover:text-white transition">
+              <span>Lees het volledige essay over dit probleem</span>
+              <i data-lucide="arrow-right" class="w-4 h-4"></i>
+            </a>
+          </div>
+        </div>
+
+        <!-- Rechts: Het Visuele Bewijs (50 Threads Load Test) -->
+        <div class="lg:col-span-6 space-y-4">
+          <div class="dark-card rounded-2xl p-6 sm:p-8 space-y-5 border border-white/10">
+            <div class="flex items-center justify-between text-xs font-mono text-slate-400 border-b border-white/10 pb-4">
+              <span>xUnit Concurrency Stress Test</span>
+              <span class="text-emerald-400">PASSED</span>
             </div>
-            <p class="text-stone-600 editorial-lead text-sm sm:text-base font-light">
-              Patiëntgegevens en consultatienotities vallen onder het strengste medisch beroepsgeheim (Art. 458 Sw.). Zelfs bij een eventuele server-inbreuk of fysieke datadiefstal mogen persoonsgegevens en hulpvragen nooit in klare tekst leesbaar zijn. Dit vereist transparante AES-256 GCM veldversleuteling en een onweerlegbaar append-only auditlogboek.
-            </p>
-          </div>
 
-          <!-- Point 3 -->
-          <div class="glass-panel rounded-3xl p-8 sm:p-10 space-y-3">
-            <div class="flex items-center space-x-3 text-brand-rose">
-              <i data-lucide="file-check-2" class="w-5 h-5"></i>
-              <h3 class="font-bold text-brand-ink text-lg sm:text-xl">3. Complexe RIZIV/ELP-conventie & 12-maanden referentieperiode</h3>
-            </div>
-            <p class="text-stone-600 editorial-lead text-sm sm:text-base font-light">
-              Belgische eerstelijnspsychologische zorg hanteert een strikt contingent van 8 gesubsidieerde sessies binnen een zwevende referentieperiode van twaalf maanden. Handmatige tracking leidt onvermijdelijk tot foutieve facturaties, geweigerde RIZIV-tegemoetkomingen en administratieve overbelasting van de therapeut.
-            </p>
-          </div>
-
-        </div>
-
-      </div>
-
-    </div>
-  </section>
-
-  <!-- ========================================================================= -->
-  <!-- 04. IMPACT IN CIJFERS (Airy, High Impact Stat Cards with 94.5% Coverage)  -->
-  <!-- ========================================================================= -->
-  <section id="statistieken" class="py-24 sm:py-36 border-t border-brand-200/80 bg-brand-50/50">
-    <div class="max-w-7xl mx-auto px-6 sm:px-10 lg:px-16">
-      
-      <!-- Section Header -->
-      <div class="max-w-3xl space-y-4 mb-16 sm:mb-24">
-        <div class="flex items-center space-x-2 text-brand-rose text-xs font-mono font-bold tracking-widest uppercase">
-          <span>02 &middot; Meetbare Resultaten</span>
-        </div>
-        <h2 class="text-3xl sm:text-5xl font-bold font-brand-title text-brand-ink leading-tight">
-          Bewezen betrouwbaarheid door geautomatiseerde verificatie.
-        </h2>
-        <p class="text-stone-600 editorial-lead text-base sm:text-lg font-light">
-          Geen subjectieve claims, maar strikt geverifieerde metrieken uit de gecombineerde ReportGenerator coverage-rapporten en load tests.
-        </p>
-      </div>
-
-      <!-- 4 Grand Stat Blocks -->
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
-        
-        <!-- Stat 1 -->
-        <div class="glass-panel rounded-3xl p-8 sm:p-10 text-left space-y-4">
-          <div class="text-4xl sm:text-6xl font-bold font-brand-title text-brand-ink">0%</div>
-          <div class="font-bold text-brand-ink text-base">Dubbele Boekingen</div>
-          <p class="text-xs sm:text-sm text-stone-500 editorial-lead font-light">
-            Gevalideerd met 50 gelijktijdige threads onder zware load tests. Exact 1 transactie slaagt, 49 requests ontvangen direct een conforme 409 Conflict.
-          </p>
-        </div>
-
-        <!-- Stat 2 -->
-        <div class="glass-panel rounded-3xl p-8 sm:p-10 text-left space-y-4">
-          <div class="text-4xl sm:text-6xl font-bold font-brand-title text-brand-rose">94.3%</div>
-          <div class="font-bold text-brand-ink text-base">Gecombineerde Coverage</div>
-          <p class="text-xs sm:text-sm text-stone-500 editorial-lead font-light">
-            1.828 geautomatiseerde tests (1.248 backend xUnit tests + 580 Vitest frontend tests) met 84.1% branch coverage als blocking CI kwaliteitsgate.
-          </p>
-        </div>
-
-        <!-- Stat 3 -->
-        <div class="glass-panel rounded-3xl p-8 sm:p-10 text-left space-y-4">
-          <div class="text-4xl sm:text-6xl font-bold font-brand-title text-emerald-800">AES-256</div>
-          <div class="font-bold text-brand-ink text-base">Medische Veldencryptie</div>
-          <p class="text-xs sm:text-sm text-stone-500 editorial-lead font-light">
-            Transparante GCM veldversleuteling op alle persoons- en consultatiegegevens, ondersteund door append-only SQLite database triggers.
-          </p>
-        </div>
-
-        <!-- Stat 4 -->
-        <div class="glass-panel rounded-3xl p-8 sm:p-10 text-left space-y-4">
-          <div class="text-4xl sm:text-6xl font-bold font-brand-title text-brand-700">12 mnd</div>
-          <div class="font-bold text-brand-ink text-base">ELP Referentieperiode</div>
-          <p class="text-xs sm:text-sm text-stone-500 editorial-lead font-light">
-            Volautomatische contingentering van 8 sessies per patiënt, zorgfunctiebepaling, remgeldberekening en eHealth maandafsluiting export.
-          </p>
-        </div>
-
-      </div>
-
-    </div>
-  </section>
-
-  <!-- ========================================================================= -->
-  <!-- 05. PRODUCT SHOWCASE & LIVE SCHERMEN (Spacious Interactive Gallery)       -->
-  <!-- ========================================================================= -->
-  <section id="screenshots" class="py-24 sm:py-36 border-t border-brand-200/80 bg-white">
-    <div class="max-w-7xl mx-auto px-6 sm:px-10 lg:px-16">
-      
-      <!-- Section Title with Air -->
-      <div class="max-w-3xl space-y-4 mb-16 sm:mb-20">
-        <div class="flex items-center space-x-2 text-brand-rose text-xs font-mono font-bold tracking-widest uppercase">
-          <i data-lucide="layout" class="w-4 h-4"></i>
-          <span>03 &middot; Interface & Live Schermen</span>
-        </div>
-        <h2 class="text-3xl sm:text-5xl font-bold font-brand-title text-brand-ink leading-tight">
-          Echte schermafbeeldingen van de draaiende applicatie.
-        </h2>
-        <p class="text-stone-600 editorial-lead text-base sm:text-lg font-light">
-          Verken de 8 kernmodules van het platform. Schakel hieronder tussen de schermen om zowel de behandelaar- als cliëntinterfaces te bekijken.
-        </p>
-      </div>
-
-      <!-- Spacious Category Navigation Tabs (Grouped Cleanly) -->
-      <div class="space-y-6 mb-12 sm:mb-16">
-        
-        <!-- Category 1: Behandelaar -->
-        <div class="space-y-3">
-          <div class="text-xs font-mono font-bold uppercase tracking-wider text-stone-400 flex items-center gap-2">
-            <span class="w-1.5 h-1.5 rounded-full bg-brand-rose"></span>
-            <span>A. Psychologen Beheer & Dashboard:</span>
-          </div>
-          <div class="flex flex-wrap gap-3">
-            <button onclick="showSlide('slide-dashboard', this)" class="tab-pill active px-5 py-3 rounded-2xl text-xs sm:text-sm font-semibold border border-brand-200 bg-white hover:bg-stone-50 text-stone-700 transition-all flex items-center gap-2.5 shadow-2xs">
-              <i data-lucide="layout-dashboard" class="w-4 h-4"></i>
-              <span>1. Psycholoog Dashboard</span>
-            </button>
-            <button onclick="showSlide('slide-calendar', this)" class="tab-pill px-5 py-3 rounded-2xl text-xs sm:text-sm font-semibold border border-brand-200 bg-white hover:bg-stone-50 text-stone-700 transition-all flex items-center gap-2.5 shadow-2xs">
-              <i data-lucide="calendar" class="w-4 h-4"></i>
-              <span>2. Afsprakenkalender / Agenda</span>
-            </button>
-            <button onclick="showSlide('slide-elp', this)" class="tab-pill px-5 py-3 rounded-2xl text-xs sm:text-sm font-semibold border border-brand-200 bg-white hover:bg-stone-50 text-stone-700 transition-all flex items-center gap-2.5 shadow-2xs">
-              <i data-lucide="file-check" class="w-4 h-4"></i>
-              <span>3. ELP Maandafsluiting & RIZIV</span>
-            </button>
-            <button onclick="showSlide('slide-patients', this)" class="tab-pill px-5 py-3 rounded-2xl text-xs sm:text-sm font-semibold border border-brand-200 bg-white hover:bg-stone-50 text-stone-700 transition-all flex items-center gap-2.5 shadow-2xs">
-              <i data-lucide="users" class="w-4 h-4"></i>
-              <span>4. Patiëntenbeheer & Dossiers</span>
-            </button>
-          </div>
-        </div>
-
-        <!-- Category 2: Cliënt & Publiek -->
-        <div class="space-y-3 pt-2">
-          <div class="text-xs font-mono font-bold uppercase tracking-wider text-stone-400 flex items-center gap-2">
-            <span class="w-1.5 h-1.5 rounded-full bg-brand-700"></span>
-            <span>B. Patiëntenportaal & Boekingsflow:</span>
-          </div>
-          <div class="flex flex-wrap gap-3">
-            <button onclick="showSlide('slide-portal', this)" class="tab-pill px-5 py-3 rounded-2xl text-xs sm:text-sm font-semibold border border-brand-200 bg-white hover:bg-stone-50 text-stone-700 transition-all flex items-center gap-2.5 shadow-2xs">
-              <i data-lucide="user" class="w-4 h-4"></i>
-              <span>5. Patiënten Portaal</span>
-            </button>
-            <button onclick="showSlide('slide-booking', this)" class="tab-pill px-5 py-3 rounded-2xl text-xs sm:text-sm font-semibold border border-brand-200 bg-white hover:bg-stone-50 text-stone-700 transition-all flex items-center gap-2.5 shadow-2xs">
-              <i data-lucide="calendar-plus" class="w-4 h-4"></i>
-              <span>6. 5-Staps Boekingswizard</span>
-            </button>
-            <button onclick="showSlide('slide-landing', this)" class="tab-pill px-5 py-3 rounded-2xl text-xs sm:text-sm font-semibold border border-brand-200 bg-white hover:bg-stone-50 text-stone-700 transition-all flex items-center gap-2.5 shadow-2xs">
-              <i data-lucide="globe" class="w-4 h-4"></i>
-              <span>7. Landingspagina & Visie</span>
-            </button>
-            <button onclick="showSlide('slide-login', this)" class="tab-pill px-5 py-3 rounded-2xl text-xs sm:text-sm font-semibold border border-brand-200 bg-white hover:bg-stone-50 text-stone-700 transition-all flex items-center gap-2.5 shadow-2xs">
-              <i data-lucide="log-in" class="w-4 h-4"></i>
-              <span>8. Inloggen & Social Auth</span>
-            </button>
-          </div>
-        </div>
-
-      </div>
-
-      <!-- Grand Gallery Display Card (Spacious Frame) -->
-      <div class="glass-panel rounded-3xl sm:rounded-4xl p-6 sm:p-10 shadow-2xl relative">
-        
-        <!-- Navigation Controls Inside Frame -->
-        <div class="flex items-center justify-between pb-6 mb-6 border-b border-brand-200/80 text-xs text-stone-500">
-          <div class="flex items-center space-x-2">
-            <span class="font-mono text-brand-rose font-bold uppercase tracking-wider" id="slide-indicator">Scherm 1 van 8</span>
-          </div>
-          <div class="flex items-center space-x-2">
-            <button onclick="prevSlide()" class="p-2.5 rounded-full border border-stone-200 bg-white hover:bg-stone-100 text-stone-700 transition">
-              <i data-lucide="chevron-left" class="w-4 h-4"></i>
-            </button>
-            <button onclick="nextSlide()" class="p-2.5 rounded-full border border-stone-200 bg-white hover:bg-stone-100 text-stone-700 transition">
-              <i data-lucide="chevron-right" class="w-4 h-4"></i>
-            </button>
-          </div>
-        </div>
-
-        <!-- Slide 1: Psycholoog Dashboard -->
-        <div id="slide-dashboard" class="gallery-slide block space-y-6">
-          <div class="rounded-2xl overflow-hidden border border-stone-200 shadow-md bg-stone-100">
-            <img src="assets/scherm-dashboard.png" loading="lazy" decoding="async" alt="Psycholoog Dashboard & Dagplanning" class="w-full h-auto object-cover">
-          </div>
-          <div class="p-8 rounded-3xl bg-white border border-brand-200 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
-            <div class="space-y-2 max-w-3xl">
-              <div class="flex items-center gap-2.5">
-                <span class="text-xs font-mono font-bold px-2.5 py-0.5 rounded-full bg-brand-100 text-brand-900 border border-brand-200">Module 01</span>
-                <h4 class="font-bold text-brand-ink text-xl sm:text-2xl">Psycholoog Dashboard & Dagplanning</h4>
+            <!-- Terminal-achtige visualisatie -->
+            <div class="space-y-2 text-xs font-mono">
+              <div class="text-slate-400">// 50 threads vuren parallel binnen 12 ms op '2026-10-15 10:00'</div>
+              <div class="p-3 rounded-xl bg-black/40 border border-white/5 space-y-1.5">
+                <div class="text-emerald-400 flex items-center justify-between">
+                  <span>Thread #07 &rarr; SlotCalculator.AllocateAsync()</span>
+                  <span class="font-bold">201 Created</span>
+                </div>
+                <div class="text-slate-500 flex items-center justify-between">
+                  <span>Thread #01 &rarr; SlotCalculator.AllocateAsync()</span>
+                  <span>409 Conflict</span>
+                </div>
+                <div class="text-slate-500 flex items-center justify-between">
+                  <span>Thread #02 &rarr; SlotCalculator.AllocateAsync()</span>
+                  <span>409 Conflict</span>
+                </div>
+                <div class="text-slate-600">... 47 overige threads ontvangen conforme 409 Conflict ...</div>
               </div>
-              <p class="text-stone-600 editorial-lead text-sm sm:text-base font-light">
-                Centraal commandocentrum voor de behandelaar: realtime dagconsultaties, metrics, status-badges en snelle consultatieacties (aanwezig, verplaatst, geannuleerd conform de 48-uurs regel).
-              </p>
             </div>
-            <div class="flex flex-col items-start md:items-end gap-2 shrink-0">
-              <span class="px-4 py-2 rounded-xl font-mono text-xs font-bold text-brand-900 bg-brand-50 border border-brand-200">CQRS Read Model &middot; React 19</span>
-              <span class="text-xs text-stone-400 font-mono">Status: Live in productie</span>
-            </div>
-          </div>
-        </div>
 
-        <!-- Slide 2: Calendar / Agenda -->
-        <div id="slide-calendar" class="gallery-slide hidden space-y-6">
-          <div class="rounded-2xl overflow-hidden border border-stone-200 shadow-md bg-stone-100">
-            <img src="assets/scherm-agenda.png" loading="lazy" decoding="async" alt="Afsprakenkalender & Weekplanning" class="w-full h-auto object-cover">
-          </div>
-          <div class="p-8 rounded-3xl bg-white border border-brand-200 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
-            <div class="space-y-2 max-w-3xl">
-              <div class="flex items-center gap-2.5">
-                <span class="text-xs font-mono font-bold px-2.5 py-0.5 rounded-full bg-brand-100 text-brand-900 border border-brand-200">Module 02</span>
-                <h4 class="font-bold text-brand-ink text-xl sm:text-2xl">Afsprakenkalender & Weekplanning</h4>
-              </div>
-              <p class="text-stone-600 editorial-lead text-sm sm:text-base font-light">
-                Interactieve week- en dagkalender met kleurgecodeerde afspraaktypes, automatische buffertijden (10-15 min) en realtime 2-weg synchronisatie met Google Calendar v3.
-              </p>
+            <div class="p-4 rounded-xl bg-white/5 text-xs text-slate-300 leading-relaxed">
+              <strong class="text-white block mb-1">Gegarandeerde Invariant:</strong>
+              Exact &eacute;&eacute;n afspraak toegekend. Nul dubbele boekingen. Geen database locks die de hele tabel blokkeren.
             </div>
-            <div class="flex flex-col items-start md:items-end gap-2 shrink-0">
-              <span class="px-4 py-2 rounded-xl font-mono text-xs font-bold text-brand-900 bg-brand-50 border border-brand-200">Google Calendar v3 API &middot; Hangfire</span>
-              <span class="text-xs text-stone-400 font-mono">Realtime 2-weg sync</span>
-            </div>
-          </div>
-        </div>
 
-        <!-- Slide 3: ELP Maandafsluiting -->
-        <div id="slide-elp" class="gallery-slide hidden space-y-6">
-          <div class="rounded-2xl overflow-hidden border border-stone-200 shadow-md bg-stone-100">
-            <img src="assets/scherm-elp-maandafsluiting.png" loading="lazy" decoding="async" alt="ELP Maandafsluiting & RIZIV-registratie" class="w-full h-auto object-cover">
-          </div>
-          <div class="p-8 rounded-3xl bg-white border border-brand-200 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
-            <div class="space-y-2 max-w-3xl">
-              <div class="flex items-center gap-2.5">
-                <span class="text-xs font-mono font-bold px-2.5 py-0.5 rounded-full bg-brand-100 text-brand-900 border border-brand-200">Module 03</span>
-                <h4 class="font-bold text-brand-ink text-xl sm:text-2xl">ELP Maandafsluiting & RIZIV-registratie</h4>
-              </div>
-              <p class="text-stone-600 editorial-lead text-sm sm:text-base font-light">
-                Contingentbewaking van de 8 gesubsidieerde sessies binnen de zwevende referentieperiode van 12 maanden. Bevat prestatiecodes, netwerkinclusie (MHC), groepssessies en eHealth/ELP portaalexport.
-              </p>
-            </div>
-            <div class="flex flex-col items-start md:items-end gap-2 shrink-0">
-              <span class="px-4 py-2 rounded-xl font-mono text-xs font-bold text-brand-900 bg-brand-50 border border-brand-200">Belgische ELP-Conventie &middot; RIZIV</span>
-              <span class="text-xs text-stone-400 font-mono">100% geautomatiseerd</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Slide 4: Patients List -->
-        <div id="slide-patients" class="gallery-slide hidden space-y-6">
-          <div class="rounded-2xl overflow-hidden border border-stone-200 shadow-md bg-stone-100">
-            <img src="assets/scherm-patientenbeheer.png" loading="lazy" decoding="async" alt="Patiëntenbeheer & Beveiligde Dossiers" class="w-full h-auto object-cover">
-          </div>
-          <div class="p-8 rounded-3xl bg-white border border-brand-200 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
-            <div class="space-y-2 max-w-3xl">
-              <div class="flex items-center gap-2.5">
-                <span class="text-xs font-mono font-bold px-2.5 py-0.5 rounded-full bg-brand-100 text-brand-900 border border-brand-200">Module 04</span>
-                <h4 class="font-bold text-brand-ink text-xl sm:text-2xl">Patiëntenbeheer & Beveiligde Dossiers</h4>
-              </div>
-              <p class="text-stone-600 editorial-lead text-sm sm:text-base font-light">
-                TanStack Table met geavanceerd zoeken, filteren, dossierstatussen, intake-historiek en transparante AES-256 GCM decryptie. Beveiligd tegen IDOR via strikte Tenant & Role claims.
-              </p>
-            </div>
-            <div class="flex flex-col items-start md:items-end gap-2 shrink-0">
-              <span class="px-4 py-2 rounded-xl font-mono text-xs font-bold text-emerald-800 bg-emerald-50 border border-emerald-300">AES-256 GCM &middot; TanStack Table</span>
-              <span class="text-xs text-stone-400 font-mono">IDOR / BOLA beveiligd</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Slide 5: Patient Portal -->
-        <div id="slide-portal" class="gallery-slide hidden space-y-6">
-          <div class="rounded-2xl overflow-hidden border border-stone-200 shadow-md bg-stone-100">
-            <img src="assets/scherm-patientenportaal.png" loading="lazy" decoding="async" alt="Patiënten Zelfservice Portaal" class="w-full h-auto object-cover">
-          </div>
-          <div class="p-8 rounded-3xl bg-white border border-brand-200 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
-            <div class="space-y-2 max-w-3xl">
-              <div class="flex items-center gap-2.5">
-                <span class="text-xs font-mono font-bold px-2.5 py-0.5 rounded-full bg-brand-100 text-brand-900 border border-brand-200">Module 05</span>
-                <h4 class="font-bold text-brand-ink text-xl sm:text-2xl">Patiënten Zelfservice Portaal</h4>
-              </div>
-              <p class="text-stone-600 editorial-lead text-sm sm:text-base font-light">
-                Rustgevend patiëntgericht dashboard voor het inzien van geplande consultaties, downloaden van persoonlijke ICS-kalenderbestanden en annuleren met automatische naleving van de 48-uurs regel.
-              </p>
-            </div>
-            <div class="flex flex-col items-start md:items-end gap-2 shrink-0">
-              <span class="px-4 py-2 rounded-xl font-mono text-xs font-bold text-brand-900 bg-brand-50 border border-brand-200">Self-Service Portal &middot; ICS Engine</span>
-              <span class="text-xs text-stone-400 font-mono">Mobile First Responsive</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Slide 6: Booking Wizard -->
-        <div id="slide-booking" class="gallery-slide hidden space-y-6">
-          <div class="rounded-2xl overflow-hidden border border-stone-200 shadow-md bg-stone-100">
-            <img src="assets/scherm-boekingswizard.png" loading="lazy" decoding="async" alt="5-Staps Boekingswizard Flow" class="w-full h-auto object-cover">
-          </div>
-          <div class="p-8 rounded-3xl bg-white border border-brand-200 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
-            <div class="space-y-2 max-w-3xl">
-              <div class="flex items-center gap-2.5">
-                <span class="text-xs font-mono font-bold px-2.5 py-0.5 rounded-full bg-brand-100 text-brand-900 border border-brand-200">Module 06</span>
-                <h4 class="font-bold text-brand-ink text-xl sm:text-2xl">5-Staps Boekingswizard Flow</h4>
-              </div>
-              <p class="text-stone-600 editorial-lead text-sm sm:text-base font-light">
-                Gestructureerde intake, praktijklocatie (Ninove of Geraardsbergen), realtime tijdslotberekening via de backend <code class="font-mono text-brand-rose">SlotCalculator</code> en automatische bevestigingsnotificaties.
-              </p>
-            </div>
-            <div class="flex flex-col items-start md:items-end gap-2 shrink-0">
-              <span class="px-4 py-2 rounded-xl font-mono text-xs font-bold text-brand-900 bg-brand-50 border border-brand-200">SlotCalculator &middot; C# 13 Lock</span>
-              <span class="text-xs text-stone-400 font-mono">0% Double-Bookings</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Slide 7: Landing Page Hero -->
-        <div id="slide-landing" class="gallery-slide hidden space-y-6">
-          <div class="rounded-2xl overflow-hidden border border-stone-200 shadow-md bg-stone-100">
-            <img src="assets/scherm-landingspagina.png" loading="lazy" decoding="async" alt="Publieke Landingspagina & Merkidentiteit" class="w-full h-auto object-cover">
-          </div>
-          <div class="p-8 rounded-3xl bg-white border border-brand-200 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
-            <div class="space-y-2 max-w-3xl">
-              <div class="flex items-center gap-2.5">
-                <span class="text-xs font-mono font-bold px-2.5 py-0.5 rounded-full bg-brand-100 text-brand-900 border border-brand-200">Module 07</span>
-                <h4 class="font-bold text-brand-ink text-xl sm:text-2xl">Publieke Landingspagina & Merkidentiteit</h4>
-              </div>
-              <p class="text-stone-600 editorial-lead text-sm sm:text-base font-light">
-                Warme, toegankelijke introductie van de praktijk met visie op psychologische flexibiliteit (ACT), praktijkfoto's, locatieweergave via Google Maps en beveiligd contactformulier.
-              </p>
-            </div>
-            <div class="flex flex-col items-start md:items-end gap-2 shrink-0">
-              <span class="px-4 py-2 rounded-xl font-mono text-xs font-bold text-brand-900 bg-brand-50 border border-brand-200">React 19 &middot; Tailwind CSS v4</span>
-              <span class="text-xs text-stone-400 font-mono">Huisstijl De Verstandhouding</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Slide 8: Login -->
-        <div id="slide-login" class="gallery-slide hidden space-y-6">
-          <div class="rounded-2xl overflow-hidden border border-stone-200 shadow-md bg-stone-100">
-            <img src="assets/scherm-inloggen.png" loading="lazy" decoding="async" alt="Inlogportaal en Multi-Provider Social Login" class="w-full h-auto object-cover">
-          </div>
-          <div class="p-8 rounded-3xl bg-white border border-brand-200 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
-            <div class="space-y-2 max-w-3xl">
-              <div class="flex items-center gap-2.5">
-                <span class="text-xs font-mono font-bold px-2.5 py-0.5 rounded-full bg-brand-100 text-brand-900 border border-brand-200">Module 08</span>
-                <h4 class="font-bold text-brand-ink text-xl sm:text-2xl">Beveiligd Inlogportaal & Social Auth</h4>
-              </div>
-              <p class="text-stone-600 editorial-lead text-sm sm:text-base font-light">
-                ASP.NET Core Identity geïntegreerd met Google, Microsoft en Facebook OAuth2 / OIDC met PKCE, geavanceerde rate-limiting, accountvergrendeling na 5 pogingen en AVG cookie consent.
-              </p>
-            </div>
-            <div class="flex flex-col items-start md:items-end gap-2 shrink-0">
-              <span class="px-4 py-2 rounded-xl font-mono text-xs font-bold text-brand-900 bg-brand-50 border border-brand-200">OAuth2 &middot; OIDC PKCE &middot; Rate Limiting</span>
-              <span class="text-xs text-stone-400 font-mono">OWASP Top 10 Compliant</span>
+            <div class="pt-1 flex items-center justify-between text-xs">
+              <a href="https://github.com/GregoryButs/Slotcalculator-showcase" target="_blank" rel="noopener" class="text-slate-300 hover:text-white flex items-center gap-1.5 font-mono">
+                <i data-lucide="github" class="w-3.5 h-3.5"></i>
+                <span>Slotcalculator-showcase (PoC)</span>
+              </a>
+              <span class="text-slate-500 font-mono">0 ms deadlock rate</span>
             </div>
           </div>
         </div>
@@ -725,151 +324,214 @@
   </section>
 
   <!-- ========================================================================= -->
-  <!-- 06. SYSTEEMARCHITECTUUR & DOMEINONTWERP (Spacious Technical Deep-Dive)    -->
+  <!-- 05. LIVE SCHERMEN (5 Kernmodules met Rust en Grote Previews)               -->
   <!-- ========================================================================= -->
-  <section id="architectuur" class="py-24 sm:py-36 border-t border-brand-200/80 bg-brand-50/40">
-    <div class="max-w-7xl mx-auto px-6 sm:px-10 lg:px-16">
+  <section id="schermen" class="py-24 sm:py-36 border-t border-white/10 bg-[#06080D]">
+    <div class="max-w-6xl mx-auto px-6 lg:px-8">
       
-      <!-- Section Header -->
-      <div class="max-w-3xl space-y-4 mb-16 sm:mb-24">
-        <div class="flex items-center space-x-2 text-brand-rose text-xs font-mono font-bold tracking-widest uppercase">
-          <i data-lucide="cpu" class="w-4 h-4"></i>
-          <span>04 &middot; Technische Diepgang & CQRS</span>
-        </div>
-        <h2 class="text-3xl sm:text-5xl font-bold font-brand-title text-brand-ink leading-tight">
-          Architectuur, data-isolatie en ontkoppeld ontwerp.
+      <!-- Section Title -->
+      <div class="max-w-3xl space-y-3 mb-12">
+        <span class="text-xs font-mono uppercase tracking-widest text-roseAccent">03 &middot; De Interface</span>
+        <h2 class="text-3xl sm:text-5xl font-bold font-brand-title text-white leading-tight">
+          De Draaiende Applicatie.
         </h2>
-        <p class="text-stone-600 editorial-lead text-base sm:text-lg font-light">
-          Hoe de ASP.NET Core 10 LTS backend en React 19 frontend schaalbaar, veilig en veerkrachtig zijn opgebouwd.
+        <p class="text-slate-400 text-base sm:text-lg leading-relaxed font-light">
+          Vijf schermen die de essentie tonen van de behandelaar- en cliëntworkflows.
         </p>
       </div>
 
-      <!-- Mermaid Diagram Card with High Padding -->
-      <div class="glass-panel rounded-3xl sm:rounded-4xl p-8 sm:p-12 shadow-xl mb-16 sm:mb-24">
-        <div class="text-xs font-mono font-semibold text-stone-400 uppercase tracking-wider mb-6 flex items-center gap-2">
-          <i data-lucide="git-commit" class="w-4 h-4 text-brand-rose"></i>
-          <span>Systeemdiagram &middot; CQRS Lees- en Schrijfpaden</span>
+      <!-- Rustige Tabknoppen -->
+      <div class="flex flex-wrap gap-2.5 mb-10">
+        <button onclick="switchScreen(0)" class="slide-tab active px-4 py-2 rounded-xl text-xs sm:text-sm border border-white/10 text-slate-300 hover:text-white hover:bg-white/5 transition">
+          1. Psycholoog Dashboard
+        </button>
+        <button onclick="switchScreen(1)" class="slide-tab px-4 py-2 rounded-xl text-xs sm:text-sm border border-white/10 text-slate-300 hover:text-white hover:bg-white/5 transition">
+          2. Afsprakenkalender
+        </button>
+        <button onclick="switchScreen(2)" class="slide-tab px-4 py-2 rounded-xl text-xs sm:text-sm border border-white/10 text-slate-300 hover:text-white hover:bg-white/5 transition">
+          3. ELP Maandafsluiting
+        </button>
+        <button onclick="switchScreen(3)" class="slide-tab px-4 py-2 rounded-xl text-xs sm:text-sm border border-white/10 text-slate-300 hover:text-white hover:bg-white/5 transition">
+          4. Patiëntendossiers (AES-256)
+        </button>
+        <button onclick="switchScreen(4)" class="slide-tab px-4 py-2 rounded-xl text-xs sm:text-sm border border-white/10 text-slate-300 hover:text-white hover:bg-white/5 transition">
+          5. 5-Staps Boekingswizard
+        </button>
+      </div>
+
+      <!-- Grote Rustige Viewport -->
+      <div class="dark-card rounded-3xl p-4 sm:p-6 shadow-2xl">
+        
+        <!-- Scherm 0: Dashboard -->
+        <div id="screen-0" class="screen-view block space-y-6">
+          <div class="rounded-2xl overflow-hidden border border-white/10 bg-black">
+            <img src="assets/scherm-dashboard.png" loading="lazy" alt="Psycholoog Dashboard" class="w-full h-auto object-cover" />
+          </div>
+          <div class="p-6 rounded-2xl bg-white/5 border border-white/5 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 text-xs">
+            <div class="space-y-1 max-w-2xl">
+              <h3 class="text-base sm:text-lg font-bold text-white">1. Psycholoog Dashboard & Dagplanning</h3>
+              <p class="text-slate-400 leading-relaxed font-light">Realtime dagoverzicht met status-badges, snelle consultatie-acties (aanwezig, verplaatst, geannuleerd conform de 48-uurs regel) en geaggregeerde praktijkstatistieken via CQRS leesprojecties.</p>
+            </div>
+            <span class="px-3 py-1 rounded-full font-mono text-slate-300 bg-white/10 border border-white/15 shrink-0">React 19 &middot; ASP.NET Core 10</span>
+          </div>
         </div>
-        <div class="mermaid text-center overflow-x-auto py-4">
+
+        <!-- Scherm 1: Kalender -->
+        <div id="screen-1" class="screen-view hidden space-y-6">
+          <div class="rounded-2xl overflow-hidden border border-white/10 bg-black">
+            <img src="assets/scherm-agenda.png" loading="lazy" alt="Afsprakenkalender" class="w-full h-auto object-cover" />
+          </div>
+          <div class="p-6 rounded-2xl bg-white/5 border border-white/5 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 text-xs">
+            <div class="space-y-1 max-w-2xl">
+              <h3 class="text-base sm:text-lg font-bold text-white">2. Afsprakenkalender & Weekplanning</h3>
+              <p class="text-slate-400 leading-relaxed font-light">Interactieve weekplanning met automatische buffertijd tussen consultaties en realtime tweewegsynchronisatie met Google Calendar v3 via asynchrone Hangfire achtergrondtaken.</p>
+            </div>
+            <span class="px-3 py-1 rounded-full font-mono text-slate-300 bg-white/10 border border-white/15 shrink-0">Google Calendar v3 &middot; Hangfire</span>
+          </div>
+        </div>
+
+        <!-- Scherm 2: ELP -->
+        <div id="screen-2" class="screen-view hidden space-y-6">
+          <div class="rounded-2xl overflow-hidden border border-white/10 bg-black">
+            <img src="assets/scherm-elp-maandafsluiting.png" loading="lazy" alt="ELP Maandafsluiting" class="w-full h-auto object-cover" />
+          </div>
+          <div class="p-6 rounded-2xl bg-white/5 border border-white/5 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 text-xs">
+            <div class="space-y-1 max-w-2xl">
+              <h3 class="text-base sm:text-lg font-bold text-white">3. ELP Maandafsluiting & RIZIV-conventie</h3>
+              <p class="text-slate-400 leading-relaxed font-light">Automatische bewaking van de 8 gesubsidieerde sessies binnen de 12-maanden referentieperiode per cliënt, zorgfunctiebepaling, remgeldberekening en eHealth portaalexport.</p>
+            </div>
+            <span class="px-3 py-1 rounded-full font-mono text-slate-300 bg-white/10 border border-white/15 shrink-0">Belgische Zorgconventie</span>
+          </div>
+        </div>
+
+        <!-- Scherm 3: Patiëntenbeheer -->
+        <div id="screen-3" class="screen-view hidden space-y-6">
+          <div class="rounded-2xl overflow-hidden border border-white/10 bg-black">
+            <img src="assets/scherm-patientenbeheer.png" loading="lazy" alt="Patiëntenbeheer" class="w-full h-auto object-cover" />
+          </div>
+          <div class="p-6 rounded-2xl bg-white/5 border border-white/5 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 text-xs">
+            <div class="space-y-1 max-w-2xl">
+              <h3 class="text-base sm:text-lg font-bold text-white">4. Patiëntendossiers met AES-256 Encryptie</h3>
+              <p class="text-slate-400 leading-relaxed font-light">TanStack Table met geavanceerd zoeken, filteren en dossierstatussen. PII en consultatienotities worden transparant gedecrypt via AES-256 GCM; mutaties op het auditlogboek zijn fysiek geblokkeerd via database triggers.</p>
+            </div>
+            <span class="px-3 py-1 rounded-full font-mono text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 shrink-0">AES-256 GCM &middot; Audit Triggers</span>
+          </div>
+        </div>
+
+        <!-- Scherm 4: Boekingswizard -->
+        <div id="screen-4" class="screen-view hidden space-y-6">
+          <div class="rounded-2xl overflow-hidden border border-white/10 bg-black">
+            <img src="assets/scherm-boekingswizard.png" loading="lazy" alt="5-Staps Boekingswizard" class="w-full h-auto object-cover" />
+          </div>
+          <div class="p-6 rounded-2xl bg-white/5 border border-white/5 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 text-xs">
+            <div class="space-y-1 max-w-2xl">
+              <h3 class="text-base sm:text-lg font-bold text-white">5. 5-Staps Boekingswizard Flow</h3>
+              <p class="text-slate-400 leading-relaxed font-light">Toegankelijke intakeflow voor patiënten: behandelingskeuze, locatiekeuze (Praktijk / Teleconsultatie / Telefoon), realtime slotselectie via de concurrency engine en automatische e-mailbevestiging met ICS-bestand.</p>
+            </div>
+            <span class="px-3 py-1 rounded-full font-mono text-roseAccent bg-roseAccent/10 border border-roseAccent/20 shrink-0">SlotCalculator &middot; C# 13 Lock</span>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ========================================================================= -->
+  <!-- 06. ARCHITECTUUR & DOMEINONTWERP (CQRS & Rich Aggregate)                  -->
+  <!-- ========================================================================= -->
+  <section id="architectuur" class="py-24 sm:py-36 border-t border-white/10">
+    <div class="max-w-6xl mx-auto px-6 lg:px-8">
+      
+      <!-- Section Title -->
+      <div class="max-w-3xl space-y-3 mb-12">
+        <span class="text-xs font-mono uppercase tracking-widest text-roseAccent">04 &middot; Systeemontwerp</span>
+        <h2 class="text-3xl sm:text-5xl font-bold font-brand-title text-white leading-tight">
+          CQRS, Data-isolatie & Interoperabiliteit.
+        </h2>
+        <p class="text-slate-400 text-base sm:text-lg leading-relaxed font-light">
+          Scheiding tussen snelle leesprojecties en atomaire schrijfoperaties.
+        </p>
+      </div>
+
+      <!-- Systeemdiagram -->
+      <div class="dark-card rounded-3xl p-6 sm:p-10 shadow-2xl mb-12">
+        <div class="text-xs font-mono uppercase tracking-wider text-slate-400 mb-6 flex items-center justify-between border-b border-white/10 pb-4">
+          <span>Architectuur &middot; CQRS Scheiding</span>
+          <span class="text-roseAccent">.NET 10 LTS &middot; C# 13</span>
+        </div>
+        <div class="mermaid text-center overflow-x-auto py-2">
 graph TD
-    subgraph ClientApp ["Client Layer (React 19 + Vite + TypeScript)"]
+    subgraph Frontend ["Client Layer (React 19 + Vite + TypeScript)"]
         LP[Publieke Landingspagina]
         BW[5-Staps Boekingswizard]
-        PD[Psycholoog Agenda & Dashboard]
-        PT[Patiëntenbeheer & Dossiers]
-        ELP[ELP Maandafsluiting Module]
+        PD[Psycholoog Dashboard & Agenda]
+        PT[Patiëntendossiers & ELP Afsluiting]
     end
 
-    subgraph API ["Backend API Gateway (ASP.NET Core 10 LTS)"]
-        AC[Afspraak & Slot Controllers]
-        PC[Patiënten & Portaal Controllers]
-        AuditC[Audit Log & Toestemming Controllers]
-        FC[FHIR R4 Interop Controller]
-        AuthC[Auth & OAuth2 / OIDC Handler]
+    subgraph Gateway ["API & Beveiligingslaag (ASP.NET Core 10 LTS)"]
+        AC[Afspraak & Slot Endpoints]
+        PC[Patiënten & Dossier Endpoints]
+        FC[HL7 FHIR R4 Interop Controller]
+        AuthC[Identity & OAuth2 / OIDC Handler]
     end
 
-    subgraph Domain ["Domein & Services (CQRS / Rich Aggregate / C# 13)"]
-        SC[AfspraakConflictDetector - Lock Sync]
+    subgraph Core ["Domein & Services (CQRS / Rich Aggregate)"]
+        SC[AfspraakConflictDetector - Lock Engine]
         PBS[PatientBookingService]
         GCS[GoogleCalendarSyncOrchestrator]
         AES[AesEncryptionService - AES-256 GCM]
-        AUDIT[AuditLogService & RetentieService]
-        RBG[Hangfire Background Workers]
+        AUDIT[AuditLogService - Append-Only]
+        RBG[Hangfire Background Queues]
     end
 
-    subgraph Data ["Data & Storage Layer"]
+    subgraph Persistence ["Data & Storage Layer"]
         EF[EF Core 10 Repositories]
-        DB[(Encrypted SQLite DB / WAL Mode)]
-        TRIG[(Append-Only Triggers op Auditlog)]
+        DB[(Encrypted SQLite Database / WAL Mode)]
+        TRIG[(DB Triggers op Auditlog - RAISE ABORT)]
     end
 
-    ClientApp -->|REST API / Axios / SameSite Cookies| API
-    API --> Domain
-    Domain --> EF
+    Frontend -->|REST API / HTTPS / SameSite Cookies| Gateway
+    Gateway --> Core
+    Core --> EF
     EF --> DB
     DB --> TRIG
-    Domain -->|Google APIs v3| Ext1[Google Calendar & Meet]
-    Domain -->|SMTP / MimeKit| Ext2[Transactionele E-mail]
+    Core -->|Google Calendar API v3| Ext1[Google Calendar & Meet]
+    Core -->|SMTP / MimeKit| Ext2[E-mail Notificaties met ICS]
         </div>
       </div>
 
-      <!-- 4 Architectural Highlights (Spacious 2x2 Grid with Essay & Contract CTAs) -->
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12">
+      <!-- 3 Kernpijlers (Herhalend & Rustig) -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
         
-        <!-- Pillar 1: Concurrency -->
-        <div class="glass-panel rounded-3xl p-8 sm:p-10 space-y-5 flex flex-col justify-between">
-          <div class="space-y-4">
-            <div class="w-12 h-12 rounded-2xl bg-amber-500/15 text-amber-800 flex items-center justify-center font-bold">
-              <i data-lucide="lock" class="w-6 h-6"></i>
-            </div>
-            <h3 class="font-bold text-brand-ink text-xl sm:text-2xl">1. Concurrency Control & SlotCalculator Engine</h3>
-            <p class="text-stone-600 editorial-lead text-sm sm:text-base font-light">
-              Waarom volstaat een unieke index niet? Tijdsloten overlappen in intervallen en vereisen dynamische buffertijden (10–15 min). De C# 13 lock-engine en centrale <code class="font-mono text-brand-rose">AfspraakConflictDetector</code> borgen dat zelfs bij identieke milliseconden-aanvragen slechts één transactie committeert.
-            </p>
+        <div class="dark-card rounded-2xl p-6 space-y-3">
+          <div class="w-10 h-10 rounded-xl bg-white/5 text-roseAccent flex items-center justify-center font-bold">
+            <i data-lucide="shield-check" class="w-5 h-5"></i>
           </div>
-          <div class="pt-4 border-t border-brand-200/60">
-            <a href="./concurrency.html" class="inline-flex items-center space-x-2 text-sm font-bold text-brand-rose hover:text-brand-ink transition group">
-              <span>Lees het diepte-essay over dit wiskundig probleem</span>
-              <i data-lucide="arrow-right" class="w-4 h-4 transition-transform group-hover:translate-x-1"></i>
-            </a>
-          </div>
+          <h3 class="font-bold text-white text-base">Privacy & Audit Triggers</h3>
+          <p class="text-slate-400 text-xs leading-relaxed font-light">
+            Transparante AES-256 GCM veldversleuteling. Wijzigingen in het auditlogboek worden fysiek geblokkeerd door SQLite database triggers (<code class="font-mono text-[11px] text-roseAccent">RAISE(ABORT)</code>).
+          </p>
         </div>
 
-        <!-- Pillar 2: Privacy -->
-        <div class="glass-panel rounded-3xl p-8 sm:p-10 space-y-5 flex flex-col justify-between">
-          <div class="space-y-4">
-            <div class="w-12 h-12 rounded-2xl bg-emerald-500/15 text-emerald-800 flex items-center justify-center font-bold">
-              <i data-lucide="shield-check" class="w-6 h-6"></i>
-            </div>
-            <h3 class="font-bold text-brand-ink text-xl sm:text-2xl">2. Privacy-by-Design & Onweerlegbare Audit Trail</h3>
-            <p class="text-stone-600 editorial-lead text-sm sm:text-base font-light">
-              Gevoelige medische en persoonsgegevens (PII) worden transparant versleuteld met AES-256 GCM. Inzages en dossierwijzigingen worden onweerlegbaar vastgelegd in een append-only audit trail via SQLite database triggers die mutaties fysiek blokkeren (<code class="font-mono text-xs">RAISE(ABORT)</code>).
-            </p>
+        <div class="dark-card rounded-2xl p-6 space-y-3">
+          <div class="w-10 h-10 rounded-xl bg-white/5 text-slateAccent flex items-center justify-center font-bold">
+            <i data-lucide="activity" class="w-5 h-5"></i>
           </div>
-          <div class="pt-4 border-t border-brand-200/60">
-            <div class="text-xs font-mono text-emerald-800 font-semibold flex items-center gap-1.5">
-              <i data-lucide="check" class="w-4 h-4"></i>
-              <span>Volledige GDPR, Beroepsgeheim & AVG Art. 15/20 export</span>
-            </div>
-          </div>
+          <h3 class="font-bold text-white text-base">HL7 FHIR R4 Interop</h3>
+          <p class="text-slate-400 text-xs leading-relaxed font-light">
+            Gestandaardiseerde endpoints (<code class="font-mono text-[11px]">/api/fhir/r4/Appointment</code>) voor veilige dossier- en afspraakuitwisseling met ziekenhuizen en externe EPD-systemen.
+          </p>
         </div>
 
-        <!-- Pillar 3: FHIR R4 -->
-        <div class="glass-panel rounded-3xl p-8 sm:p-10 space-y-5 flex flex-col justify-between">
-          <div class="space-y-4">
-            <div class="w-12 h-12 rounded-2xl bg-brand-700/15 text-brand-900 flex items-center justify-center font-bold">
-              <i data-lucide="activity" class="w-6 h-6"></i>
-            </div>
-            <h3 class="font-bold text-brand-ink text-xl sm:text-2xl">3. HL7 FHIR R4 Interoperabiliteit</h3>
-            <p class="text-stone-600 editorial-lead text-sm sm:text-base font-light">
-              Gestandaardiseerde interfaces (<code class="font-mono text-xs">FhirAppointmentController</code>, <code class="font-mono text-xs">FhirPatientController</code>) leveren JSON-FHIR resources op voor naadloze integratie met ziekenhuizen, eerstelijnszones en externe EPD-platformen.
-            </p>
+        <div class="dark-card rounded-2xl p-6 space-y-3">
+          <div class="w-10 h-10 rounded-xl bg-white/5 text-emerald-400 flex items-center justify-center font-bold">
+            <i data-lucide="refresh-cw" class="w-5 h-5"></i>
           </div>
-          <div class="pt-4 border-t border-brand-200/60">
-            <a href="./api.html" class="inline-flex items-center space-x-2 text-sm font-bold text-brand-rose hover:text-brand-ink transition group">
-              <span>Bekijk het complete interactieve API-contract (91 endpoints / 74 operaties)</span>
-              <i data-lucide="arrow-right" class="w-4 h-4 transition-transform group-hover:translate-x-1"></i>
-            </a>
-          </div>
-        </div>
-
-        <!-- Pillar 4: Google & Hangfire -->
-        <div class="glass-panel rounded-3xl p-8 sm:p-10 space-y-5 flex flex-col justify-between">
-          <div class="space-y-4">
-            <div class="w-12 h-12 rounded-2xl bg-purple-500/15 text-purple-800 flex items-center justify-center font-bold">
-              <i data-lucide="refresh-cw" class="w-6 h-6"></i>
-            </div>
-            <h3 class="font-bold text-brand-ink text-xl sm:text-2xl">4. 2-Weg Google Calendar & Hangfire Workers</h3>
-            <p class="text-stone-600 editorial-lead text-sm sm:text-base font-light">
-              Realtime synchronisatie met Google Calendar v3 met dynamische aanmaak van Google Meet links voor videoconsultaties. Hangfire achtergrondqueues verzenden geautomatiseerde 24u-herinneringsmails met ICS-bestanden zonder de API-respons te vertragen.
-            </p>
-          </div>
-          <div class="pt-4 border-t border-brand-200/60">
-            <div class="text-xs font-mono text-stone-600 font-semibold flex items-center gap-1.5">
-              <i data-lucide="check" class="w-4 h-4 text-emerald-600"></i>
-              <span>Asynchrone non-blocking queue via Hangfire</span>
-            </div>
-          </div>
+          <h3 class="font-bold text-white text-base">2-Weg Agenda Sync</h3>
+          <p class="text-slate-400 text-xs leading-relaxed font-light">
+            Google Calendar v3 integratie met automatische Google Meet link-generatie voor teleconsultaties en duurzame Hangfire achtergrondwachtrijen voor 24u-herinneringen.
+          </p>
         </div>
 
       </div>
@@ -878,75 +540,88 @@ graph TD
   </section>
 
   <!-- ========================================================================= -->
-  <!-- 07. CASE ARTEFACTEN & DEEP DIVES (Spacious Deliverables Grid)              -->
+  <!-- 07. ARTEFACTEN & DOCUMENTATIE (Werkende Links!)                            -->
   <!-- ========================================================================= -->
-  <section class="py-24 sm:py-36 border-t border-brand-200/80 bg-white">
-    <div class="max-w-7xl mx-auto px-6 sm:px-10 lg:px-16">
+  <section id="bronnen" class="py-24 sm:py-32 border-t border-white/10 bg-[#06080D]">
+    <div class="max-w-6xl mx-auto px-6 lg:px-8">
       
-      <!-- Section Title -->
-      <div class="max-w-3xl space-y-4 mb-16 sm:mb-20">
-        <div class="flex items-center space-x-2 text-brand-rose text-xs font-mono font-bold tracking-widest uppercase">
-          <i data-lucide="folder-git-2" class="w-4 h-4"></i>
-          <span>05 &middot; Documentatie & Broncode</span>
-        </div>
-        <h2 class="text-3xl sm:text-5xl font-bold font-brand-title text-brand-ink leading-tight">
-          Verdiepende documenten en open-source artefacten.
+      <div class="max-w-3xl space-y-3 mb-12">
+        <span class="text-xs font-mono uppercase tracking-widest text-roseAccent">05 &middot; Documenten & Code</span>
+        <h2 class="text-3xl sm:text-5xl font-bold font-brand-title text-white leading-tight">
+          Publieke Artefacten.
         </h2>
-        <p class="text-stone-600 editorial-lead text-base sm:text-lg font-light">
-          Alle architecturale besluiten, het API-contract en een geïsoleerde concurrency-proof zijn publiek raadpleegbaar.
+        <p class="text-slate-400 text-base sm:text-lg leading-relaxed font-light">
+          Alle onderliggende contracten, essays en repositories zijn direct raadpleegbaar.
         </p>
       </div>
 
-      <!-- 3 Column Deliverable Cards -->
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <!-- 4 Werkende Kaarten (Allemaal met Echte Links!) -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         
-        <!-- Card 1 -->
-        <a href="./concurrency.html" class="glass-panel rounded-3xl p-8 sm:p-10 space-y-4 block group hover:border-brand-rose transition">
-          <div class="w-12 h-12 rounded-2xl bg-brand-rose/15 text-brand-900 flex items-center justify-center font-bold">
-            <i data-lucide="book-open" class="w-6 h-6"></i>
-          </div>
-          <div class="space-y-2">
-            <h3 class="font-bold text-brand-ink text-xl group-hover:text-brand-rose transition">Het Concurrency Essay</h3>
-            <p class="text-xs sm:text-sm text-stone-500 editorial-lead font-light">
-              Diepgravend essay over waarom een unieke SQL-index faalt bij overlappende tijdsintervallen en hoe C# 13 lock synchronisatie dit oplost.
+        <!-- Link 1: Concurrency Essay -->
+        <a href="./concurrency.html" class="dark-card rounded-2xl p-6 flex flex-col justify-between space-y-6 group">
+          <div class="space-y-3">
+            <div class="w-10 h-10 rounded-xl bg-white/5 text-roseAccent flex items-center justify-center">
+              <i data-lucide="book-open" class="w-5 h-5"></i>
+            </div>
+            <h3 class="font-bold text-white text-base group-hover:text-roseAccent transition">Het Concurrency Essay</h3>
+            <p class="text-xs text-slate-400 leading-relaxed font-light">
+              Waarom een unieke database-index faalt bij intervallen met wisseltijden.
             </p>
           </div>
-          <div class="pt-2 text-xs font-bold text-brand-rose flex items-center gap-1.5">
+          <div class="text-xs font-semibold text-roseAccent flex items-center gap-1.5 pt-2 border-t border-white/5">
             <span>Lees essay</span>
             <i data-lucide="arrow-right" class="w-3.5 h-3.5 transition-transform group-hover:translate-x-1"></i>
           </div>
         </a>
 
-        <!-- Card 2 -->
-        <a href="./api.html" class="glass-panel rounded-3xl p-8 sm:p-10 space-y-4 block group hover:border-brand-rose transition">
-          <div class="w-12 h-12 rounded-2xl bg-brand-700/15 text-brand-900 flex items-center justify-center font-bold">
-            <i data-lucide="code-2" class="w-6 h-6"></i>
-          </div>
-          <div class="space-y-2">
-            <h3 class="font-bold text-brand-ink text-xl group-hover:text-brand-rose transition">Interactief API-Contract</h3>
-            <p class="text-xs sm:text-sm text-stone-500 editorial-lead font-light">
-              Volledig OpenAPI 3.1 contract met 91 endpoints (62 unieke paden, 74 operaties en 30 dataschema's) gegenereerd uit ASP.NET Core 10.
+        <!-- Link 2: API Contract -->
+        <a href="./api.html" class="dark-card rounded-2xl p-6 flex flex-col justify-between space-y-6 group">
+          <div class="space-y-3">
+            <div class="w-10 h-10 rounded-xl bg-white/5 text-slateAccent flex items-center justify-center">
+              <i data-lucide="code-2" class="w-5 h-5"></i>
+            </div>
+            <h3 class="font-bold text-white text-base group-hover:text-roseAccent transition">API-Contract</h3>
+            <p class="text-xs text-slate-400 leading-relaxed font-light">
+              Volledig OpenAPI 3.1 contract met 91 endpoints en 30 dataschema's.
             </p>
           </div>
-          <div class="pt-2 text-xs font-bold text-brand-rose flex items-center gap-1.5">
-            <span>Bekijk API endpoints</span>
+          <div class="text-xs font-semibold text-roseAccent flex items-center gap-1.5 pt-2 border-t border-white/5">
+            <span>Bekijk OpenAPI</span>
             <i data-lucide="arrow-right" class="w-3.5 h-3.5 transition-transform group-hover:translate-x-1"></i>
           </div>
         </a>
 
-        <!-- Card 3 -->
-        <a href="https://github.com/GregoryButs/Slotcalculator-showcase" target="_blank" rel="noopener" class="glass-panel rounded-3xl p-8 sm:p-10 space-y-4 block group hover:border-brand-rose transition">
-          <div class="w-12 h-12 rounded-2xl bg-stone-900/10 text-brand-ink flex items-center justify-center font-bold">
-            <i data-lucide="github" class="w-6 h-6"></i>
-          </div>
-          <div class="space-y-2">
-            <h3 class="font-bold text-brand-ink text-xl group-hover:text-brand-rose transition">Concurrency PoC Repository</h3>
-            <p class="text-xs sm:text-sm text-stone-500 editorial-lead font-light">
-              Geïsoleerde repository met de C# SlotCalculator concurrency-engine inclusief xUnit 50-thread race-condition stresstest.
+        <!-- Link 3: Concurrency PoC Repo -->
+        <a href="https://github.com/GregoryButs/Slotcalculator-showcase" target="_blank" rel="noopener" class="dark-card rounded-2xl p-6 flex flex-col justify-between space-y-6 group">
+          <div class="space-y-3">
+            <div class="w-10 h-10 rounded-xl bg-white/5 text-white flex items-center justify-center">
+              <i data-lucide="git-branch" class="w-5 h-5"></i>
+            </div>
+            <h3 class="font-bold text-white text-base group-hover:text-roseAccent transition">SlotCalculator PoC</h3>
+            <p class="text-xs text-slate-400 leading-relaxed font-light">
+              Geïsoleerde C# repo met de engine en de 50-thread race condition test.
             </p>
           </div>
-          <div class="pt-2 text-xs font-bold text-brand-rose flex items-center gap-1.5">
-            <span>Bekijk op GitHub</span>
+          <div class="text-xs font-semibold text-roseAccent flex items-center gap-1.5 pt-2 border-t border-white/5">
+            <span>GitHub repository</span>
+            <i data-lucide="arrow-up-right" class="w-3.5 h-3.5"></i>
+          </div>
+        </a>
+
+        <!-- Link 4: Showcase Repo -->
+        <a href="https://github.com/GregoryButs/de-verstandhouding-showcase" target="_blank" rel="noopener" class="dark-card rounded-2xl p-6 flex flex-col justify-between space-y-6 group">
+          <div class="space-y-3">
+            <div class="w-10 h-10 rounded-xl bg-white/5 text-white flex items-center justify-center">
+              <i data-lucide="folder-git-2" class="w-5 h-5"></i>
+            </div>
+            <h3 class="font-bold text-white text-base group-hover:text-roseAccent transition">Showcase Broncode</h3>
+            <p class="text-xs text-slate-400 leading-relaxed font-light">
+              De volledige broncode van deze showcase en de video-compositie.
+            </p>
+          </div>
+          <div class="text-xs font-semibold text-roseAccent flex items-center gap-1.5 pt-2 border-t border-white/5">
+            <span>GitHub repository</span>
             <i data-lucide="arrow-up-right" class="w-3.5 h-3.5"></i>
           </div>
         </a>
@@ -957,32 +632,31 @@ graph TD
   </section>
 
   <!-- ========================================================================= -->
-  <!-- 08. CLOSING CTA & ARCHITECT PROFILE (Airy & Prestigious)                  -->
+  <!-- 08. ARCHITECT PROFIEL & CONTACT                                           -->
   <!-- ========================================================================= -->
-  <section class="py-24 sm:py-36 border-t border-brand-200/80 bg-brand-50/60">
-    <div class="max-w-5xl mx-auto px-6 sm:px-10 text-center space-y-8">
+  <section class="py-24 border-t border-white/10">
+    <div class="max-w-4xl mx-auto px-6 text-center space-y-6">
       
-      <div class="w-20 h-20 rounded-full mx-auto p-1 bg-white border border-brand-200 shadow-md">
-        <img src="assets/psychologist_portrait.png" alt="Gregory Buts" class="w-full h-full rounded-full object-cover" />
+      <div class="w-20 h-20 rounded-full mx-auto p-1 bg-white/10 border border-white/20 overflow-hidden">
+        <img src="assets/psychologist_portrait.png" alt="Gregory Buts" class="w-full h-full object-cover rounded-full" />
       </div>
 
-      <div class="space-y-4 max-w-2xl mx-auto">
-        <h2 class="text-3xl sm:text-5xl font-bold font-brand-title text-brand-ink leading-tight">
-          Op zoek naar robuuste .NET & React architectuur?
-        </h2>
-        <p class="text-stone-600 editorial-lead text-base sm:text-lg font-light">
-          Van concurrency-kritieke backend engines tot modulaire, toegankelijke interfaces in React en TypeScript.
+      <div class="space-y-2">
+        <h2 class="text-2xl sm:text-4xl font-bold font-brand-title text-white">Gregory Buts</h2>
+        <p class="text-sm font-mono text-roseAccent">Lead Full-Stack & System Architect</p>
+        <p class="text-xs sm:text-sm text-slate-400 max-w-xl mx-auto leading-relaxed font-light pt-2">
+          Gespecialiseerd in veerkrachtige C# / ASP.NET Core backend architecturen, concurrency-engines en modulaire React & TypeScript frontends.
         </p>
       </div>
 
       <div class="flex flex-wrap justify-center gap-4 pt-4">
-        <a href="mailto:gregory.buts@gmail.com" class="inline-flex items-center space-x-2 px-8 py-4 rounded-full text-sm font-bold bg-brand-ink hover:bg-stone-800 text-white transition shadow-md hover:shadow-lg">
+        <a href="mailto:gregory.buts@gmail.com" class="inline-flex items-center space-x-2 px-6 py-3 rounded-full text-xs font-bold bg-white text-canvas hover:bg-slate-200 transition">
           <i data-lucide="mail" class="w-4 h-4"></i>
-          <span>Neem Contact Op</span>
+          <span>gregory.buts@gmail.com</span>
         </a>
-        <a href="https://github.com/GregoryButs" target="_blank" rel="noopener" class="inline-flex items-center space-x-2 px-8 py-4 rounded-full text-sm font-bold border border-stone-300 bg-white hover:bg-stone-50 text-brand-ink transition shadow-2xs">
+        <a href="https://github.com/GregoryButs" target="_blank" rel="noopener" class="inline-flex items-center space-x-2 px-6 py-3 rounded-full text-xs font-bold border border-white/20 bg-white/5 hover:bg-white/10 text-white transition">
           <i data-lucide="github" class="w-4 h-4"></i>
-          <span>GitHub Profiel</span>
+          <span>github.com/GregoryButs</span>
         </a>
       </div>
 
@@ -990,96 +664,47 @@ graph TD
   </section>
 
   <!-- ========================================================================= -->
-  <!-- 09. FOOTER IN HUISSTIJL (Airy, Minimalist)                                -->
+  <!-- 09. FOOTER                                                                -->
   <!-- ========================================================================= -->
-  <footer class="max-w-7xl mx-auto px-6 sm:px-10 lg:px-16 pt-16 border-t border-brand-200/80 text-center text-xs text-stone-500">
-    <div class="flex flex-col sm:flex-row justify-between items-center gap-6 pb-12">
+  <footer class="border-t border-white/10 py-10 text-center text-xs text-slate-500">
+    <div class="max-w-6xl mx-auto px-6 flex flex-col sm:flex-row justify-between items-center gap-4">
       <div class="flex items-center space-x-3">
-        <img src="assets/logo-voet.png" alt="De Verstandhouding" class="h-9 w-auto object-contain" />
-        <span class="text-brand-rose font-bold text-sm font-brand-title tracking-widest uppercase">De Verstandhouding</span>
-        <span class="text-stone-300">&middot;</span>
-        <span class="text-stone-600 font-mono">Portfolio Case Study</span>
+        <img src="assets/logo-voet.png" alt="De Verstandhouding" class="h-7 w-auto object-contain brightness-75" />
+        <span class="text-white font-mono font-medium">De Verstandhouding</span>
+        <span class="text-slate-600">&middot;</span>
+        <span>Portfolio Showcase</span>
       </div>
-      <p class="text-stone-500 font-medium">
-        Architectuur & Realisatie door <strong>Gregory Buts</strong> &middot; Lead Software Architect
+      <p>
+        Architectuur & Ontwikkeling door <strong>Gregory Buts</strong> &middot; 2026
       </p>
     </div>
   </footer>
 
   <!-- ========================================================================= -->
-  <!-- JAVASCRIPT: TAB / SLIDER CONTROLLER                                       -->
+  <!-- JAVASCRIPT: SCHERM SWITCHER                                               -->
   <!-- ========================================================================= -->
   <script>
     lucide.createIcons();
 
-    const slideIds = [
-      'slide-dashboard',
-      'slide-calendar',
-      'slide-elp',
-      'slide-patients',
-      'slide-portal',
-      'slide-booking',
-      'slide-landing',
-      'slide-login'
-    ];
-
-    let currentSlideIndex = 0;
-
-    function updateSlideIndicator(index) {
-      const el = document.getElementById('slide-indicator');
-      if (el) {
-        el.textContent = `Scherm ${index + 1} van ${slideIds.length}`;
-      }
-    }
-
-    function showSlide(slideId, btnElement) {
-      currentSlideIndex = slideIds.indexOf(slideId);
-      if (currentSlideIndex === -1) currentSlideIndex = 0;
-
-      document.querySelectorAll('.gallery-slide').forEach(el => {
-        el.classList.add('hidden');
-        el.classList.remove('block');
-      });
-      
-      document.querySelectorAll('.tab-pill').forEach(btn => {
-        btn.classList.remove('active');
+    function switchScreen(index) {
+      document.querySelectorAll('.screen-view').forEach((el, i) => {
+        if (i === index) {
+          el.classList.remove('hidden');
+          el.classList.add('block');
+        } else {
+          el.classList.add('hidden');
+          el.classList.remove('block');
+        }
       });
 
-      const activeSlide = document.getElementById(slideId);
-      if (activeSlide) {
-        activeSlide.classList.remove('hidden');
-        activeSlide.classList.add('block');
-      }
-
-      if (btnElement) {
-        btnElement.classList.add('active');
-      } else {
-        const matchingBtn = document.querySelectorAll('.tab-pill')[currentSlideIndex];
-        if (matchingBtn) matchingBtn.classList.add('active');
-      }
-
-      updateSlideIndicator(currentSlideIndex);
+      document.querySelectorAll('.slide-tab').forEach((tab, i) => {
+        if (i === index) {
+          tab.classList.add('active');
+        } else {
+          tab.classList.remove('active');
+        }
+      });
     }
-
-    function nextSlide() {
-      currentSlideIndex = (currentSlideIndex + 1) % slideIds.length;
-      const targetId = slideIds[currentSlideIndex];
-      const buttons = document.querySelectorAll('.tab-pill');
-      showSlide(targetId, buttons[currentSlideIndex]);
-    }
-
-    function prevSlide() {
-      currentSlideIndex = (currentSlideIndex - 1 + slideIds.length) % slideIds.length;
-      const targetId = slideIds[currentSlideIndex];
-      const buttons = document.querySelectorAll('.tab-pill');
-      showSlide(targetId, buttons[currentSlideIndex]);
-    }
-
-    // Keyboard navigation (ArrowLeft / ArrowRight)
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'ArrowRight') nextSlide();
-      if (e.key === 'ArrowLeft') prevSlide();
-    });
   </script>
 </body>
 </html>
