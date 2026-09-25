@@ -100,7 +100,7 @@ graph TD
 ├── concurrency.html            # Uitgelichte deep dive: invarianten over rijen vs unieke indices
 ├── api.html                    # Redocly OpenAPI UI met alle 62 endpoints & schemas
 ├── openapi.json                # Volledige OpenAPI 3.0.1 specificatie
-├── coverage-badge.svg          # Test coverage status badge (94,3%)
+├── coverage-badge.svg          # Test coverage status badge (94,5%)
 ├── PORTFOLIO_CASE_STUDY.md     # Volledige technische documentatie & architectuurbeschrijving
 ├── cv_summary_snippets.md      # CV en LinkedIn teksten (Nederlands & Engels)
 └── assets/                     # Officiële merklogo's, vector assets en praktijkfoto's
