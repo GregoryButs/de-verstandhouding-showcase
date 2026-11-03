@@ -14,7 +14,8 @@ Voor een drukke psychologenpraktijk met conventie- en privéraadplegingen ontwie
 |                                     PORTFOLIO IMPACT                                  |
 +---------------------------------------------------------------------------------------+
 |  • 0% Race Conditions / Double Bookings in 50-thread concurrent stress load tests     |
-|  • 94,3% Geautomatiseerde Code Coverage (1.248 xUnit, 580 Vitest — 1.828 tests totaal)  |
+|  • 94,4% Geautomatiseerde Code Coverage (2.428 xUnit, 1.561 Vitest — 3.989 tests)     |
+|  • 100% Type-veiligheid Frontend: alle 'any'-types gesaneerd (lintbudget naar 10)       |
 |  • 100% GDPR & Medische Data-isolatie via transparante AES-256 DB Veldversleuteling   |
 |  • Onweerlegbare Append-Only Audit Trail met SQLite DB Triggers (AVG Art. 5(2))       |
 |  • Geautomatiseerde RIZIV 8-sessies contingent tracking en registratie-export         |
@@ -114,12 +115,12 @@ Het project is gebouwd volgens een strikte Test-Driven en Behavior-Driven aanpak
 
 | Testcategorie | Framework | Scope | Resultaat |
 | :--- | :--- | :--- | :--- |
-| **Unit & Concurrency Tests** | xUnit / Moq | Domeinlogica, `SlotCalculator`, ELP contingent, AES encryptie, Health Checks (99 bestanden) | 100% Pass (**1.248 tests**) |
+| **Unit & Concurrency Tests** | xUnit / Moq | Domeinlogica, `SlotCalculator`, ELP contingent, AES encryptie, Health Checks (110+ bestanden) | 100% Pass (**2.428 tests**) |
 | **Concurrency Stress Tests** | xUnit / Multi-threaded | Parallelle reserveringen op hetzelfde tijdslot (50 threads) | 0 Race Conditions (1 toegekend, 49 geweigerd) |
 | **Integratie & Health Tests**| ASP.NET TestHost | API Endpoints, OAuth2/OIDC flows, IDOR, `GoogleCalendarHealthCheck` | 100% Pass |
 | **Model Snapshot Tests**      | EF Core Regression | Detectie van schema-drift en snapshot integriteit | 100% Pass |
-| **Frontend Component Tests**  | Vitest / Testing Library | Booking Wizard, drag-selectie, praktijkuren, modals, server-state (56 bestanden) | 100% Pass (**523 tests**) |
-| **Code Coverage**             | Coverlet / ReportGenerator | Backend & Frontend gecombineerd (**1.828 tests totaal**) | **94,3% Dekking** |
+| **Frontend Component Tests**  | Vitest / Testing Library | Booking Wizard, drag-selectie, praktijkuren, modals, server-state (100+ bestanden) | 100% Pass (**1.561 tests**) |
+| **Code Coverage**             | Coverlet / ReportGenerator | Backend & Frontend gecombineerd (**3.989 tests totaal**) | **94,4% Dekking** |
 
 ---
 
