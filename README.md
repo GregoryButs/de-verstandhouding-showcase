@@ -26,7 +26,7 @@
 
 ```mermaid
 graph TD
-    subgraph ClientApp ["Client Layer (React 18/19 + Vite 6 + TypeScript)"]
+    subgraph ClientApp ["Client Layer (React 18/19 + Vite 8 + TypeScript)"]
         LP[Publieke Landingspagina]
         BW[5-Staps Boekingswizard]
         PD[Psycholoog Agenda & Dashboard]
